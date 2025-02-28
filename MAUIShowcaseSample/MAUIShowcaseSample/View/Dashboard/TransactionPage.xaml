@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:grid="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:pager="clr-namespace:Syncfusion.Maui.DataGrid.DataPager;assembly=Syncfusion.Maui.DataGrid"
+             xmlns:refresh="clr-namespace:Syncfusion.Maui.PullToRefresh;assembly=Syncfusion.Maui.PullToRefresh"
+             xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:converter="clr-namespace:MAUIShowcaseSample.Converters"
+             x:Class="MAUIShowcaseSample.View.Dashboard.TransactionPage">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converter:StringToColorConverter x:Key="StringToColorConverter"/>
+        </ResourceDictionary>
+        
+    </ContentView.Resources>
+    
+    <Grid BackgroundColor="{DynamicResource SurfaceBackground}">
+        <Border StrokeShape="RoundRectangle 10,10,10,10" BackgroundColor="{DynamicResource Surface}" Margin="16,24,16,24">
+            <Grid RowDefinitions="Auto,*">
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" HorizontalOptions="FillAndExpand">
+                    
+                    <!-- Segment to select transaction type -->
+                    <buttons:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="TransactionSegment" SegmentWidth="103" ItemsSource="{Binding SegmentTitle}" HeightRequest="40" WidthRequest="310" HorizontalOptions="Start" Margin="32,32,0,32" SelectionChanged="GridSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}"/>
+                    
+                    <!-- Dropdown (SfComboBox) for Date Range selection -->
+                    <editors:SfComboBox ItemsSource="{Binding DateRange}"  Grid.Column="1"
+                        SelectedItem="{Binding SelectedGridDateRange, Mode=TwoWay}"
+                        DisplayMemberPath="RangeType"
+                        IsClearButtonVisible="False" Stroke="Transparent"
+                        WidthRequest="175" 
+                                        HeightRequest="40"
+                        Margin="0,0,8,0" >
+                        <editors:SfComboBox.CustomView>
+                            <Grid ColumnDefinitions="Auto,*">
+                                <Label Grid.Column="0" FontFamily="FontIcons" Text="&#xe723;" VerticalOptions="Center" TextColor="{DynamicResource GrayText}" Padding="10"/>
+                                <!-- ComboBox Text -->
+                                <Label Grid.Column="1" Text="{Binding SelectedGridDateRange.RangeType}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14" FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" />
+                            </Grid>
+                        </editors:SfComboBox.CustomView>
+                    </editors:SfComboBox>
+                    
+                    <!-- Export Button -->
+                    <buttons:SfButton Text="Export"  Grid.Column="2"
+                                      CornerRadius="20"
+                                      WidthRequest="108"
+                                      HeightRequest="40"
+                                      HorizontalOptions="End"
+                                      StrokeThickness="1"
+                                      Stroke="{DynamicResource LineBackground}"
+                                      TextColor="{DynamicResource GrayText}"
+                                      FontFamily="Roboto-Medium"
+                                      FontSize="14"
+                                      Background="Transparent"
+                                      ShowIcon="True" 
+                                      Margin="0,0,16,0" 
+                                      Clicked="OnExportClicked">
+                        <buttons:SfButton.ImageSource>
+                            <FontImageSource FontFamily="FontIcons" Glyph="&#xe733;" Size="16" Color="{DynamicResource GrayText}" />
+                        </buttons:SfButton.ImageSource>      
+                    </buttons:SfButton>
+                </Grid>           
+                
+                <Border Grid.Row="1" StrokeShape="RoundRectangle 20,20,20,20" Margin="16,0,16,16" VerticalOptions="FillAndExpand">
+                    <Grid RowDefinitions="*,Auto" >
+                        
+                        <!-- Data grid page selection -->
+                        <pager:SfDataPager Grid.Row="1" x:Name ="dataPager" PageSize="6" NumericButtonCount="10" UseOnDemandPaging="True" Source="{Binding GridData}" Margin="0,0,0,16" />
+
+                        <!-- Data grid -->
+                        <grid:SfDataGrid Grid.Row="0" x:Name="dataGrid" ColumnWidthMode="Fill" AutoGenerateColumnsMode="None"  RowHeight="68" ItemsSource="{Binding Source={x:Reference dataPager}, Path=PagedSource }" >
+                            <grid:SfDataGrid.Columns>
+                                
+                                <!-- Checkbox Column with Header Template -->
+                                <grid:DataGridTemplateColumn Width="60" >
+                                    <grid:DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <CheckBox HorizontalOptions="End" IsChecked="{Binding IsAllRowsSelected, Mode=TwoWay}" CheckedChanged="OnCheckedChanged"/>
+                                        </DataTemplate>
+                                    </grid:DataGridTemplateColumn.HeaderTemplate>
+                                    <grid:DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox HorizontalOptions="End"  IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                        </DataTemplate>
+                                    </grid:DataGridTemplateColumn.CellTemplate>
+                                </grid:DataGridTemplateColumn>
+                                
+                                <!-- Text Columns -->
+                                <grid:DataGridDateColumn HeaderText="Transaction Date" MappingName="TransactionDate" Format="dd/MM/yyyy" HeaderTextAlignment="Start" CellTextAlignment="Start"/>
+                                <grid:DataGridTemplateColumn>
+                                    <grid:DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid RowDefinitions="Auto,Auto" VerticalOptions="Center" RowSpacing="5">
+                                                <Label Grid.Row="0" Text="{Binding TransactionCategory}"/>
+                                                <Label Grid.Row="1" Text="{Binding TransactionName}" TextColor="{DynamicResource GrayText}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </grid:DataGridTemplateColumn.CellTemplate>
+                                    <grid:DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Label Text="Category" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                        </DataTemplate>
+                                    </grid:DataGridTemplateColumn.HeaderTemplate>
+                                </grid:DataGridTemplateColumn>
+                                <grid:DataGridTemplateColumn>
+                                    <grid:DataGridTemplateColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Label  Text="Transaction Type" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                        </DataTemplate>
+                                    </grid:DataGridTemplateColumn.HeaderTemplate>
+                                    <grid:DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border StrokeShape="RoundRectangle 5,5,5,5" Background="{Binding TransactionType, Converter={x:StaticResource StringToColorConverter}, ConverterParameter='DataGridBackground'}" HeightRequest="22" WidthRequest="66" Stroke="Transparent" VerticalOptions="Center" HorizontalOptions="Start">
+                                                <Label Text="{Binding TransactionType}" TextColor="{Binding TransactionType, Converter={x:StaticResource StringToColorConverter}, ConverterParameter='DataGridValue'}" FontSize="16" FontFamily="Roboto-Regular"/>
+                                            </Border>
+                                        </DataTemplate>                                       
+                                    </grid:DataGridTemplateColumn.CellTemplate>
+                                </grid:DataGridTemplateColumn>
+                                <grid:DataGridTextColumn HeaderText="Amount" MappingName="TransactionAmount"/>
+                                <grid:DataGridTextColumn HeaderText="Remark" MappingName="TransactionDescription"/>
+                            </grid:SfDataGrid.Columns>
+                        </grid:SfDataGrid>
+                    </Grid>
+                </Border>
+            </Grid>            
+        </Border>            
+    </Grid>
+</ContentView>

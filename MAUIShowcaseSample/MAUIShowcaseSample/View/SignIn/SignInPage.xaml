@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:MAUIShowcaseSample"
              x:Class="MAUIShowcaseSample.View.SignIn.SignInPage"
              Title="SignInPage">
-       
+
     <Grid>
         <!-- Splash Screen (Initially Visible) -->
         <Grid x:Name="SplashView" BackgroundColor="{DynamicResource SurfaceBackground}" />
@@ -20,7 +20,7 @@
                     <Label Text="Sign In" FontFamily="RobotoMedium" FontSize="22" HeightRequest="28" TextColor="{DynamicResource DarkText}" HorizontalOptions="Center" />
                     <Label Text="Enter your credentials to sign in" FontFamily="RobotoRegular" FontSize="16" HeightRequest="22" TextColor="{DynamicResource GrayText}" HorizontalOptions="Center" Margin="{OnPlatform WinUI='0,12,0,0'}" />
 
-                    <dataForm:SfDataForm x:Name="SignInForm" DataObject="{Binding SignInFormModel}" LayoutType="TextInputLayout" MinimumHeightRequest="120">
+                    <dataForm:SfDataForm x:Name="SignInForm" DataObject="{Binding SignInFormModel}"  CommitMode="PropertyChanged" LayoutType="TextInputLayout" MinimumHeightRequest="120">
                         <dataForm:SfDataForm.LabelTextStyle>
                             <dataForm:DataFormTextStyle FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" FontSize="16" />
                         </dataForm:SfDataForm.LabelTextStyle>

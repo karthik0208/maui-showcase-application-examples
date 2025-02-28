@@ -1,13 +1,11 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace MAUIShowcaseSample.View.SignIn
 {
     public partial class SignInPage : ContentPage
     {
-        public SignInPage(SignInPageViewModel viewModel)
+        public SignInPage(SignInPageViewModel model)
         {
             InitializeComponent();
-            BindingContext = viewModel;
+            this.BindingContext = model;
             ShowSplashScreen();           
         }
 

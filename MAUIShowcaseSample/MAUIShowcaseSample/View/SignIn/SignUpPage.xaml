@@ -15,7 +15,7 @@
                 <Label Text="Sign Up" FontFamily="RobotoMedium" FontSize="22" HeightRequest="28" TextColor="{DynamicResource DarkText}" HorizontalOptions="Center" />
                 <Label Text="Enter your information to sign up" FontFamily="RobotoRegular" FontSize="16" HeightRequest="22" TextColor="{DynamicResource GrayText}" HorizontalOptions="Center" Margin="{OnPlatform WinUI='0,12,0,0'}" />
 
-                <dataForm:SfDataForm x:Name="SignUpForm" DataObject="{Binding SignUpFormModel}" LayoutType="TextInputLayout" MinimumHeightRequest="300">
+                <dataForm:SfDataForm x:Name="SignUpForm" DataObject="{Binding SignUpFormModel}"  CommitMode="PropertyChanged" LayoutType="TextInputLayout" MinimumHeightRequest="300">
                     <dataForm:SfDataForm.LabelTextStyle>
                         <dataForm:DataFormTextStyle FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" FontSize="16" />
                     </dataForm:SfDataForm.LabelTextStyle>

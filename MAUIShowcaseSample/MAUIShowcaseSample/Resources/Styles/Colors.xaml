@@ -34,6 +34,45 @@
     <Color x:Key="GrayText">#49454F</Color>
     <Color x:Key="LineBackground">#CAC4D0</Color>
     <Color x:Key="ButtonOutline">#79747E</Color>
+    <Color x:Key="Surface">#FFFBFE</Color>
+    <Color x:Key="LabelText">#1D192B</Color>
+    <Color x:Key="Green">#205107</Color>
+    <Color x:Key="Red">#B3261E</Color>
+    <Color x:Key="BackgroundGreen">#DBFFD8</Color>
+    <Color x:Key="BackgroundRed">#FFD8E4</Color>
+    
+    
+    <Color x:Key="LegendColor1">#CDDE1F</Color>
+    <Color x:Key="LegendColor2">#FEC200</Color>
+    <Color x:Key="LegendColor3">#FF477E</Color>
+    <Color x:Key="LegendColor4">#2485FA</Color>
+    <Color x:Key="LegendColor5">#FF5E6A</Color>
+    <Color x:Key="LegendColor6">#C152D2</Color>
+    <Color x:Key="LegendColor7">#8854D9</Color>
+    <Color x:Key="LegendColor8">#3D4EB8</Color>
+    <Color x:Key="LegendColor9">#00BCD7</Color>
+    <Color x:Key="LegendColor10">#61EFCD</Color>
+    <Color x:Key="LegendColor11">#F97316</Color>
+    <Color x:Key="LegendColor12">#14B8A6</Color>
+    <Color x:Key="LegendColor13">#6366F1</Color>
+    <Color x:Key="LegendColor14">#EC4899</Color>
+    <Color x:Key="LegendColor15">#FACC15</Color>
+    <Color x:Key="LegendColor16">#10B981</Color>
+    <Color x:Key="LegendColor17">#EF4444</Color>
+    <Color x:Key="LegendColor18">#6D28D9</Color>
+    <Color x:Key="LegendColor19">#0EA5E9</Color>
+    <Color x:Key="LegendColor20">#A855F7</Color>
+
+    <Color x:Key="IconPurple">#9215F3</Color>
+    <Color x:Key="IconGreen">#00E190</Color>
+    <Color x:Key="IconRed">#FF4E4E</Color>
+    <Color x:Key="IconBlue">#116DF9</Color>
+    <Color x:Key="IconBackgroundPurple">#1A9215F3</Color>
+    <Color x:Key="IconBackgroundGreen">#1A00E190</Color>
+    <Color x:Key="IconBackgroundRed">#1AFF4E4E</Color>
+    <Color x:Key="IconBackgroundBlue">#1A116DF9</Color>
+
+
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>

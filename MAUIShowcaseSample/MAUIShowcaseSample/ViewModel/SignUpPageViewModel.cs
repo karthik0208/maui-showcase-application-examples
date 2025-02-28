@@ -63,14 +63,14 @@ namespace MAUIShowcaseSample
 
         private async Task OnSignUpClicked()
         {
-            if (this._userDataService.AddUser(this.SignUpFormModel.Email, this.SignUpFormModel.Password))
+            if (this._userDataService.AddUser(this.SignUpFormModel.Name, this.SignUpFormModel.Email, this.SignUpFormModel.Password))
             {
                 await Application.Current.MainPage.DisplayAlert("Signup Alert", "User added successfully", "Okay");
                 await Shell.Current.GoToAsync("///signin");
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Signup Alert", "User already exists", "Okay");
+                await Application.Current.MainPage.DisplayAlert("Sign Up Failed", "User Email already exists", "Okay");
             }            
         }
 

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
+             x:Class="MAUIShowcaseSample.View.Dashboard.BudgetPage">
+    <Grid RowDefinitions="Auto,*" BackgroundColor="{DynamicResource SurfaceBackground}">
+        
+        <buttons:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="BudgetSegment" SegmentWidth="167" ItemsSource="{Binding SegmentTitle}" HeightRequest="4" WidthRequest="334" HorizontalOptions="Start" Margin="32,32,0,0" SelectionChanged="ChartSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}"/>
+
+        <VerticalStackLayout Grid.Row="1" Padding="15" BackgroundColor="Transparent">
+            <ScrollView>
+                <CollectionView ItemsSource="{Binding BudgetData}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="3"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BackgroundColor="White" Padding="15" Stroke="Transparent">
+                                <VerticalStackLayout Spacing="10">
+                                     <!--Header Section--> 
+                                    <HorizontalStackLayout VerticalOptions="Center">
+                                        <Label FontFamily="FontIcons" Text="{Binding Icon}" WidthRequest="40" HeightRequest="40"/>
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding BudgetCategory}" FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                                            <Label Text="{Binding BudgetTitle}" FontSize="12" TextColor="Gray"/>
+                                        </VerticalStackLayout>
+                                        <Image Source="dots_icon.png" HorizontalOptions="EndAndExpand" WidthRequest="25" HeightRequest="25"/>
+                                    </HorizontalStackLayout>
+
+                                     <!--Budget Details--> 
+                                    <HorizontalStackLayout>
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding BudgetAmount}" FontSize="22" FontAttributes="Bold" TextColor="Black"/>
+                                            <Label Text="Remaining from $8,000" FontSize="12" TextColor="Gray"/>
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout HorizontalOptions="EndAndExpand">
+                                            <Label Text="{Binding BudgetDate}" FontSize="12" TextColor="Black"/>
+                                            <Label Text="Created on" FontSize="12" TextColor="Gray"/>
+                                        </VerticalStackLayout>
+                                    </HorizontalStackLayout>
+
+                                     <!--Amount Spent & Utilization--> 
+                                    <HorizontalStackLayout>
+                                        <VerticalStackLayout>
+                                            <Label Text="Amount Spent" FontSize="12" TextColor="Gray"/>
+                                            <Label Text="{Binding BudgetAmount}" FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout HorizontalOptions="EndAndExpand">
+                                            <Label Text="Utilization" FontSize="12" TextColor="Gray"/>
+                                            <Label Text="{Binding BudgetAmount}" FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                                        </VerticalStackLayout>
+                                    </HorizontalStackLayout>
+
+                                     <!--Progress Bar--> 
+                                    <progressBar:SfLinearProgressBar Progress="81.25" Minimum="0" Maximum="100" 
+                     ProgressFill="Orange" TrackFill="LightGray"
+                     ProgressCornerRadius="10" TrackCornerRadius="10" HeightRequest="8"/>
+
+                                     <!--View Details Button--> 
+                                    <buttons:SfButton Text="View Details" 
+           Background="White" TextColor="Purple"
+           WidthRequest="290"
+           CornerRadius="20"
+           HorizontalOptions="FillAndExpand" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
+            <!-- Card Container -->
+           
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>

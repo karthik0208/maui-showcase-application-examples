@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:navigationDrawer="clr-namespace:Syncfusion.Maui.NavigationDrawer;assembly=Syncfusion.Maui.NavigationDrawer"
+             x:Class="MAUIShowcaseSample.View.Dashboard.DashboardLayoutPage"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:editor="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:button="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:local="clr-namespace:MAUIShowcaseSample"
+             BackgroundColor="White"
+             Title="Dashboard">
+
+    <ContentPage.BindingContext>
+        <local:DashboardLayoutPageViewModel />
+    </ContentPage.BindingContext>
+    
+    <Grid ColumnDefinitions="{OnPlatform Default='1*,4*'}">
+        <Grid Grid.Column="{OnPlatform Default='0'}" RowDefinitions="{OnPlatform Default='Auto,*'}" BackgroundColor="{DynamicResource PrimaryBackground}">
+            <HorizontalStackLayout Grid.Row="0" HorizontalOptions="Center">
+                <Image Source="{Binding DashboardLogo}" WidthRequest="36" HeightRequest="36" Margin="10,24,10,10"/>
+                <Label Text="Expense Analysis"  FontFamily="Roboto-Medium" FontSize="22" TextColor="{DynamicResource White}"  HorizontalOptions="Center" VerticalOptions="Center" Padding="0,24,10,10"/>
+            </HorizontalStackLayout>            
+            <navigationDrawer:SfNavigationDrawer x:Name="navigationDrawer" Grid.Row="1" IsOpen="False">
+                <navigationDrawer:SfNavigationDrawer.DrawerSettings>
+                    <navigationDrawer:DrawerSettings DrawerWidth="250" Position="Left"/>
+                </navigationDrawer:SfNavigationDrawer.DrawerSettings>
+
+                <navigationDrawer:SfNavigationDrawer.ContentView>
+                    <Grid/>
+                </navigationDrawer:SfNavigationDrawer.ContentView>
+
+                <navigationDrawer:SfNavigationDrawer>
+                    <VerticalStackLayout  Padding="10" VerticalOptions="Start">
+                        <CollectionView ItemsSource="{Binding NavigationItemList}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="Transparent">
+                                        <button:SfButton ShowIcon="True" ImageSize="30" Text="{Binding ItemName}" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource White}" Padding="10,10,10,10" HorizontalTextAlignment="Start" Clicked="OnNavigationClicked" ImageAlignment="End">
+                                            <button:SfButton.ImageSource>
+                                                <FontImageSource FontFamily="FontIcons" Glyph="{Binding ItemIcon}" Color="{DynamicResource White}" Size="30" />
+     </button:SfButton.ImageSource>
+                                        </button:SfButton>
+                                    </Border>                                   
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>                        
+                    </VerticalStackLayout>
+                    
+                    <VerticalStackLayout Margin="0,0,0,30" VerticalOptions="End">
+                        <Button Text="Settings"  Style="{StaticResource NavigationButton}" Command="{Binding NavigateCommand}" CommandParameter="Settings"/>
+                        <Button Text="HelpSupport"  Style="{StaticResource NavigationButton}" Command="{Binding NavigateCommand}" CommandParameter="Help"/>
+                    </VerticalStackLayout>
+                </navigationDrawer:SfNavigationDrawer>
+            </navigationDrawer:SfNavigationDrawer>
+        </Grid>
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <Border Grid.Row="0" HeightRequest="68" Margin="-1,0,-1,0">
+                <Border.Shadow>
+                    <Shadow Brush="#00000026" Offset="0,1" Radius="3" Opacity="1"/>
+                </Border.Shadow>
+                <Grid ColumnDefinitions="*,Auto,Auto">
+                    <Label x:Name="PageTitle" Grid.Column="0" Text="Dashboard" TextColor="{DynamicResource BlackText}" HorizontalOptions="Start" VerticalOptions="Center" FontFamily="Roboto-Medium" FontSize="22" Margin="32,0,0,0"/>
+
+                    <Grid Grid.Column="1" Padding="10" HorizontalOptions="End" Margin="0,0,16,0">
+
+                        <HorizontalStackLayout>
+                            <Border StrokeShape="RoundRectangle 40,40,40,40" StrokeThickness="1" Stroke="Transparent" HeightRequest="40" WidthRequest="108" Background="Transparent" Margin="0,0,16,0">
+                                <editor:SfComboBox x:Name="navigationdropdown" IsEditable="False" Text="Create" TextColor="{DynamicResource White}" HorizontalTextAlignment="Center" BackgroundColor="{DynamicResource PrimaryBackground}" DropDownBackground="{DynamicResource White}" IsClearButtonVisible="False" >
+                                    <editor:SfComboBox.DropDownButtonSettings>
+                                        <editor:DropDownButtonSettings>
+                                            <editor:DropDownButtonSettings.View>
+                                                <Label Text="&#xe703;" FontFamily="FontIcons" FontSize="18" TextColor="{DynamicResource White}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Padding="0,0,10,0"/>
+                                            </editor:DropDownButtonSettings.View>
+                                        </editor:DropDownButtonSettings>
+                                    </editor:SfComboBox.DropDownButtonSettings>
+                                    <editor:SfComboBox.ItemsSource>
+                                        <x:Array Type="{x:Type x:String}">
+                                            <x:String>Transaction</x:String>
+                                            <x:String>Budget</x:String>
+                                            <x:String>Savings</x:String>
+                                            <x:String>Goal</x:String>
+                                        </x:Array>
+                                    </editor:SfComboBox.ItemsSource>
+                                </editor:SfComboBox>
+
+                            </Border>
+                           
+                            <!-- Notification Bell Icon with Badge -->
+                            <syncfusion:SfBadgeView HorizontalOptions="End" VerticalOptions="Center">
+                                <syncfusion:SfBadgeView.Content>
+                                    <Label Text="&#xe725;" FontFamily="FontIcons" FontSize="22" VerticalOptions="Center"/>
+                                </syncfusion:SfBadgeView.Content>
+                            </syncfusion:SfBadgeView>
+
+                            <!-- Avatar -->
+                            <syncfusion:SfAvatarView x:Name="ProfileAvatar" Padding="15"
+          ContentType="Custom"
+          ImageSource="{Binding ProfileAvatar}"
+          AvatarShape="Circle">
+                                <syncfusion:SfAvatarView.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAvatarTapped"/>
+                                </syncfusion:SfAvatarView.GestureRecognizers>
+                            </syncfusion:SfAvatarView>
+
+                            <!-- Profile Popup using Border -->
+                            <Border x:Name="ProfilePopup" BackgroundColor="White" StrokeThickness="1" Stroke="#CCCCCC" Padding="10" IsVisible="False" TranslationY="60">
+                                <VerticalStackLayout>
+                                    <syncfusion:SfAvatarView ContentType="AvatarCharacter" ImageSource="profile.png" AvatarShape="Circle" WidthRequest="40" HeightRequest="40"/>
+
+                                    <Label Text="Alex Johnson" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+                                    <Label Text="alexjohnson@gmail.com" FontSize="14" TextColor="Gray" HorizontalOptions="Center"/>
+
+                                    <Button Text="View Profile  Settings" BackgroundColor="Transparent" TextColor="Blue" Clicked="OnViewProfileClicked"/>
+
+                                    <Button Text="Logout" BackgroundColor="Transparent" TextColor="Red" Clicked="OnLogoutClicked"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </HorizontalStackLayout>
+                      
+                    </Grid>
+                </Grid>                
+            </Border>
+
+            <ContentView Grid.Row="1" x:Name="ContentContainer"/>
+        </Grid>
+    </Grid>
+
+    
+</ContentPage>

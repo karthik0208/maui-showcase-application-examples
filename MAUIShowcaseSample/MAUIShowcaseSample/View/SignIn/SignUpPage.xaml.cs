@@ -1,11 +1,11 @@
-
-namespace MAUIShowcaseSample.View.SignIn;
-
+namespace MAUIShowcaseSample.View.SignIn
+{
 public partial class SignUpPage : ContentPage
 {
-	public SignUpPage(SignUpPageViewModel viewModel)
-	{
-		InitializeComponent();
+    public SignUpPage(SignUpPageViewModel viewModel)
+    {
+        InitializeComponent();
         BindingContext = viewModel;
     }
+}
 }

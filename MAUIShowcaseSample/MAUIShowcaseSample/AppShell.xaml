@@ -3,12 +3,15 @@
     x:Class="MAUIShowcaseSample.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MAUIShowcaseSample.View.SignIn"
+    xmlns:signin="clr-namespace:MAUIShowcaseSample.View.SignIn"
+    xmlns:dashboard="clr-namespace:MAUIShowcaseSample.View.Dashboard"
     Shell.FlyoutBehavior="Flyout"
     Shell.NavBarIsVisible="False"
     Title="MAUIShowcaseSample">
 
-    <ShellContent ContentTemplate="{DataTemplate local:SignInPage}" Route="signin" />
-    <ShellContent ContentTemplate="{DataTemplate local:SignUpPage}" Route="signup" />
-
+    <ShellContent ContentTemplate="{DataTemplate signin:SignInPage}" Route="signin" />
+    <ShellContent ContentTemplate="{DataTemplate signin:SignUpPage}" Route="signup" />
+    <ShellContent ContentTemplate="{DataTemplate signin:ForgotPasswordPage}" Route="forgotpassword" />
+    <ShellContent ContentTemplate="{DataTemplate signin:UpdateAccountInfoPage}" Route="updateaccountinfo" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:DashboardLayoutPage}" Route="dashboardlayout" />
 </Shell>
