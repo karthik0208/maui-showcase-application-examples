@@ -11,7 +11,7 @@ namespace MAUIShowcaseSample
         public UserDataService()
         {
             // 🔹 Set default users at startup
-            AddUser("admin","admin@syncfusion.com", "Admin@123");
+            AddUser("admin","ad", "ad");
         }
 
         public string LoggedInAccount

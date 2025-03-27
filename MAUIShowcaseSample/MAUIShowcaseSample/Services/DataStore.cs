@@ -43,6 +43,30 @@ new Transaction { TransactionType = "Expense", TransactionName = "Game Subscript
 new Transaction { TransactionType = "Expense", TransactionName = "Pharmacy Expenses", TransactionCategory = ExpenseCategory.HealthCare.ToString(), TransactionDescription = "Medicines and supplements", TransactionAmount = "60", TransactionDate = DateTime.Today.AddDays(-20) }
 
             };
+        static DateTime today = DateTime.Today;
+        ObservableCollection<Savings> savingsList = new ObservableCollection<Savings>
+        {
+            new Savings { SavingsDate = today, SavingsDescription = "General Savings", SavingsType = "Deposit", SavingsAmount = "500" },
+            new Savings { SavingsDate = today.AddDays(-1), SavingsDescription = "Savings Usage", SavingsType = "Withdrawal", SavingsAmount = "100" },
+            new Savings { SavingsDate = today.AddDays(-2), SavingsDescription = "Flexible Fund", SavingsType = "Deposit", SavingsAmount = "200" },
+            new Savings { SavingsDate = today.AddDays(-3), SavingsDescription = "Emergency Access", SavingsType = "Withdrawal", SavingsAmount = "50" },
+            new Savings { SavingsDate = today.AddDays(-4), SavingsDescription = "Miscellaneous Savings", SavingsType = "Deposit", SavingsAmount = "300" },
+            new Savings { SavingsDate = today.AddDays(-5), SavingsDescription = "General Fund Withdrawal", SavingsType = "Withdrawal", SavingsAmount = "75" },
+            new Savings { SavingsDate = today.AddDays(-6), SavingsDescription = "Holiday Fund", SavingsType = "Deposit", SavingsAmount = "600" },
+            new Savings { SavingsDate = today.AddDays(-7), SavingsDescription = "Medical Expenses", SavingsType = "Withdrawal", SavingsAmount = "120" },
+            new Savings { SavingsDate = today.AddDays(-8), SavingsDescription = "Investment Savings", SavingsType = "Deposit", SavingsAmount = "800" },
+            new Savings { SavingsDate = today.AddDays(-9), SavingsDescription = "Home Renovation", SavingsType = "Withdrawal", SavingsAmount = "400" },
+            new Savings { SavingsDate = today.AddDays(-10), SavingsDescription = "Car Repair Fund", SavingsType = "Deposit", SavingsAmount = "500" },
+            new Savings { SavingsDate = today.AddDays(-1), SavingsDescription = "Car Maintenance", SavingsType = "Withdrawal", SavingsAmount = "95" },
+            new Savings { SavingsDate = today.AddDays(-2), SavingsDescription = "Bonus Savings", SavingsType = "Deposit", SavingsAmount = "900" },
+            new Savings { SavingsDate = today.AddDays(-3), SavingsDescription = "Charity Donation", SavingsType = "Withdrawal", SavingsAmount = "150" },
+            new Savings { SavingsDate = today.AddDays(-4), SavingsDescription = "College Fund", SavingsType = "Deposit", SavingsAmount = "700" },
+            new Savings { SavingsDate = today.AddDays(-5), SavingsDescription = "Subscription Payment", SavingsType = "Withdrawal", SavingsAmount = "30" },
+            new Savings { SavingsDate = today.AddDays(-6), SavingsDescription = "Grocery Savings", SavingsType = "Deposit", SavingsAmount = "250" },
+            new Savings { SavingsDate = today.AddDays(-7), SavingsDescription = "Electricity Bill", SavingsType = "Withdrawal", SavingsAmount = "85" },
+            new Savings { SavingsDate = today.AddDays(-8), SavingsDescription = "Travel Fund", SavingsType = "Deposit", SavingsAmount = "450" },
+            new Savings { SavingsDate = today.AddDays(-9), SavingsDescription = "Dining Out", SavingsType = "Withdrawal", SavingsAmount = "60" }
+        };
 
         private ObservableCollection<Budget> BudgetList = new ObservableCollection<Budget>()
         {
@@ -52,14 +76,32 @@ new Transaction { TransactionType = "Expense", TransactionName = "Pharmacy Expen
             new Budget { BudgetTitle = "Budget for February 2025", BudgetAmount = 33000, BudgetCategory = BudgetCategory.MonthlyBudget, BudgetDate = new DateTime (2025, 02, 01), IsCompleted = true, Remarks = "Monthly budget for February 2025" },
         };
 
+        private ObservableCollection<Goal> GoalsList = new ObservableCollection<Goal>()
+        {
+            new Goal { GoalTitle = "Vacation Fund", GoalAmount = 35000,SpentAmount=3000, GoalPriority = GoalPriority.Medium, GoalDate = new DateTime (2025, 03, 01), IsCompleted = false, Remarks = "Family trip to Hawai" },
+            new Goal { GoalTitle = "New Car", GoalAmount = 8000, SpentAmount = 2000, GoalPriority = GoalPriority.Low, GoalDate = new DateTime(2025, 02, 28), IsCompleted = false, Remarks = "Buy a new car"},
+            new Goal {GoalTitle = "Home Renovation", GoalAmount = 15000,SpentAmount = 8000, GoalPriority = GoalPriority.High, GoalDate = new DateTime(2025, 03, 02), IsCompleted = false, Remarks = "Kitchen Renovation"},
+            new Goal { GoalTitle = "Wedding Fund", GoalAmount = 33000, SpentAmount = 6000, GoalPriority = GoalPriority.High, GoalDate = new DateTime (2025, 02, 01), IsCompleted = true, Remarks = "Best Friend's marriage gift" },
+        };
+
         public ObservableCollection<Transaction> GetDailyTransactions(DateTime? startDate = null, DateTime? endDate = null)
         {
             if(startDate != null && endDate != null)
             {
-                var filteredTransactions = dailyTransaction.Where(t => t.TransactionDate >= startDate && t.TransactionDate <= endDate).ToObservableCollection();
+                var filteredTransactions = this.dailyTransaction.Where(t => t.TransactionDate >= startDate && t.TransactionDate <= endDate).ToObservableCollection();
                 return filteredTransactions;
             }
-            return dailyTransaction;
+            return this.dailyTransaction;
+        }
+
+        public ObservableCollection<Savings> GetSavingsData(DateTime? startDate = null, DateTime? endDate = null)
+        {
+            if (startDate != null && endDate != null)
+            {
+                var filteredSavings = this.savingsList.Where(t => t.SavingsDate >= startDate && t.SavingsDate <= endDate).ToObservableCollection();
+                return filteredSavings;
+            }
+            return this.savingsList;
         }
 
         public ObservableCollection<Budget> GetBudgetList(string? budgetStatus)
@@ -70,6 +112,16 @@ new Transaction { TransactionType = "Expense", TransactionName = "Pharmacy Expen
                 return selectedBudgetList;
             }
             return this.BudgetList;
+        }
+
+        public ObservableCollection<Goal> GetGoalsData(string? goalStatus = null)
+        {
+            if(goalStatus != null)
+            {
+                var selectedGoalData = this.GoalsList.Where(t => t.IsCompleted == (goalStatus == "Active" ? false : true)).ToObservableCollection<Goal>();
+                return selectedGoalData;
+            }
+            return this.GoalsList;
         }
 
         public double GetPreviousBalance()
@@ -285,4 +337,187 @@ new Transaction { TransactionType = "Expense", TransactionName = "Pharmacy Expen
         TransportBudget,
     }
 
+    public class Savings
+    {
+        private string? savingsType;
+
+        private string? savingsDescription;
+
+        private string? savingsAmount;
+
+        private DateTime savingsDate;
+
+        private string? savingsRemark;
+
+        public string? SavingsType
+        {
+            get
+            {
+                return this.savingsType;
+            }
+            set
+            {
+                this.savingsType = value;
+            }
+        }
+
+        public string? SavingsDescription
+        {
+            get
+            {
+                return this.savingsDescription;
+            }
+            set
+            {
+                this.savingsDescription = value;
+            }
+        }
+        public string SavingsAmount
+        {
+            get
+            {
+                return this.savingsAmount;
+            }
+            set
+            {
+                this.savingsAmount = value;
+            }
+        }
+        public DateTime SavingsDate
+        {
+            get
+            {
+                return this.savingsDate;
+            }
+            set
+            {
+                this.savingsDate = value;
+            }
+        }
+
+        public string SavingsRemark
+        {
+            get
+            {
+                return this.savingsRemark;
+            }
+            set
+            {
+                this.savingsRemark = value;
+            }
+        }
+    }
+
+    public class Goal
+    {
+        private string? goalTitle;
+
+        private GoalPriority goalPriority;
+
+        private double goalAmount;
+
+        private double spentAmount;
+
+        private DateTime goalDate;
+
+        private string? goalRemarks;
+
+        private bool isCompleted;
+
+        public string? GoalTitle
+        {
+            get
+            {
+                return this.goalTitle;
+            }
+            set
+            {
+                this.goalTitle = value;
+            }
+        }
+
+        public GoalPriority GoalPriority
+        {
+            get
+            {
+                return this.goalPriority;
+            }
+            set
+            {
+                this.goalPriority = value;
+            }
+        }
+
+        public double GoalAmount
+        {
+            get
+            {
+                return this.goalAmount;
+            }
+            set
+            {
+                this.goalAmount = value;
+            }
+        }
+
+        public double SpentAmount
+        {
+            get
+            {
+                return this.spentAmount;
+            }
+            set
+            {
+                this.spentAmount = value;
+            }
+        }
+
+        public DateTime GoalDate
+        {
+            get
+            {
+                return this.goalDate;
+            }
+            set
+            {
+                this.goalDate = value;
+            }
+        }
+
+        public string? Remarks
+        {
+            get
+            {
+                return this.goalRemarks;
+            }
+            set
+            {
+                this.goalRemarks = value;
+            }
+        }
+
+        public bool IsCompleted
+        {
+            get
+            {
+                return this.isCompleted;
+            }
+            set
+            {
+                this.isCompleted = value;
+            }
+        }
+    }
+
+    public enum GoalPriority
+    {
+        [Description("Low")]
+        Low,
+
+        [Description("Medium")]
+        Medium,
+
+        [Description("High")]
+        High,
+    }
 }

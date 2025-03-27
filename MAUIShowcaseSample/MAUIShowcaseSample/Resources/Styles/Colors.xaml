@@ -40,8 +40,17 @@
     <Color x:Key="Red">#B3261E</Color>
     <Color x:Key="BackgroundGreen">#DBFFD8</Color>
     <Color x:Key="BackgroundRed">#FFD8E4</Color>
-    
-    
+    <Color x:Key="GrayProgress">#D9D9D9</Color>
+    <Color x:Key="Pink">#DD29DA</Color>
+
+
+    <Color x:Key="SeriesColor1">#2196F5</Color>
+    <Color x:Key="SeriesColor2">#FFB400</Color>
+    <Color x:Key="SeriesColor3">#EC5C7B</Color>
+
+
+
+
     <Color x:Key="LegendColor1">#CDDE1F</Color>
     <Color x:Key="LegendColor2">#FEC200</Color>
     <Color x:Key="LegendColor3">#FF477E</Color>

@@ -20,6 +20,9 @@
     <MauiXaml Update="Resources\Styles\LabelStyles.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="View\Dashboard\BudgetDetailPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="View\Dashboard\BudgetPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
@@ -27,6 +30,15 @@
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="View\Dashboard\DashboardPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="View\Dashboard\GoalDetailPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="View\Dashboard\GoalsPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="View\Dashboard\SavingsPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="View\Dashboard\TransactionPage.xaml">

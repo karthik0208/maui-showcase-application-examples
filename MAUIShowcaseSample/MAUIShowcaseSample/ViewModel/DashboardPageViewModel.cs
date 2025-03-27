@@ -1,7 +1,9 @@
 ﻿using MAUIShowcaseSample.Services;
 using Syncfusion.Maui.Buttons;
+using Syncfusion.Maui.Data;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace MAUIShowcaseSample
@@ -18,7 +20,11 @@ namespace MAUIShowcaseSample
 
         private List<SfSegmentItem> segmentItems;
 
+        private List<SfSegmentItem> areaChartSegmentItems;
+
         private int selectedSegmentIndex;
+
+        private int areaChartSelectedSegment;
 
         private ObservableCollection<DataStore> selectedChartData;
 
@@ -26,13 +32,29 @@ namespace MAUIShowcaseSample
 
         private List<ChartDateRange> dateRange;
 
+        private List<ChartDateRange> areaChartDateRange;
+
+        private List<ChartDateRange> savingsChartDateRange;
+
         private ChartDateRange selectedChartDateRange;
+
+        private ChartDateRange selectedAreaChartDateRange;
+
+        private ChartDateRange selectedSavingsChartDateRange;
+
+        private ObservableCollection<AreaChartData> dashboardIncomeAreaChart;
+
+        private ObservableCollection<AreaChartData> dashboardExpenseAreaChart;
+
+        private ObservableCollection<AreaChartData> savingsAreaChart;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public List<Brush> LegendColors { get; set; } = new();
 
         public ObservableCollection<Transaction> Transactions { get; set; } = new();
+
+        public GoalsPageViewModel GoalsPageViewModel { get; set; }
 
         public ChartDateRange SelectedChartDateRange
         {
@@ -48,6 +70,33 @@ namespace MAUIShowcaseSample
             }
         }
 
+        public ChartDateRange SelectedAreaChartDateRange
+        {
+            get
+            {
+                return this.selectedAreaChartDateRange;
+            }
+            set
+            {
+                this.selectedAreaChartDateRange = value;
+                UpdateAreaChartData(this.selectedAreaChartDateRange.RangeType, this.selectedAreaChartDateRange.StartDate, this.selectedAreaChartDateRange.EndDate);
+                OnPropertyChanged("SelectedAreaChartDateRange");
+            }
+        }
+
+        public ChartDateRange SelectedSavingsChartDateRange
+        {
+            get
+            {
+                return this.selectedSavingsChartDateRange;
+            }
+            set
+            {
+                this.selectedSavingsChartDateRange = value;
+                UpdateSavingsAreaChartData(this.selectedSavingsChartDateRange.RangeType, this.selectedSavingsChartDateRange.StartDate, this.selectedSavingsChartDateRange.EndDate);
+                OnPropertyChanged("SelectedSavingsChartDateRange");
+            }
+        }
         public ObservableCollection<DataStore> SelectedChartData
         {
             get
@@ -100,6 +149,30 @@ namespace MAUIShowcaseSample
                 OnPropertyChanged(nameof(SelectedSegmentIndex));
             }
         }
+
+        public int AreaChartSelectedSegment
+        {
+            get
+            {
+                return this.areaChartSelectedSegment;
+            }
+            set
+            {
+                this.areaChartSelectedSegment = value;
+            }
+        }
+
+        public List<SfSegmentItem> AreaChartSegmentTitle
+        {
+            get
+            {
+                return this.segmentItems;
+            }
+            set
+            {
+                this.segmentItems = value;
+            }
+        }
         public List<ChartDateRange> DateRange
         {
             get
@@ -112,6 +185,72 @@ namespace MAUIShowcaseSample
                 OnPropertyChanged("DateRange");
             }
         }
+
+        public List<ChartDateRange> AreaChartDateRange
+        {
+            get
+            {
+                return this.areaChartDateRange;
+            }
+            set
+            {
+                this.areaChartDateRange = value;
+                OnPropertyChanged("AreaChartDateRange");
+            }
+        }
+
+        public List<ChartDateRange> SavingsChartDateRange
+        {
+            get
+            {
+                return this.savingsChartDateRange;
+            }
+            set
+            {
+                this.savingsChartDateRange = value;
+                OnPropertyChanged("SavingsChartDateRange");
+            }
+        }
+
+        public ObservableCollection<AreaChartData> DashboardIncomeAreaChart
+        {
+            get
+            {
+                return this.dashboardIncomeAreaChart;
+            }
+            set
+            {
+                this.dashboardIncomeAreaChart = value;
+                OnPropertyChanged("DashboardIncomeAreaChart");
+            }
+        }
+
+        public ObservableCollection<AreaChartData> DashboardExpenseAreaChart
+        {
+            get
+            {
+                return this.dashboardExpenseAreaChart;
+            }
+            set
+            {
+                this.dashboardExpenseAreaChart = value;
+                OnPropertyChanged("DashboardExpenseAreaChart");
+            }
+        }
+
+        public ObservableCollection<AreaChartData> SavingsAreaChart
+        {
+            get
+            {
+                return this.savingsAreaChart;
+            }
+            set
+            {
+                this.savingsAreaChart = value;
+                OnPropertyChanged("SavingsAreaChart");
+            }
+        }
+
         public DashboardPageViewModel(UserDataService userService, DataStore dataStore)
         {
             _userService = userService;
@@ -119,6 +258,7 @@ namespace MAUIShowcaseSample
             SegmentTitle = new List<SfSegmentItem>() 
             { 
                 new SfSegmentItem(){ Text = "Income"},
+
                 new SfSegmentItem() {Text = "Expense"}
             };
             SelectedSegmentIndex = 0;
@@ -128,11 +268,37 @@ namespace MAUIShowcaseSample
                 new ChartDateRange() { RangeType = "This Month", StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1), EndDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1)},                
                 new ChartDateRange() {RangeType = "This Year", StartDate = new DateTime(DateTime.Today.Year, 1, 1), EndDate = new DateTime(DateTime.Today.Year, 12, 31)}
             };
+
+            AreaChartDateRange = new List<ChartDateRange>
+            {
+                new ChartDateRange() {RangeType = "This Week", StartDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday), EndDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday).AddDays(6)},
+                new ChartDateRange() { RangeType = "This Month", StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1), EndDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1)},
+                new ChartDateRange() {RangeType = "This Year", StartDate = new DateTime(DateTime.Today.Year, 1, 1), EndDate = new DateTime(DateTime.Today.Year, 12, 31)}
+            };
+
+            SavingsChartDateRange = new List<ChartDateRange>
+            {
+                new ChartDateRange() { RangeType = "This Week",StartDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday), EndDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday).AddDays(6) },
+                new ChartDateRange() { RangeType = "Last Week", StartDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday - 7), EndDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday - 1) },
+                new ChartDateRange() { RangeType = "This Month", StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1), EndDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1) },
+                new ChartDateRange() { RangeType = "Last 6 Months", StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-5), EndDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1) },
+                new ChartDateRange() { RangeType = "This Year", StartDate = new DateTime(DateTime.Today.Year, 1, 1), EndDate = new DateTime(DateTime.Today.Year, 12, 31) }
+            };
+
             SelectedChartDateRange = DateRange.ElementAt(1);
+            SelectedAreaChartDateRange = AreaChartDateRange.ElementAt(1);
+            SelectedSavingsChartDateRange = SavingsChartDateRange.ElementAt(3);
             var dailyTransaction = _dataStore.GetDailyTransactions();
             Transactions = UpdateRecentTransaction(dailyTransaction, 8);
             ChartData = GetChartData(dailyTransaction, SegmentTitle.ElementAt(SelectedSegmentIndex).Text);
-            TotalTransactionSummary = GetTransactionSummary(dailyTransaction); 
+            UpdateAreaChartData(SelectedAreaChartDateRange.RangeType, SelectedChartDateRange.StartDate, SelectedChartDateRange.EndDate);
+            //var incomeTransactions = (dailyTransaction.Where(t => t.TransactionType == "Income")).ToObservableCollection<Transaction>();
+            //var expenseTransactions = (dailyTransaction.Where(t => t.TransactionType == "Expense")).ToObservableCollection<Transaction>();
+            //DashboardIncomeAreaChart = DataHelper.GetAreaChartData(incomeTransactions, SelectedAreaChartDateRange.RangeType, SelectedChartDateRange.StartDate, SelectedChartDateRange.EndDate);
+            //DashboardExpenseAreaChart = DataHelper.GetAreaChartData(expenseTransactions, SelectedAreaChartDateRange.RangeType, SelectedChartDateRange.StartDate, SelectedChartDateRange.EndDate);
+            UpdateSavingsAreaChartData(SelectedSavingsChartDateRange.RangeType, SelectedSavingsChartDateRange.StartDate, SelectedSavingsChartDateRange.EndDate);
+            TotalTransactionSummary = GetTransactionSummary(dailyTransaction);
+            GoalsPageViewModel = new GoalsPageViewModel(_userService, _dataStore);
         }
 
         private ObservableCollection<Transaction> UpdateRecentTransaction(ObservableCollection<Transaction> allTransaction, int? limitCount)
@@ -168,7 +334,7 @@ namespace MAUIShowcaseSample
             return _transactions;
         }  
         
-        private ObservableCollection<TransactionChartData> GetChartData(ObservableCollection<Transaction> transactions, string transactionType)
+        public ObservableCollection<TransactionChartData> GetChartData(ObservableCollection<Transaction> transactions, string transactionType)
         {
             var currencySymbol = _userService.GetUserCurrencySymbol(_userService.LoggedInAccount);
             var _transactions = transactions.Where(t => t.TransactionType == transactionType).Where(t => t.TransactionDate >= SelectedChartDateRange.StartDate && t.TransactionDate <= SelectedChartDateRange.EndDate);
@@ -195,6 +361,137 @@ namespace MAUIShowcaseSample
         {
             var dailyTransaction = _dataStore.GetDailyTransactions();            
             ChartData = GetChartData(dailyTransaction, transactionType);
+        }
+
+        public void UpdateAreaChartData(string dateRangeType, DateTime? startDate, DateTime? endDate)
+        {
+            var dailyTransaction = _dataStore.GetDailyTransactions();
+            var incomeTransactions = (dailyTransaction.Where(t => t.TransactionType == "Income")).ToObservableCollection<Transaction>();
+            var expenseTransactions = (dailyTransaction.Where(t => t.TransactionType == "Expense")).ToObservableCollection<Transaction>();
+            DashboardIncomeAreaChart = DataHelper.GetAreaChartData(incomeTransactions, dateRangeType, startDate, endDate);
+            DashboardExpenseAreaChart = DataHelper.GetAreaChartData(expenseTransactions, dateRangeType, startDate, endDate);
+        }
+
+        private void UpdateSavingsAreaChartData(string rangeType, DateTime? startDate, DateTime? endDate)
+        {
+            ObservableCollection<Savings> data = _dataStore.GetSavingsData();
+            var filteredData = data.Where(s => s.SavingsDate >= startDate && s.SavingsDate <= endDate).ToList();
+
+            switch (rangeType)
+            {
+                case "This Week":
+                    Dictionary<string, double> weeklySavings = new Dictionary<string, double>
+            {
+                { "Sun", 0 }, { "Mon", 0 }, { "Tue", 0 }, { "Wed", 0 },
+                { "Thu", 0 }, { "Fri", 0 }, { "Sat", 0 }
+            };
+
+                    foreach (var savings in filteredData)
+                    {
+                        if (double.TryParse(savings.SavingsAmount, out double amount))
+                        {
+                            string dayKey = savings.SavingsDate.ToString("ddd");
+                            weeklySavings[dayKey] += amount;
+                        }
+                    }
+
+                    SavingsAreaChart = weeklySavings.Select(entry => new AreaChartData
+                    {
+                        TimeInterval = entry.Key,
+                        Data = entry.Value
+                    }).ToObservableCollection<AreaChartData>();
+                    break;
+
+                case "Last Week":
+                    DateTime lastSunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek - 7);
+                    DateTime lastSaturday = lastSunday.AddDays(6);
+
+                    Dictionary<string, double> lastWeekSavings = new Dictionary<string, double>
+            {
+                { "Sun", 0 }, { "Mon", 0 }, { "Tue", 0 }, { "Wed", 0 },
+                { "Thu", 0 }, { "Fri", 0 }, { "Sat", 0 }
+            };
+
+                    foreach (var savings in filteredData)
+                    {
+                        if (double.TryParse(savings.SavingsAmount, out double amount))
+                        {
+                            string dayKey = savings.SavingsDate.ToString("ddd");
+                            lastWeekSavings[dayKey] += amount;
+                        }
+                    }
+
+                    SavingsAreaChart = lastWeekSavings.Select(entry => new AreaChartData
+                    {
+                        TimeInterval = entry.Key,
+                        Data = entry.Value
+                    }).ToObservableCollection();
+                    break;
+
+                case "This Month":
+                    Dictionary<int, double> dailySavingsMonth = Enumerable.Range(1, DateTime.DaysInMonth(startDate.Value.Year, startDate.Value.Month))
+                        .ToDictionary(day => day, day => 0.0);
+
+                    foreach (var savings in filteredData)
+                    {
+                        if (double.TryParse(savings.SavingsAmount, out double amount))
+                        {
+                            dailySavingsMonth[savings.SavingsDate.Day] += amount;
+                        }
+                    }
+
+                    SavingsAreaChart = dailySavingsMonth.Select(entry => new AreaChartData
+                    {
+                        TimeInterval = entry.Key.ToString(),
+                        Data = entry.Value
+                    }).ToObservableCollection();
+                    break;
+
+                case "This Year":
+                    Dictionary<string, double> monthlySavings = Enumerable.Range(1, 12)
+                        .ToDictionary(month => CultureInfo.InvariantCulture.DateTimeFormat.GetAbbreviatedMonthName(month), _ => 0.0);
+
+                    foreach (var savings in filteredData)
+                    {
+                        if (double.TryParse(savings.SavingsAmount, out double amount))
+                        {
+                            string monthKey = savings.SavingsDate.ToString("MMM");
+                            monthlySavings[monthKey] += amount;
+                        }
+                    }
+
+                    SavingsAreaChart = monthlySavings.Select(entry => new AreaChartData
+                    {
+                        TimeInterval = entry.Key,
+                        Data = entry.Value
+                    }).ToObservableCollection();
+                    break;
+
+                case "Last 6 Months":
+                    DateTime sixMonthsAgo = DateTime.Today.AddMonths(-5);
+                    Dictionary<string, double> lastSixMonthsSavings = Enumerable.Range(0, 6)
+                        .Select(i => sixMonthsAgo.AddMonths(i).ToString("MMM"))
+                        .ToDictionary(month => month, month => 0.0);
+
+                    foreach (var savings in filteredData)
+                    {
+                        if (double.TryParse(savings.SavingsAmount, out double amount))
+                        {
+                            string monthKey = savings.SavingsDate.ToString("MMM");
+                            if (lastSixMonthsSavings.ContainsKey(monthKey))
+                            {
+                                lastSixMonthsSavings[monthKey] += amount;
+                            }
+                        }
+                    }
+
+                    SavingsAreaChart = lastSixMonthsSavings.Select(entry => new AreaChartData
+                    {
+                        TimeInterval = entry.Key, // "Jan", "Feb", etc.
+                        Data = entry.Value
+                    }).ToObservableCollection();
+                    break;
+            }
         }
 
         private TransactionSummary GetTransactionSummary(ObservableCollection<Transaction> transactions)

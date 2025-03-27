@@ -42,7 +42,19 @@ public partial class DashboardLayoutPage : ContentPage
         {
             this.PageTitle.Text = "Budget";
             var _viewModel = new BudgetPageViewModel(_userCredentials, _dataStore);
-            this.ContentContainer.Content = new BudgetPage(_viewModel);
+            this.ContentContainer.Content = new BudgetPage(_viewModel, _userCredentials, _dataStore);
+        }
+        else if (((SfButton)sender).Text == "Savings")
+        {
+            this.PageTitle.Text = "Savings";
+            var _viewModel = new SavingsPageViewModel(_userCredentials, _dataStore);
+            this.ContentContainer.Content = new SavingsPage(_viewModel);
+        }
+        else if(((SfButton)sender).Text == "Goal")
+                {
+            this.PageTitle.Text = "Goal";
+            var _viewModel = new GoalsPageViewModel(_userCredentials, _dataStore);
+            this.ContentContainer.Content = new GoalsPage(_viewModel);
         }
     }
     private void OnAvatarTapped(object sender, TappedEventArgs e)

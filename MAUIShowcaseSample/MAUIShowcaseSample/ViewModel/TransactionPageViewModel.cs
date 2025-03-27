@@ -196,74 +196,7 @@ namespace MAUIShowcaseSample
             {
                 row.IsSelected = value;
             }
-        }
-
-        //public async void ExportCSV()
-        //{
-        //    if(GridData.Where(t => t.IsSelected).Count() == 0)
-        //    {
-        //        await Application.Current.MainPage.DisplayAlert("Export failed", "Please select rows to export.", "OK");
-        //    }
-        //    else
-        //    {
-        //        try
-        //        {
-        //            using (ExcelEngine excelEngine = new ExcelEngine())
-        //            {
-        //                Syncfusion.XlsIO.IApplication application = excelEngine.Excel;
-        //                application.DefaultVersion = ExcelVersion.Xlsx;
-
-        //                // Create a workbook and worksheet
-        //                IWorkbook workbook = application.Workbooks.Create(1);
-        //                IWorksheet worksheet = workbook.Worksheets[0];
-
-        //                string downloadsPath = FileSystem.Current.AppDataDirectory;
-                        
-        //                // On Windows, set the actual Downloads path
-        //                #if WINDOWS ||  MACCATALYST
-        //                    downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
-        //                #elif ANDROID
-        //                    downloadsPath = "/storage/emulated/0/Download";
-        //                #elif IOS
-        //                    downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        //                #endif
-
-        //                string filePath = Path.Combine(downloadsPath, "ExpenseAnalysis.xlsx");
-
-        //                //Saving the workbook as stream
-        //                FileStream stream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite);
-        //                workbook.SaveAs(stream);
-
-        //                //Dispose stream
-        //                stream.Dispose();
-
-        //                //// Export SfDataGrid to Excel
-        //                //DataGridExcelExportingController excelExport = new DataGridExcelExportingController();
-        //                //DataGridExcelExportingOption options = new DataGridExcelExportingOption
-        //                //{
-        //                //    ExportColumnWidth = true,
-        //                //    ExportRowHeight = true
-        //                //};
-
-        //                //// Convert DataGrid to Excel Worksheet
-        //                //worksheet = excelExport.ExportToExcel(GridData, options, workbook.Worksheets[0]);
-
-        //                //// Save the file
-        //                //MemoryStream stream = new MemoryStream();
-        //                //workbook.SaveAs(stream);
-        //                //workbook.Close();
-        //                //stream.Position = 0;
-
-        //                //// Save and Open the Excel File
-        //                //await SaveAndOpenExcelFile(stream, "ExportedData.xlsx");
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //           // await DisplayAlert("Error", $"Export Failed: {ex.Message}", "OK");
-        //        }
-        //    }
-        //}
+        }        
     }
 
     public class TransactionGridData : INotifyPropertyChanged
