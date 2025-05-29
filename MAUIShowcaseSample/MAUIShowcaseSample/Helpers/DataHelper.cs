@@ -1,6 +1,7 @@
 ﻿using MAUIShowcaseSample.Services;
 using Syncfusion.Maui.Data;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Transactions;
 using Transaction = MAUIShowcaseSample.Services.Transaction;
 
@@ -43,7 +44,7 @@ namespace MAUIShowcaseSample
             return _chartData;
         }
 
-        public static ObservableCollection<AreaChartData> GetAreaChartData(ObservableCollection<Transaction> transactionChartData,string interval, DateTime? startDate, DateTime? endDate)
+        public static ObservableCollection<AreaChartData> GetAreaChartData(ObservableCollection<Transaction> transactionChartData, string interval, DateTime? startDate, DateTime? endDate)
         {
             ObservableCollection<AreaChartData> data = new ObservableCollection<AreaChartData>();
             // Get today's date
@@ -55,7 +56,7 @@ namespace MAUIShowcaseSample
                     //// Find last week's Saturday (the end of the last full week)
                     //DateTime lastSaturday = today.AddDays(-(int)today.DayOfWeek - 1);
                     //DateTime lastSunday = lastSaturday.AddDays(-6);
-                    
+
                     // Initialize dictionary for day-wise totals (Sunday to Saturday)
                     Dictionary<DayOfWeek, double> dailyTotals = new Dictionary<DayOfWeek, double>
                     {
@@ -178,6 +179,7 @@ namespace MAUIShowcaseSample
                 Data = entry.Value
             }).ToList();
         }
+
         private static Brush GetRandomLegendColor()
         {
             var randomKey = legendColors[_random.Next(legendColors.Count)];
@@ -200,6 +202,45 @@ namespace MAUIShowcaseSample
             };
         }
 
+        public static ObservableCollection<AppThemes> GetAppThemes()
+        {
+            return new ObservableCollection<AppThemes>()
+            {
+                new AppThemes() { Theme = "Light", IsSelected = true },
+                new AppThemes() {Theme = "Dark", IsSelected = false},
+                new AppThemes() {Theme = "System Default", IsSelected = false }
+            };
+        }
+
+        public static string GetGoalIcon(string? title)
+        {
+            string iconCode = "\ue73d";
+
+            if (title.Contains("Vacation", StringComparison.OrdinalIgnoreCase))
+            {
+                iconCode = "\ue73b";
+            }
+            else if (title.Contains("Car", StringComparison.OrdinalIgnoreCase))
+            {
+                iconCode = "\ue72a";
+            }
+            else if (title.Contains("Wedding", StringComparison.OrdinalIgnoreCase))
+            {
+                iconCode = "\ue73c";
+            }
+            else if (title.Contains("Home", StringComparison.OrdinalIgnoreCase))
+            {
+                iconCode = "\ue716";
+            }
+            return iconCode;
+        }
+
+        public static Color GetColorCode(int elementCount)
+        {
+            List<string> colorValues = new List<string>() { "#315A74", "#2196F5", "#963C70", "#EC5C7B" };
+            elementCount = elementCount > 3 ? elementCount % 3 : elementCount;
+            return Color.FromArgb(colorValues[elementCount]);
+        }
     }
 
     public class AreaChartData
@@ -231,5 +272,39 @@ namespace MAUIShowcaseSample
                 this.data = value;
             }
         }
+    }
+
+    public class AppThemes : INotifyPropertyChanged
+    {
+        private string theme;
+
+        private bool isSelected;
+
+        public string Theme
+        {
+            get
+            {
+                return this.theme;
+            }
+            set
+            {
+                this.theme = value;
+            }
+        }
+
+        public bool IsSelected
+        {
+            get
+            {
+                return this.isSelected;
+            }
+            set
+            {
+                this.isSelected = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

@@ -4,13 +4,16 @@ using Syncfusion.XlsIO;
 
 namespace MAUIShowcaseSample.View.Dashboard;
 
-public partial class BudgetDetailPage : ContentView
+public partial class BudgetDetailPage : ContentPage
 {
-	public BudgetDetailPage(BudgetDetailPageViewModel _viewModel)
-	{
-		InitializeComponent();
-        BindingContext = _viewModel;
-	}
+    public BudgetDetailPage(UserDataService dataService, DataStore dataStore)
+    {
+        string pageTitle = "Budget";
+        InitializeComponent();
+        BindingContext = NavigationDataStore.BudgetDetailPageViewModel;
+        var layoutViewModel = new DashboardLayoutPageViewModel(dataService, dataStore, pageTitle);
+        this.contentcontainer.Content = new DashboardLayoutPage(layoutViewModel, dataService, dataStore);
+    }
 
     private void ChartSegmentChanged(object? sender, Syncfusion.Maui.Buttons.SelectionChangedEventArgs e)
     {

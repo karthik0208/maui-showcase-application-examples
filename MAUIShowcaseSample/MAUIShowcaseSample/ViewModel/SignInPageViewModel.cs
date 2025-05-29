@@ -1,198 +1,250 @@
 ﻿using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using System.ComponentModel.DataAnnotations;
-using Syncfusion.Maui.DataForm;
-using System.Runtime.Serialization;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 
 namespace MAUIShowcaseSample
 {
-    public class SignInPageViewModel
+    /// <summary>
+    /// ViewModel for the Sign-In Page, handling user sign-in and account setup logic.
+    /// </summary>
+    public class SignInPageViewModel : INotifyPropertyChanged
     {
-
-        #region Fields
-
         private readonly UserDataService _userDataService;
 
-        private string Email;
-
-        #endregion
-
-        #region Constructor
-
-        public SignInPageViewModel() 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SignInPageViewModel"/> class.
+        /// </summary>
+        /// <param name="userDataService">Optional user data service for user validation and data management.</param>
+        public SignInPageViewModel(UserDataService? userDataService = null)
         {
-            this.SignInFormModel = new SignInDataForm();
+            _userDataService = userDataService ?? new UserDataService();
 
-            this.OnSignInClickedCommand = new Command(OnSignInClicked);
+            SignInFormModel = new SignInDataForm();
+            AccountInfoDataFormModel = new AccountInfoDataForm();
 
-            this.OnForgotPasswordTappedCommand = new AsyncRelayCommand(OnForgotPasswordTapped);
-
-            this.OnSignUpTappedCommand = new AsyncRelayCommand(OnSignUpTapped);
-
-            this.OnGoogleSignInClickedCommand = new Command(OnGoogleSignInClicked);
-
-            this.OnMicrosoftSignInClickedCommand = new Command(OnMicrosoftSignInClicked);
-
-            this.AccountInfoDataFormModel = new AccountInfoDataForm();
-
-            this.OnFinishSetupClickedCommand = new Command(OnFinishSetupClicked);
+            OnSignInClickedCommand = new AsyncRelayCommand(OnSignInClicked);
+            OnForgotPasswordTappedCommand = new AsyncRelayCommand(OnForgotPasswordTapped);
+            OnSignUpTappedCommand = new AsyncRelayCommand(OnSignUpTapped);
+            OnGoogleSignInClickedCommand = new RelayCommand(OnGoogleSignInClicked);
+            OnMicrosoftSignInClickedCommand = new RelayCommand(OnMicrosoftSignInClicked);
+            OnFinishSetupClickedCommand = new AsyncRelayCommand(OnFinishSetupClicked);
         }
 
-        public SignInPageViewModel(UserDataService userDataService)
-        {
-            this._userDataService = userDataService;
-
-            this.SignInFormModel = new SignInDataForm();
-
-            this.AccountInfoDataFormModel = new AccountInfoDataForm();
-
-            this.OnSignInClickedCommand = new Command(OnSignInClicked);
-
-            this.OnForgotPasswordTappedCommand = new AsyncRelayCommand(OnForgotPasswordTapped);
-
-            this.OnSignUpTappedCommand = new AsyncRelayCommand(OnSignUpTapped);
-
-            this.OnGoogleSignInClickedCommand = new Command(OnGoogleSignInClicked);
-
-            this.OnMicrosoftSignInClickedCommand = new Command(OnMicrosoftSignInClicked);           
-
-            this.OnFinishSetupClickedCommand = new Command(OnFinishSetupClicked);
-        }
-
-        #endregion
-
-        #region Properties
+        /// <inheritdoc/>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Gets or sets the SignIn form model.
+        /// Notifies property changes to the UI.
+        /// </summary>
+        /// <param name="name">The name of the property.</param>
+        protected void OnPropertyChanged([CallerMemberName] string name = "") =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        /// <summary>
+        /// Gets or sets the sign-in form model containing email and password.
         /// </summary>
         public SignInDataForm SignInFormModel { get; set; }
 
-        public ICommand OnSignInClickedCommand { get; }
-
-        public ICommand OnForgotPasswordTappedCommand { get; }
-
-        public ICommand OnSignUpTappedCommand { get; }
-
-        public ICommand OnGoogleSignInClickedCommand { get; }        
-
-        public ICommand OnMicrosoftSignInClickedCommand { get; }
-
+        /// <summary>
+        /// Gets or sets the account information form model for user profile setup.
+        /// </summary>
         public AccountInfoDataForm AccountInfoDataFormModel { get; set; }
 
+        /// <summary>
+        /// Command executed when the user taps the Sign In button.
+        /// </summary>
+        public ICommand OnSignInClickedCommand { get; }
+
+        /// <summary>
+        /// Command executed when the user taps the Forgot Password link.
+        /// </summary>
+        public ICommand OnForgotPasswordTappedCommand { get; }
+
+        /// <summary>
+        /// Command executed when the user taps the Sign Up link.
+        /// </summary>
+        public ICommand OnSignUpTappedCommand { get; }
+
+        /// <summary>
+        /// Command executed when the user taps the Google Sign-In button.
+        /// </summary>
+        public ICommand OnGoogleSignInClickedCommand { get; }
+
+        /// <summary>
+        /// Command executed when the user taps the Microsoft Sign-In button.
+        /// </summary>
+        public ICommand OnMicrosoftSignInClickedCommand { get; }
+
+        /// <summary>
+        /// Command executed when the user taps the Finish Setup button.
+        /// </summary>
         public ICommand OnFinishSetupClickedCommand { get; }
-        #endregion
 
-        #region Methods
-
-        private async void OnSignInClicked()
+        private async Task OnSignInClicked()
         {
-            if (this._userDataService.ValidateUser(this.SignInFormModel.Email, this.SignInFormModel.Password))
+            try
             {
-                this._userDataService.LoggedInAccount = this.SignInFormModel.Email;
-                await Application.Current.MainPage.DisplayAlert("Sign In", "Sign In Successful", "Okay");
-                if(!this._userDataService.ValidateAccountInfo(this._userDataService.LoggedInAccount))
+                var email = SignInFormModel?.Email;
+                var password = SignInFormModel?.Password;
+
+                if (email != null && password != null && _userDataService.ValidateUser(email, password))
                 {
-                    //await Shell.Current.GoToAsync("///updateaccountinfo");
-                    await Shell.Current.GoToAsync("///dashboardlayout");
+                    _userDataService.LoggedInAccount = email;
+
+                    await Application.Current?.Windows.FirstOrDefault()?.Page.DisplayAlert("Sign In", "Sign In Successful", "Okay");
+
+                    var isInfoComplete = _userDataService.ValidateAccountInfo(email);
+                    await Shell.Current.GoToAsync("///dashboard");
                 }
                 else
                 {
-                    await Shell.Current.GoToAsync("///dashboardlayout");
-                }                
+                    await Application.Current?.Windows.FirstOrDefault()?.Page?.DisplayAlert("Sign In failed", "Invalid Username or Password", "Okay");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Sign In failed", "Invalid Username or Password", "Okay");
+                System.Diagnostics.Debug.WriteLine($"SignIn Error: {ex.Message}");
             }
         }
 
-        private async Task OnForgotPasswordTapped()
-        {
+        private async Task OnForgotPasswordTapped() =>
             await Shell.Current.GoToAsync("///forgotpassword");
-        }
 
-        private async Task OnSignUpTapped()
-        {
+        private async Task OnSignUpTapped() =>
             await Shell.Current.GoToAsync("///signup");
-        }
 
         private void OnGoogleSignInClicked()
         {
-            // Handle Google sign-in logic
+            // Future: Add async Google Sign-In logic here
         }
 
         private void OnMicrosoftSignInClicked()
         {
-            // Handle Microsoft sign-in logic
+            // Future: Add async Microsoft Sign-In logic here
         }
 
-        private async void OnFinishSetupClicked()
-        {            
-            UserCredentials userCredentials = new UserCredentials();
-
-            userCredentials.Email = this._userDataService.LoggedInAccount;
-            userCredentials.FirstName = this.AccountInfoDataFormModel.FirstName;
-            userCredentials.LastName = this.AccountInfoDataFormModel.LastName;
-            userCredentials.DOB = this.AccountInfoDataFormModel.DOB;
-            userCredentials.Gender = this.AccountInfoDataFormModel.Gender.ToString();
-            userCredentials.Currency = this.AccountInfoDataFormModel.Currency.ToString();
-            userCredentials.Language = this.AccountInfoDataFormModel.Language.ToString();
-            userCredentials.TimeZone = this.AccountInfoDataFormModel.TimeZone.ToString();
-
-            if(this._userDataService.AddAccountInfo(userCredentials))
+        private async Task OnFinishSetupClicked()
+        {
+            try
             {
-                await Application.Current.MainPage.DisplayAlert("Account Information", "Successfully updated Account information", "Okay");
-                await Shell.Current.GoToAsync("///signin");
+                var user = new UserCredentials
+                {
+                    Email = _userDataService.LoggedInAccount,
+                    FirstName = AccountInfoDataFormModel.FirstName,
+                    LastName = AccountInfoDataFormModel.LastName,
+                    DOB = AccountInfoDataFormModel.DOB,
+                    Gender = AccountInfoDataFormModel.Gender,
+                    Currency = AccountInfoDataFormModel.Currency.ToString(),
+                    Language = AccountInfoDataFormModel.Language.ToString(),
+                    TimeZone = AccountInfoDataFormModel.TimeZone.ToString()
+                };
+
+                if (_userDataService.UpdateAccountInfo(user))
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() =>
+                        Application.Current?.Windows.FirstOrDefault()?.Page?.DisplayAlert("Account Information", "Successfully updated", "Okay"));
+
+                    await Shell.Current.GoToAsync("///signin");
+                }
+                else
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() =>
+                        Application.Current?.Windows.FirstOrDefault()?.Page?.DisplayAlert("Enter Account Information", "Enter all fields", "Okay"));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Enter Account Information", "Enter all fields", "Okay");
-            }            
-
+                System.Diagnostics.Debug.WriteLine($"FinishSetup Error: {ex.Message}");
+            }
         }
-        #endregion
     }
 
+    /// <summary>
+    /// Data model for the Sign-In form containing user credentials.
+    /// </summary>
     public class SignInDataForm
     {
+        /// <summary>
+        /// Gets or sets the email or username for sign-in.
+        /// </summary>
         [Display(Name = "Email or Username")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
+        /// <summary>
+        /// Gets or sets the password for sign-in.
+        /// </summary>
         [Display(Name = "Password")]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string? Password { get; set; }
     }
 
+    /// <summary>
+    /// Data model for collecting account information after sign-in.
+    /// </summary>
     public class AccountInfoDataForm
     {
+        /// <summary>
+        /// Gets or sets the first name.
+        /// </summary>
         [Display(Name = "First Name")]
+        [DefaultValue(null)]
+        [DataType(DataType.Text)]
         public string? FirstName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the last name.
+        /// </summary>
         [Display(Name = "Last Name")]
+        [DefaultValue(null)]
+        [DataType(DataType.Text)]
         public string? LastName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the date of birth.
+        /// </summary>
         [Display(Name = "Date of Birth")]
-        public DateTime DOB { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? DOB { get; set; } = DateTime.Today;
 
+        /// <summary>
+        /// Gets or sets the gender.
+        /// </summary>
         [Display(Name = "Gender")]
         [DefaultValue(null)]
+        [DataType(DataType.Custom)]
         public GenderEnum Gender { get; set; }
 
+        /// <summary>
+        /// Gets or sets the preferred language.
+        /// </summary>
         [Display(Name = "Language")]
         [DefaultValue(null)]
+        [DataType(DataType.Custom)]
         public LanguageEnum Language { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the preferred currency.
+        /// </summary>
         [Display(Name = "Currency")]
         [DefaultValue(null)]
+        [DataType(DataType.Custom)]
         public CurrencyEnum Currency { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user's time zone.
+        /// </summary>
         [Display(Name = "TimeZone")]
         [DefaultValue(null)]
+        [DataType(DataType.Custom)]
         public TimeZoneEnum TimeZone { get; set; }
     }
 
+    /// <summary>
+    /// Enumeration for gender values.
+    /// </summary>
     public enum GenderEnum
     {
         Male,
@@ -200,6 +252,9 @@ namespace MAUIShowcaseSample
         Others
     }
 
+    /// <summary>
+    /// Enumeration for supported languages.
+    /// </summary>
     public enum LanguageEnum
     {
         English,
@@ -213,6 +268,9 @@ namespace MAUIShowcaseSample
         Korean
     }
 
+    /// <summary>
+    /// Enumeration for supported currencies.
+    /// </summary>
     public enum CurrencyEnum
     {
         USD,
@@ -224,6 +282,9 @@ namespace MAUIShowcaseSample
         KRW
     }
 
+    /// <summary>
+    /// Enumeration for supported time zones.
+    /// </summary>
     public enum TimeZoneEnum
     {
         [EnumMember(Value = "UTC-5:00")]

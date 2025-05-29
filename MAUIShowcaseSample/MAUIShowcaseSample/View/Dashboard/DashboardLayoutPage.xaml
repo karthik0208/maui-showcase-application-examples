@@ -1,130 +1,328 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:navigationDrawer="clr-namespace:Syncfusion.Maui.NavigationDrawer;assembly=Syncfusion.Maui.NavigationDrawer"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
              x:Class="MAUIShowcaseSample.View.Dashboard.DashboardLayoutPage"
-             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
-             xmlns:editor="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
-             xmlns:button="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
-             xmlns:local="clr-namespace:MAUIShowcaseSample"
-             BackgroundColor="White"
-             Title="Dashboard">
-
-    <ContentPage.BindingContext>
-        <local:DashboardLayoutPageViewModel />
-    </ContentPage.BindingContext>
+             xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:button="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:popup="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:MAUIShowcaseSample">
     
-    <Grid ColumnDefinitions="{OnPlatform Default='1*,4*'}">
-        <Grid Grid.Column="{OnPlatform Default='0'}" RowDefinitions="{OnPlatform Default='Auto,*'}" BackgroundColor="{DynamicResource PrimaryBackground}">
-            <HorizontalStackLayout Grid.Row="0" HorizontalOptions="Center">
-                <Image Source="{Binding DashboardLogo}" WidthRequest="36" HeightRequest="36" Margin="10,24,10,10"/>
-                <Label Text="Expense Analysis"  FontFamily="Roboto-Medium" FontSize="22" TextColor="{DynamicResource White}"  HorizontalOptions="Center" VerticalOptions="Center" Padding="0,24,10,10"/>
-            </HorizontalStackLayout>            
-            <navigationDrawer:SfNavigationDrawer x:Name="navigationDrawer" Grid.Row="1" IsOpen="False">
-                <navigationDrawer:SfNavigationDrawer.DrawerSettings>
-                    <navigationDrawer:DrawerSettings DrawerWidth="250" Position="Left"/>
-                </navigationDrawer:SfNavigationDrawer.DrawerSettings>
-
-                <navigationDrawer:SfNavigationDrawer.ContentView>
-                    <Grid/>
-                </navigationDrawer:SfNavigationDrawer.ContentView>
-
-                <navigationDrawer:SfNavigationDrawer>
-                    <VerticalStackLayout  Padding="10" VerticalOptions="Start">
-                        <CollectionView ItemsSource="{Binding NavigationItemList}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Stroke="Transparent">
-                                        <button:SfButton ShowIcon="True" ImageSize="30" Text="{Binding ItemName}" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource White}" Padding="10,10,10,10" HorizontalTextAlignment="Start" Clicked="OnNavigationClicked" ImageAlignment="End">
-                                            <button:SfButton.ImageSource>
-                                                <FontImageSource FontFamily="FontIcons" Glyph="{Binding ItemIcon}" Color="{DynamicResource White}" Size="30" />
-     </button:SfButton.ImageSource>
-                                        </button:SfButton>
-                                    </Border>                                   
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>                        
-                    </VerticalStackLayout>
-                    
-                    <VerticalStackLayout Margin="0,0,0,30" VerticalOptions="End">
-                        <Button Text="Settings"  Style="{StaticResource NavigationButton}" Command="{Binding NavigateCommand}" CommandParameter="Settings"/>
-                        <Button Text="HelpSupport"  Style="{StaticResource NavigationButton}" Command="{Binding NavigateCommand}" CommandParameter="Help"/>
-                    </VerticalStackLayout>
-                </navigationDrawer:SfNavigationDrawer>
-            </navigationDrawer:SfNavigationDrawer>
-        </Grid>
-        <Grid Grid.Column="1" RowDefinitions="Auto,*">
-            <Border Grid.Row="0" HeightRequest="68" Margin="-1,0,-1,0">
+    <Grid>
+        <Grid>
+            <Border HeightRequest="68" Margin="-1,0,-1,0" Background="{DynamicResource White}">
                 <Border.Shadow>
                     <Shadow Brush="#00000026" Offset="0,1" Radius="3" Opacity="1"/>
                 </Border.Shadow>
-                <Grid ColumnDefinitions="*,Auto,Auto">
-                    <Label x:Name="PageTitle" Grid.Column="0" Text="Dashboard" TextColor="{DynamicResource BlackText}" HorizontalOptions="Start" VerticalOptions="Center" FontFamily="Roboto-Medium" FontSize="22" Margin="32,0,0,0"/>
+                <Grid ColumnDefinitions="*,auto,auto">
+                    <Label x:Name="pagetitle" Grid.Column="0" Text="{Binding PageTitle, Mode=TwoWay}" TextColor="{DynamicResource blackText}" HorizontalOptions="Start" VerticalOptions="Center" FontFamily="Roboto-Medium" FontSize="22" Margin="32,0,0,0"/>
 
                     <Grid Grid.Column="1" Padding="10" HorizontalOptions="End" Margin="0,0,16,0">
 
                         <HorizontalStackLayout>
-                            <Border StrokeShape="RoundRectangle 40,40,40,40" StrokeThickness="1" Stroke="Transparent" HeightRequest="40" WidthRequest="108" Background="Transparent" Margin="0,0,16,0">
-                                <editor:SfComboBox x:Name="navigationdropdown" IsEditable="False" Text="Create" TextColor="{DynamicResource White}" HorizontalTextAlignment="Center" BackgroundColor="{DynamicResource PrimaryBackground}" DropDownBackground="{DynamicResource White}" IsClearButtonVisible="False" >
-                                    <editor:SfComboBox.DropDownButtonSettings>
-                                        <editor:DropDownButtonSettings>
-                                            <editor:DropDownButtonSettings.View>
-                                                <Label Text="&#xe703;" FontFamily="FontIcons" FontSize="18" TextColor="{DynamicResource White}" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Padding="0,0,10,0"/>
-                                            </editor:DropDownButtonSettings.View>
-                                        </editor:DropDownButtonSettings>
-                                    </editor:SfComboBox.DropDownButtonSettings>
-                                    <editor:SfComboBox.ItemsSource>
+                            <Border StrokeShape="RoundRectangle 80,80,80,80" StrokeThickness="1" Stroke="transparent" HeightRequest="40" WidthRequest="108" Background="transparent" Margin="0,0,16,0">
+                                <input:SfComboBox x:Name="navigationdropdown" TextHighlightMode="None" IsEditable="False" Text="Create" TextColor="{DynamicResource White}" SelectionChanged="OnCreateComboBoxSelectionChanged" HorizontalTextAlignment="Center" BackgroundColor="{DynamicResource PrimaryBackground}" DropDownBackground="{DynamicResource White}" IsClearButtonVisible="False" >
+                                    <input:SfComboBox.DropDownButtonSettings>
+                                        <input:DropDownButtonSettings>
+                                            <input:DropDownButtonSettings.Effects>
+                                            </input:DropDownButtonSettings.Effects>
+                                            <input:DropDownButtonSettings.View>
+                                                <Label Text="&#xe703;" FontFamily="FontIcons" FontSize="18" TextColor="{DynamicResource White}" VerticalTextAlignment="Center"  HorizontalTextAlignment="Center" BackgroundColor="{DynamicResource PrimaryBackground}" />
+                                            </input:DropDownButtonSettings.View>
+                                        </input:DropDownButtonSettings>
+                                    </input:SfComboBox.DropDownButtonSettings>
+                                    <input:SfComboBox.ItemsSource>
                                         <x:Array Type="{x:Type x:String}">
                                             <x:String>Transaction</x:String>
                                             <x:String>Budget</x:String>
                                             <x:String>Savings</x:String>
                                             <x:String>Goal</x:String>
                                         </x:Array>
-                                    </editor:SfComboBox.ItemsSource>
-                                </editor:SfComboBox>
+                                    </input:SfComboBox.ItemsSource>
+                                </input:SfComboBox>
 
                             </Border>
-                           
-                            <!-- Notification Bell Icon with Badge -->
-                            <syncfusion:SfBadgeView HorizontalOptions="End" VerticalOptions="Center">
-                                <syncfusion:SfBadgeView.Content>
+
+                            <!-- notification bell icon with badge -->
+                            <core:SfBadgeView HorizontalOptions="End" VerticalOptions="Center">
+                                <core:SfBadgeView.Content>
                                     <Label Text="&#xe725;" FontFamily="FontIcons" FontSize="22" VerticalOptions="Center"/>
-                                </syncfusion:SfBadgeView.Content>
-                            </syncfusion:SfBadgeView>
+                                </core:SfBadgeView.Content>
+                            </core:SfBadgeView>
 
-                            <!-- Avatar -->
-                            <syncfusion:SfAvatarView x:Name="ProfileAvatar" Padding="15"
-          ContentType="Custom"
-          ImageSource="{Binding ProfileAvatar}"
-          AvatarShape="Circle">
-                                <syncfusion:SfAvatarView.GestureRecognizers>
+                            <!-- avatar -->
+                            <core:SfAvatarView x:Name="profileavatar" Padding="15"
+ContentType="Custom"
+ImageSource="profileavatar.png"
+AvatarShape="Circle">
+                                <core:SfAvatarView.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnAvatarTapped"/>
-                                </syncfusion:SfAvatarView.GestureRecognizers>
-                            </syncfusion:SfAvatarView>
+                                </core:SfAvatarView.GestureRecognizers>
+                            </core:SfAvatarView>
 
-                            <!-- Profile Popup using Border -->
-                            <Border x:Name="ProfilePopup" BackgroundColor="White" StrokeThickness="1" Stroke="#CCCCCC" Padding="10" IsVisible="False" TranslationY="60">
+                            <!-- profile popup using Border -->
+                            <Border x:Name="profilepopup" BackgroundColor="White" StrokeThickness="1" Stroke="#cccccc" Padding="10" IsVisible="False" TranslationY="60">
                                 <VerticalStackLayout>
-                                    <syncfusion:SfAvatarView ContentType="AvatarCharacter" ImageSource="profile.png" AvatarShape="Circle" WidthRequest="40" HeightRequest="40"/>
+                                    <core:SfAvatarView ContentType="AvatarCharacter" ImageSource="profile.png" AvatarShape="Circle" WidthRequest="40" HeightRequest="40"/>
 
-                                    <Label Text="Alex Johnson" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    <Label Text="alex johnson" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
 
-                                    <Label Text="alexjohnson@gmail.com" FontSize="14" TextColor="Gray" HorizontalOptions="Center"/>
+                                    <Label Text="alexjohnson@gmail.com" FontSize="14" TextColor="gray" HorizontalOptions="Center"/>
 
-                                    <Button Text="View Profile  Settings" BackgroundColor="Transparent" TextColor="Blue" Clicked="OnViewProfileClicked"/>
+                                    <Button Text="view profile  settings" BackgroundColor="transparent" TextColor="blue" Clicked="OnViewProfileClicked"/>
 
-                                    <Button Text="Logout" BackgroundColor="Transparent" TextColor="Red" Clicked="OnLogoutClicked"/>
+                                    <Button Text="logout" BackgroundColor="transparent" TextColor="red" Clicked="OnLogoutClicked"/>
                                 </VerticalStackLayout>
                             </Border>
                         </HorizontalStackLayout>
-                      
+
                     </Grid>
-                </Grid>                
+                </Grid>
             </Border>
-
-            <ContentView Grid.Row="1" x:Name="ContentContainer"/>
         </Grid>
-    </Grid>
 
-    
-</ContentPage>
+        <!--transaction popup-->
+        <popup:SfPopup x:Name="createtransactionpopup" WidthRequest="480" AutoSizeMode="Height" ShowCloseButton="True" ShowHeader="True" HeaderTitle="Add Transaction" HorizontalOptions="Center" VerticalOptions="Center" IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="{DynamicResource Surface}" />
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Grid RowDefinitions="auto,auto,auto,*,auto">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="2">
+                                <input:SfComboBox Grid.Column="0" ItemsSource="{Binding TransactionDetails.TransactionTypeOptions}" SelectedItem="{Binding TransactionDetails.TransactionType, Mode=TwoWay}" Placeholder="Transaction Type" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" IsClearButtonVisible="False" ShowBorder="False"/>
+                            </Border>
+                            <Border Grid.Column="1" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="2">
+                                <input:SfComboBox Grid.Column="1" ItemsSource="{Binding TransactionDetails.TransactionCategoryOptions, Mode=TwoWay}" SelectedItem="{Binding TransactionDetails.TransactionCategory, Mode=TwoWay}" Placeholder="Category" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" IsClearButtonVisible="False" ShowBorder="False"/>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="2">
+                                <input:SfComboBox Grid.Column="0" ItemsSource="{Binding TransactionDetails.TransactionSubCategoryOptions}" SelectedItem="{Binding TransactionDetails.TransactionSubCategory, Mode=TwoWay}" IsClearButtonVisible="False" Placeholder="SubCategory" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" ShowBorder="False"/>
+                            </Border>
+                            <!--<Entry Grid.Column="0" Text="{Binding TransactionDetails.transactiondate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="transaction date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>-->
+                            <Border Grid.Column="1" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
+                                <Entry Keyboard="Numeric" Text="{Binding  TransactionDetails.TransactionAmount, Mode=TwoWay}" Placeholder="Transaction Amount" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent" TextChanged="OnEntryTextChanged"/>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Row="2"  VerticalOptions="Center" Margin="16,16,16,0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
+                            <Grid ColumnDefinitions="*,auto,auto">
+                                <Entry Grid.Column="0" Text="{Binding TransactionDetails.TransactionDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Transaction Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+
+                                <picker:SfDatePicker x:Name="transactiondatepicker" Grid.Column="1" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}" SelectedDate="{Binding TransactionDetails.TransactionDate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
+                                    <picker:SfDatePicker.FooterView>
+                                        <picker:PickerFooterView ShowOkButton="True" OkButtonText="OK" CancelButtonText="Cancel" Height="40" />
+                                    </picker:SfDatePicker.FooterView>
+                                </picker:SfDatePicker>
+                                <button:SfButton x:Name="pickerButton" Grid.Column="2" FontFamily="FontIcons" Text="&#xe723;" TextColor="{DynamicResource GrayText}" MinimumHeightRequest="30" MinimumWidthRequest="30" FontSize="15" HorizontalOptions="End" VerticalOptions="Center" Padding="0" BackgroundColor="transparent" Clicked="CalendarIconClicked"/>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="3" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="120"  Margin="16,16,16,0">
+                            <Entry Text="{Binding  TransactionDetails.Remarks, Mode=TwoWay}" Placeholder="Remark" VerticalTextAlignment="Start" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent"/>
+                        </Border>
+
+                        <HorizontalStackLayout Grid.Row="4" HorizontalOptions="End" Margin="0,16,16,16">
+                            <button:SfButton Text="Cancel" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnTransactionCancelClicked"/>
+                            <button:SfButton Text="{Binding TransactionDetails.ButtonText}" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnTransactionAddClicked"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <!--budget popup-->
+        <popup:SfPopup x:Name="createbudgetpopup" WidthRequest="480" AutoSizeMode="Height" ShowCloseButton="True" ShowHeader="True" HeaderTitle="Create Budget" HorizontalOptions="Center" VerticalOptions="Center" IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="{DynamicResource Surface}" />
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Grid RowDefinitions="auto,auto,*,auto">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
+                                <Entry Text="{Binding  BudgetDetails.BudgetTitle, Mode=TwoWay}" Placeholder="Budget Title" PlaceholderColor="{DynamicResource GrayText}" TextColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent"/>
+                            </Border>
+                            <Border Grid.Column="1" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="2">
+                                <input:SfComboBox Grid.Column="1" ItemsSource="{Binding BudgetDetails.BudgetCategoryOptions, Mode=TwoWay}" BackgroundColor ="{DynamicResource Surface}" SelectedItem="{Binding BudgetDetails.BudgetCategory, Mode=TwoWay}" Placeholder="Category" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" IsClearButtonVisible="False" ShowBorder="False"/>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
+                                <Entry Keyboard="Numeric" Text="{Binding  BudgetDetails.BudgetAmount, Mode=TwoWay}" Placeholder="Budget Amount" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent" TextChanged="OnEntryTextChanged"/>
+                            </Border>
+                            <Border Grid.Column="1"  VerticalOptions="Center" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
+                                <Grid ColumnDefinitions="*,auto,auto">
+                                    <Entry Grid.Column="0" Text="{Binding BudgetDetails.BudgetDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Budget Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    <picker:SfDatePicker x:Name="budgetdatepicker" Grid.Column="1" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}" SelectedDate="{Binding BudgetDetails.BudgetDate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
+                                        <picker:SfDatePicker.FooterView>
+                                            <picker:PickerFooterView ShowOkButton="True" OkButtonText="Ok" CancelButtonText="Cancel" Height="40" />
+                                        </picker:SfDatePicker.FooterView>
+                                    </picker:SfDatePicker>
+                                    <Button x:Name="pickerButton" Grid.Column="2" FontFamily="FontIcons" Text="&#xe723;" TextColor="{DynamicResource GrayText}" MinimumHeightRequest="30" MinimumWidthRequest="30" FontSize="15" HorizontalOptions="End" VerticalOptions="Center" Padding="0" BackgroundColor="transparent" Clicked="CalendarIconClicked"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Row="2" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="120" Margin="16,16,16,0">
+                            <Entry Text="{Binding  BudgetDetails.BudgetRemarks, Mode=TwoWay}" Placeholder="Remark" VerticalTextAlignment="Start" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent"/>
+                        </Border>
+
+                        <HorizontalStackLayout Grid.Row="3" HorizontalOptions="End" Margin="0,16,16,16">
+                            <button:SfButton Text="Cancel" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnBudgetCancelClicked"/>
+                            <button:SfButton Text="{Binding BudgetDetails.ButtonText, Mode=TwoWay}" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnBudgetAddClicked"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <popup:SfPopup x:Name="addsavingspopup" WidthRequest="480" AutoSizeMode="Height" ShowCloseButton="True" ShowHeader="True" HeaderTitle="Add Savings" HorizontalOptions="Center" VerticalOptions="Center" IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="{DynamicResource Surface}" />
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Grid RowDefinitions="auto,auto,*,auto">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
+                                <Entry Text="{Binding  SavingDetails.SavingDescription, Mode=TwoWay}" Placeholder="Description" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="Transparent"/>
+                            </Border>
+                            <Border Grid.Column="1" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="2">
+                                <input:SfComboBox Grid.Column="1" ItemsSource="{Binding SavingDetails.SavingTypeOptions, Mode=TwoWay}" SelectedItem="{Binding SavingDetails.SavingType, Mode=TwoWay}" Placeholder="Transaction Type" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" IsClearButtonVisible="False" ShowBorder="False"/>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
+                                <Entry Keyboard="Numeric" Text="{Binding  SavingDetails.SavingAmount, Mode=TwoWay}" Placeholder="Transaction Amount" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent" TextChanged="OnEntryTextChanged"/>
+                            </Border>
+                            <Border Grid.Column="1"  VerticalOptions="Center" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
+                                <Grid ColumnDefinitions="*,auto,auto">
+                                    <Entry Grid.Column="0" Text="{Binding SavingDetails.SavingDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Transaction Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    <picker:SfDatePicker x:Name="savingdatepicker" Grid.Column="1" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}" SelectedDate="{Binding SavingDetails.SavingDate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
+                                        <picker:SfDatePicker.FooterView>
+                                            <picker:PickerFooterView ShowOkButton="True" OkButtonText="Okay" CancelButtonText="Cancel" Height="40" />
+                                        </picker:SfDatePicker.FooterView>
+                                    </picker:SfDatePicker>
+                                    <Button x:Name="pickerButton" Grid.Column="2" FontFamily="FontIcons" Text="&#xe723;" TextColor="{DynamicResource GrayText}" MinimumHeightRequest="30" MinimumWidthRequest="30" FontSize="15" HorizontalOptions="End" VerticalOptions="Center" Padding="0" BackgroundColor="transparent" Clicked="CalendarIconClicked"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Row="2" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="120" Margin="16,16,16,0">
+                            <Entry Text="{Binding  SavingDetails.SavingRemarks, Mode=TwoWay}" Placeholder="Remark" VerticalTextAlignment="Start" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent"/>
+                        </Border>
+
+                        <HorizontalStackLayout Grid.Row="3" HorizontalOptions="End" Margin="0,16,16,16">
+                            <button:SfButton Text="Cancel" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnSavingsCancelClicked"/>
+                            <button:SfButton Text="{Binding SavingDetails.ButtonText}" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnAddSavingsClicked"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+
+        <popup:SfPopup x:Name="creategoalpopup" WidthRequest="480" AutoSizeMode="Height" ShowCloseButton="True" ShowHeader="True" HeaderTitle="create goal" HorizontalOptions="Center" VerticalOptions="Center" IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="{DynamicResource Surface}" />
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Grid RowDefinitions="auto,auto,*,auto">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
+                                <Entry Text="{Binding  GoalDetails.GoalTitle, Mode=TwoWay}" Placeholder="Goal Title" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent"/>
+                            </Border>
+                            <Border Grid.Column="1" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
+                                <Entry Keyboard="Numeric" Text="{Binding  GoalDetails.GoalAmount, Mode=TwoWay}" Placeholder="Target Amount" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent" TextChanged="OnEntryTextChanged"/>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="2">
+                                <input:SfComboBox Grid.Column="1" ItemsSource="{Binding GoalDetails.GoalPriorityOptions, Mode=TwoWay}" SelectedItem="{Binding GoalDetails.GoalPriority, Mode=TwoWay}" Placeholder="Priority" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" IsClearButtonVisible="False" ShowBorder="False"/>
+                            </Border>
+
+                            <Border Grid.Column="1"  VerticalOptions="Center" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
+                                <Grid ColumnDefinitions="*,auto,auto">
+                                    <Entry Grid.Column="0" Text="{Binding GoalDetails.DeadlineDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Deadline Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    <picker:SfDatePicker x:Name="goaldatepicker" Grid.Column="1" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}" SelectedDate="{Binding GoalDetails.DeadlineDate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
+                                        <picker:SfDatePicker.FooterView>
+                                            <picker:PickerFooterView ShowOkButton="True" OkButtonText="Okay" CancelButtonText="Cancel" Height="40" />
+                                        </picker:SfDatePicker.FooterView>
+                                    </picker:SfDatePicker>
+                                    <Button x:Name="pickerButton" Grid.Column="2" FontFamily="FontIcons" Text="&#xe723;" TextColor="{DynamicResource GrayText}" MinimumHeightRequest="30" MinimumWidthRequest="30" FontSize="15" HorizontalOptions="End" VerticalOptions="Center" Padding="0" BackgroundColor="transparent" Clicked="CalendarIconClicked"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Row="2" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="120" Margin="16,16,16,0">
+                            <Entry Text="{Binding  GoalDetails.GoalRemarks, Mode=TwoWay}" Placeholder="Remark" VerticalTextAlignment="Start" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent"/>
+                        </Border>
+
+                        <HorizontalStackLayout Grid.Row="3" HorizontalOptions="End" Margin="0,16,16,16">
+                            <button:SfButton Text="Cancel" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnGoalCancelClicked"/>
+                            <button:SfButton Text="{Binding GoalDetails.ButtonText}" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnCreateGoalClicked"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <!--expense popup-->
+        <popup:SfPopup x:Name="addexpensepopup" WidthRequest="480" AutoSizeMode="Height" ShowCloseButton="True" ShowHeader="True" HeaderTitle="Add Expense" HorizontalOptions="Center" VerticalOptions="Center" IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="{DynamicResource Surface}" />
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Grid RowDefinitions="auto,auto,*,auto">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="2">
+                                <input:SfComboBox Grid.Column="1" ItemsSource="{Binding TransactionDetails.TransactionCategoryOptions, Mode=TwoWay}" SelectedItem="{Binding TransactionDetails.transactioncategory, Mode=TwoWay}" Placeholder="category" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" IsClearButtonVisible="False" ShowBorder="False"/>
+                            </Border>
+
+                            <Border Grid.Column="1" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="2">
+                                <input:SfComboBox Grid.Column="0" ItemsSource="{Binding TransactionDetails.transactionsubcategoryoptions}" SelectedItem="{Binding TransactionDetails.transactionsubcategory, Mode=TwoWay}" IsClearButtonVisible="False" Placeholder="subcategory" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" ShowBorder="False"/>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
+                                <Entry Keyboard="Numeric" Text="{Binding  TransactionDetails.transactionamount, Mode=TwoWay}" Placeholder="transaction amount" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent" TextChanged="OnEntryTextChanged"/>
+                            </Border>
+                            <Border Grid.Column="1"  VerticalOptions="Center" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
+                                <Grid ColumnDefinitions="*,auto,auto">
+                                    <Entry Text="{Binding TransactionDetails.transactiondate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="transaction date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    <picker:SfDatePicker x:Name="transactiondatepicker" Grid.Column="1" IsOpen="{Binding ispickeropen, Mode=TwoWay}" SelectedDate="{Binding TransactionDetails.transactiondate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
+                                        <picker:SfDatePicker.FooterView>
+                                            <picker:PickerFooterView ShowOkButton="True" OkButtonText="ok" CancelButtonText="Cancel" Height="40" />
+                                        </picker:SfDatePicker.FooterView>
+                                    </picker:SfDatePicker>
+                                    <Button x:Name="pickerButton" Grid.Column="2" FontFamily="FontIcons" Text="&#xe723;" TextColor="{DynamicResource GrayText}" MinimumHeightRequest="30" MinimumWidthRequest="30" FontSize="15" HorizontalOptions="End" VerticalOptions="Center" Padding="0" BackgroundColor="transparent" Clicked="CalendarIconClicked"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Row="2" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="120"  Margin="16,16,16,0">
+                            <Entry Text="{Binding  TransactionDetails.remarks, Mode=TwoWay}" Placeholder="remark" VerticalTextAlignment="Start" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent"/>
+                        </Border>
+
+                        <HorizontalStackLayout Grid.Row="4" HorizontalOptions="End" Margin="0,16,16,16">
+                            <button:SfButton Text="Cancel" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnTransactionCancelClicked"/>
+                            <button:SfButton Text="{Binding TransactionDetails.ButtonText}" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnTransactionAddClicked"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+    </Grid>
+</ContentView>

@@ -1,13 +1,15 @@
-﻿using MAUIShowcaseSample.Services;
-using Syncfusion.Maui.Buttons;
+﻿using CommunityToolkit.Mvvm.Input;
+using MAUIShowcaseSample.Services;
+using Syncfusion.Maui.Toolkit.SegmentedControl;
 using Syncfusion.Maui.Data;
+using Syncfusion.XlsIO;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace MAUIShowcaseSample
 {
-    public class TransactionPageViewModel : INotifyPropertyChanged
+    public partial class TransactionPageViewModel : INotifyPropertyChanged
     {
         private readonly DataStore _dataStore;
 
@@ -24,6 +26,8 @@ namespace MAUIShowcaseSample
         private ChartDateRange selectedGridDateRange;
 
         private ObservableCollection<TransactionGridData> transactionGridData;
+
+        private int selectedRowCount;
 
         private bool isAllRowsSelected;
 
@@ -74,7 +78,7 @@ namespace MAUIShowcaseSample
             set
             {
                 this.selectedGridDateRange = value;
-                UpdateGridData(SegmentTitle.ElementAt(SelectedSegmentIndex).Text);
+                UpdateGridData();
                 OnPropertyChanged("SelectedChartDateRange");
             }
         }
@@ -106,6 +110,19 @@ namespace MAUIShowcaseSample
 
         }
 
+        public int SelectedRowCount
+        {
+            get
+            {
+                return this.selectedRowCount;
+            }
+            set
+            {
+                this.selectedRowCount = value;
+                OnPropertyChanged(nameof(SelectedRowCount));
+            }
+        }
+
         public bool IsAllRowsSelected
         {
             get
@@ -115,7 +132,6 @@ namespace MAUIShowcaseSample
             set
             {
                 this.isAllRowsSelected = value;
-                SelectAllRowsInGrid(this.IsAllRowsSelected);
                 OnPropertyChanged(nameof(IsAllRowsSelected));
             }
         }
@@ -147,13 +163,14 @@ namespace MAUIShowcaseSample
                 new ChartDateRange() {RangeType = "This Year", StartDate = new DateTime(DateTime.Today.Year, 1, 1), EndDate = new DateTime(DateTime.Today.Year, 12, 31)}
             };
             SelectedGridDateRange = DateRange.ElementAt(1);
-            UpdateGridData(SegmentTitle.ElementAt(SelectedSegmentIndex).Text);
+            UpdateGridData();
             IsAllRowsSelected = false;
         }
 
-        public void UpdateGridData(string transactionType)
+        public void UpdateGridData()
         {
             var dailyTransaction = _dataStore.GetDailyTransactions();
+            var transactionType = SegmentTitle.ElementAt(SelectedSegmentIndex).Text;
             GridData = GetGridData(dailyTransaction, transactionType);
         }
 
@@ -168,6 +185,7 @@ namespace MAUIShowcaseSample
             {
                 _gridData.Add(new TransactionGridData()
                 {
+                    TransactionId = transaction.TransactionId,
                     TransactionCategory = transaction.TransactionCategory,
                     TransactionAmount = transaction.TransactionAmount + currencySymbol,
                     TransactionDescription = transaction.TransactionDescription,
@@ -179,7 +197,7 @@ namespace MAUIShowcaseSample
             return _gridData;
         }
 
-        public void SelectAllRowsInGrid(bool value)
+        public void SelectAllRowsInGrid(bool value, int pageIndex, int pageSize)
         {
             var selectedRows = GridData;
 
@@ -191,12 +209,108 @@ namespace MAUIShowcaseSample
             {
                 selectedRows = GridData.Where(t => t.TransactionType == "Expense").ToObservableCollection<TransactionGridData>();
             }
-            
-            foreach (var row in selectedRows)
+            var indexedRows = selectedRows.Skip(pageIndex * pageSize).Take(pageSize);
+            foreach (var row in indexedRows)
             {
                 row.IsSelected = value;
             }
-        }        
+        }
+
+        [RelayCommand]
+        public async Task ExportAllDataAsync()
+        {
+            if (ExportExcel(GridData))
+            {
+                return;
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Failed", "Excel export failed", "Okay");
+            }
+        }
+
+        [RelayCommand]
+        public async Task ExportSelectedDataAsync()
+        {
+            var selectedData = GridData.Where(t => t.IsSelected).ToObservableCollection<TransactionGridData>();
+            if (ExportExcel(selectedData))
+            {
+                return;
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Failed", "Excel export failed", "Okay");
+            }
+        }
+
+        [RelayCommand]
+        public async Task DeleteTransactionAsync()
+        {
+            List<int> transactionIds = GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).ToList();
+            if (_dataStore.DeleteTransactions(transactionIds, "Transaction"))
+            {
+                UpdateGridData();
+                await Application.Current.MainPage.DisplayAlert("Success", "Transaction deleted successfully", "Okay");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Failed", "Deleting transaction failed", "Okay");
+            }
+        }
+
+        public bool ExportExcel(ObservableCollection<TransactionGridData> selectedRows)
+        {
+            try
+            {
+                using (ExcelEngine excelEngine = new ExcelEngine())
+                {
+                    Syncfusion.XlsIO.IApplication application = excelEngine.Excel;
+                    application.DefaultVersion = ExcelVersion.Xlsx;
+
+                    // Create a workbook and worksheet
+                    IWorkbook workbook = application.Workbooks.Create(1);
+                    IWorksheet worksheet = workbook.Worksheets[0];
+
+                    // Add headers
+                    worksheet.Range["A1"].Text = "Transaction Date";
+                    worksheet.Range["B1"].Text = "Category";
+                    worksheet.Range["C1"].Text = "Transaction Type";
+                    worksheet.Range["D1"].Text = "Amount";
+                    worksheet.Range["E1"].Text = "Remark";
+
+                    // Apply styles (optional)
+                    worksheet.Range["A1:E1"].CellStyle.Font.Bold = true;
+
+                    // Fill data from ObservableCollection
+                    int rowIndex = 2;
+                    foreach (var transaction in selectedRows)
+                    {
+                        worksheet.Range[$"A{rowIndex}"].Value = transaction.TransactionDate.ToString("dd/MM/yyyy");
+                        worksheet.Range[$"B{rowIndex}"].Value = transaction.TransactionCategory;
+                        worksheet.Range[$"C{rowIndex}"].Value = transaction.TransactionType;
+                        worksheet.Range[$"D{rowIndex}"].Value = transaction.TransactionAmount;
+                        worksheet.Range[$"E{rowIndex}"].Value = transaction.TransactionDescription;
+                        rowIndex++;
+                    }
+
+                    MemoryStream stream = new MemoryStream();
+                    workbook.SaveAs(stream);
+
+                    workbook.Close();
+                    //Dispose stream
+                    excelEngine.Dispose();
+
+                    string OutputFilename = "ExpenseAnalysis.xlsx";
+                    SaveService saveService = new();
+                    saveService.SaveAndView(OutputFilename, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", stream);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 
     public class TransactionGridData : INotifyPropertyChanged
@@ -299,6 +413,8 @@ namespace MAUIShowcaseSample
                 this.transactionDate = value;
             }
         }
+
+        public int TransactionId { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

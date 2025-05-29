@@ -1,85 +1,85 @@
-using Syncfusion.Maui.DataGrid.Exporting;
 using MAUIShowcaseSample.Services;
-using Syncfusion.XlsIO;
 using Syncfusion.Maui.Data;
+using Syncfusion.Maui.DataGrid.DataPager;
+using System.ComponentModel;
+using System.Diagnostics;
+using PageChangingEventArgs = Syncfusion.Maui.DataGrid.DataPager.PageChangingEventArgs;
 
 namespace MAUIShowcaseSample.View.Dashboard;
 
-public partial class TransactionPage : ContentView
+public partial class TransactionPage : ContentPage
 {
-	public TransactionPage(TransactionPageViewModel viewModel)
-	{
-		InitializeComponent();
+    //DashboardLayoutPage layoutPage;
+    public TransactionPage(TransactionPageViewModel viewModel, UserDataService dataService, DataStore dataStore)
+    {
+        string pageTitle = "Transaction";
+        InitializeComponent();
         BindingContext = viewModel;
+        var layoutViewModel = new DashboardLayoutPageViewModel(dataService, dataStore, pageTitle);
+        this.contentcontainer.Content = new DashboardLayoutPage(layoutViewModel, dataService, dataStore);
         TransactionSegment.SelectionChanged += GridSegmentChanged;
     }
 
-    private void GridSegmentChanged(object? sender, Syncfusion.Maui.Buttons.SelectionChangedEventArgs e)
+    private void GridSegmentChanged(object? sender, Syncfusion.Maui.Toolkit.SegmentedControl.SelectionChangedEventArgs e)
     {
-        ((TransactionPageViewModel)BindingContext).UpdateGridData(e.NewValue.Text);
+        ((TransactionPageViewModel)BindingContext).UpdateGridData();
+    }
+
+    private async void OnPageChanged(object? sender, PageChangingEventArgs e)
+    {
+        await UpdateGridData(e.NewPageIndex);
     }
 
     private void OnCheckedChanged(object? sender, CheckedChangedEventArgs e)
     {
-        ((TransactionPageViewModel)BindingContext).SelectAllRowsInGrid(e.Value);
+        ((TransactionPageViewModel)BindingContext).SelectAllRowsInGrid(e.Value, this.dataPager.PageIndex, this.dataPager.PageSize);
     }
-    private async void OnExportClicked(object sender, EventArgs e)
+
+    private async void OnSingleCheckboxChanged(object? sender, CheckedChangedEventArgs e)
     {
-        var selectedData = ((TransactionPageViewModel)BindingContext).GridData.Where(t => t.IsSelected).ToObservableCollection<TransactionGridData>();
-        if (selectedData.Count() == 0)
+        await UpdateGridData(this.dataPager.PageIndex);
+    }
+
+    private async Task<bool> UpdateGridData(int pageIndex)
+    {
+        var selectedCount = ((TransactionPageViewModel)BindingContext).GridData.Skip(pageIndex * this.dataPager.PageSize).Take(this.dataPager.PageSize).Where(t => t.IsSelected == true).Count();
+        ((TransactionPageViewModel)BindingContext).SelectedRowCount = selectedCount;
+
+        if (selectedCount > 0)
         {
-            await Application.Current.MainPage.DisplayAlert("Export failed", "Please select rows to export.", "OK");
+            if (selectedCount > 1)
+            {
+                this.editbutton.IsVisible = false;
+            }
+            else
+            {
+                this.editbutton.IsVisible = true;
+            }
+            this.TransactionSegment.IsVisible = false;
+            this.selectioncontrol.IsVisible = true;
         }
         else
         {
-            try
-            {
-                using (ExcelEngine excelEngine = new ExcelEngine())
-                {
-                    Syncfusion.XlsIO.IApplication application = excelEngine.Excel;
-                    application.DefaultVersion = ExcelVersion.Xlsx;
+            this.selectioncontrol.IsVisible = false;
+            this.TransactionSegment.IsVisible = true;
+        }
+        if (selectedCount < this.dataPager.PageSize)
+        {
+            ((TransactionPageViewModel)BindingContext).IsAllRowsSelected = false;
+        }
 
-                    // Create a workbook and worksheet
-                    IWorkbook workbook = application.Workbooks.Create(1);
-                    IWorksheet worksheet = workbook.Worksheets[0];
+        return true;
+    }
 
-                    // Add headers
-                    worksheet.Range["A1"].Text = "Transaction Date";
-                    worksheet.Range["B1"].Text = "Category";
-                    worksheet.Range["C1"].Text = "Transaction Type";
-                    worksheet.Range["D1"].Text = "Amount";
-                    worksheet.Range["E1"].Text = "Remark";
+    private void OnSelectCloseButtonClicked(object sender, EventArgs e)
+    {
+        this.selectioncontrol.IsVisible = false;
+        this.TransactionSegment.IsVisible = true;
+    }
 
-                    // Apply styles (optional)
-                    worksheet.Range["A1:E1"].CellStyle.Font.Bold = true;
-
-                    // Fill data from ObservableCollection
-                    int rowIndex = 2;
-                    foreach (var transaction in selectedData)
-                    {
-                        worksheet.Range[$"A{rowIndex}"].Value = transaction.TransactionDate.ToString("dd/MM/yyyy");
-                        worksheet.Range[$"B{rowIndex}"].Value = transaction.TransactionCategory;
-                        worksheet.Range[$"C{rowIndex}"].Value = transaction.TransactionType;
-                        worksheet.Range[$"D{rowIndex}"].Value = transaction.TransactionAmount;
-                        worksheet.Range[$"E{rowIndex}"].Value = transaction.TransactionDescription;
-                        rowIndex++;
-                    }
-
-                    MemoryStream stream = new MemoryStream();
-                    workbook.SaveAs(stream);
-
-                    workbook.Close();
-                    //Dispose stream
-                    excelEngine.Dispose();                   
-
-                    string OutputFilename = "ExpenseAnalysis.xlsx";
-                    SaveService saveService = new();
-                    saveService.SaveAndView(OutputFilename, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", stream);
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-        }        
+    private async void OnEditSelection(object? sender, EventArgs e)
+    {
+        int transactionId = ((TransactionPageViewModel)BindingContext).GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).First();
+        ((DashboardLayoutPage)this.contentcontainer.Content).TriggerEditTransactionPopup(transactionId);
     }
 }

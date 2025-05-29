@@ -1,5 +1,5 @@
 ﻿using MAUIShowcaseSample.Services;
-using Syncfusion.Maui.Buttons;
+using Syncfusion.Maui.Toolkit.SegmentedControl;
 using Syncfusion.Maui.Data;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -47,6 +47,10 @@ namespace MAUIShowcaseSample
         private ObservableCollection<AreaChartData> dashboardExpenseAreaChart;
 
         private ObservableCollection<AreaChartData> savingsAreaChart;
+
+        private ObservableCollection<SummarizedGoalData> goalData;
+
+        private string currencySymbol;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -121,6 +125,19 @@ namespace MAUIShowcaseSample
                 OnPropertyChanged(nameof(ChartData));
             }
             
+        }
+
+        public ObservableCollection<SummarizedGoalData> GoalData
+        {
+            get
+            {
+                return this.goalData;
+            }
+            set
+            {
+                this.goalData = value;
+                OnPropertyChanged(nameof(GoalData));
+            }
         }
 
         public TransactionSummary TotalTransactionSummary { get; set; } = new();
@@ -251,10 +268,23 @@ namespace MAUIShowcaseSample
             }
         }
 
+        public string CurrencySymbol
+        {
+            get
+            {
+                return this.currencySymbol;
+            }
+            set
+            {
+                this.currencySymbol = value;
+            }
+        }
+
         public DashboardPageViewModel(UserDataService userService, DataStore dataStore)
         {
             _userService = userService;
-            _dataStore = dataStore;            
+            _dataStore = dataStore;
+            CurrencySymbol = _userService.GetUserCurrencySymbol(userService.LoggedInAccount);
             SegmentTitle = new List<SfSegmentItem>() 
             { 
                 new SfSegmentItem(){ Text = "Income"},
@@ -288,17 +318,25 @@ namespace MAUIShowcaseSample
             SelectedChartDateRange = DateRange.ElementAt(1);
             SelectedAreaChartDateRange = AreaChartDateRange.ElementAt(1);
             SelectedSavingsChartDateRange = SavingsChartDateRange.ElementAt(3);
-            var dailyTransaction = _dataStore.GetDailyTransactions();
-            Transactions = UpdateRecentTransaction(dailyTransaction, 8);
-            ChartData = GetChartData(dailyTransaction, SegmentTitle.ElementAt(SelectedSegmentIndex).Text);
-            UpdateAreaChartData(SelectedAreaChartDateRange.RangeType, SelectedChartDateRange.StartDate, SelectedChartDateRange.EndDate);
+            var activeGoalData = dataStore.GetGoalsData().Where(t => t.IsCompleted == false).ToObservableCollection();
+            GoalData = GetSummarizedGoalData(activeGoalData);
+            UpdateDashboardPage();
             //var incomeTransactions = (dailyTransaction.Where(t => t.TransactionType == "Income")).ToObservableCollection<Transaction>();
             //var expenseTransactions = (dailyTransaction.Where(t => t.TransactionType == "Expense")).ToObservableCollection<Transaction>();
             //DashboardIncomeAreaChart = DataHelper.GetAreaChartData(incomeTransactions, SelectedAreaChartDateRange.RangeType, SelectedChartDateRange.StartDate, SelectedChartDateRange.EndDate);
             //DashboardExpenseAreaChart = DataHelper.GetAreaChartData(expenseTransactions, SelectedAreaChartDateRange.RangeType, SelectedChartDateRange.StartDate, SelectedChartDateRange.EndDate);
+           
+           // GoalsPageViewModel = new GoalsPageViewModel(_userService, _dataStore);
+        }
+
+        public void UpdateDashboardPage()
+        {
+            var dailyTransaction = _dataStore.GetDailyTransactions();
+            Transactions = UpdateRecentTransaction(dailyTransaction, 8);
+            ChartData = GetChartData(dailyTransaction, SegmentTitle.ElementAt(SelectedSegmentIndex).Text);
+            UpdateAreaChartData(SelectedAreaChartDateRange.RangeType, SelectedChartDateRange.StartDate, SelectedChartDateRange.EndDate);
             UpdateSavingsAreaChartData(SelectedSavingsChartDateRange.RangeType, SelectedSavingsChartDateRange.StartDate, SelectedSavingsChartDateRange.EndDate);
             TotalTransactionSummary = GetTransactionSummary(dailyTransaction);
-            GoalsPageViewModel = new GoalsPageViewModel(_userService, _dataStore);
         }
 
         private ObservableCollection<Transaction> UpdateRecentTransaction(ObservableCollection<Transaction> allTransaction, int? limitCount)
@@ -307,7 +345,7 @@ namespace MAUIShowcaseSample
 
             var selectedTransactions = limitCount != null? allTransaction.Take((int)limitCount) : allTransaction;            
 
-            var currencySymbol = _userService.GetUserCurrencySymbol(_userService.LoggedInAccount);
+            CurrencySymbol = _userService.GetUserCurrencySymbol(_userService.LoggedInAccount);
             foreach (var transaction in selectedTransactions)
             {
                 var amount = string.Empty;
@@ -319,7 +357,7 @@ namespace MAUIShowcaseSample
                 {
                     amount = "-";
                 }
-                amount = amount + currencySymbol + transaction.TransactionAmount;
+                amount = amount + CurrencySymbol + transaction.TransactionAmount;
 
                 // Create a new Transaction object instead of modifying the existing one
                 _transactions.Add(new Transaction
@@ -336,7 +374,7 @@ namespace MAUIShowcaseSample
         
         public ObservableCollection<TransactionChartData> GetChartData(ObservableCollection<Transaction> transactions, string transactionType)
         {
-            var currencySymbol = _userService.GetUserCurrencySymbol(_userService.LoggedInAccount);
+            var CurrencySymbol = _userService.GetUserCurrencySymbol(_userService.LoggedInAccount);
             var _transactions = transactions.Where(t => t.TransactionType == transactionType).Where(t => t.TransactionDate >= SelectedChartDateRange.StartDate && t.TransactionDate <= SelectedChartDateRange.EndDate);
             var _chartData = new ObservableCollection<TransactionChartData>();
 
@@ -352,7 +390,7 @@ namespace MAUIShowcaseSample
                 var totalPercent = (totalAmount / sumAmount) * 100;
                 Brush categoryColor = GetRandomLegendColor();
                 LegendColors.Add(categoryColor);
-                _chartData.Add(new TransactionChartData() { TransactionCategory = _transaction.Key, TransactionAmount = currencySymbol + totalAmount.ToString(), TransactionPercent = totalPercent, CategoryColor = categoryColor });
+                _chartData.Add(new TransactionChartData() { TransactionCategory = _transaction.Key, TransactionAmount = CurrencySymbol + totalAmount.ToString(), TransactionPercent = totalPercent, CategoryColor = categoryColor });
             }
             return _chartData;
         }
@@ -496,19 +534,19 @@ namespace MAUIShowcaseSample
 
         private TransactionSummary GetTransactionSummary(ObservableCollection<Transaction> transactions)
         {
-            var currencySymbol = _userService.GetUserCurrencySymbol(_userService.LoggedInAccount);
-            var previousBalance = currencySymbol + _dataStore.GetPreviousBalance();
+            var CurrencySymbol = _userService.GetUserCurrencySymbol(_userService.LoggedInAccount);
+            var previousBalance = CurrencySymbol + _dataStore.GetPreviousBalance();
             var totalExpense =  transactions.Where(t => t.TransactionType == "Expense").Sum(t => double.Parse(t.TransactionAmount));
             var totalIncome = transactions.Where(t => t.TransactionType == "Income").Sum(t => double.Parse(t.TransactionAmount));
-            var totalSavings = currencySymbol + (totalIncome - totalExpense);
+            var totalSavings = CurrencySymbol + (totalIncome - totalExpense);
 
-            return new TransactionSummary() { CurrentBalance = previousBalance, TotalExpense = currencySymbol + totalExpense, TotalIncome = currencySymbol + totalIncome, TotalSavings = totalSavings };
+            return new TransactionSummary() { CurrentBalance = previousBalance, TotalExpense = CurrencySymbol + totalExpense, TotalIncome = CurrencySymbol + totalIncome, TotalSavings = totalSavings };
         }
 
         private Brush GetRandomLegendColor()
         {    
             var randomKey = legendColors[_random.Next(legendColors.Count)];
-            legendColors.Remove(randomKey); // Removed from list to ensure duplicate colors in chart
+            //legendColors.Remove(randomKey); // Removed from list to ensure duplicate colors in chart
 
             if (Application.Current.Resources.TryGetValue(randomKey, out var colorValue) && colorValue is Color color)
             {
@@ -530,6 +568,22 @@ namespace MAUIShowcaseSample
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private ObservableCollection<SummarizedGoalData> GetSummarizedGoalData(ObservableCollection<Goal> filterData)
+        {
+            var summarizedData = new ObservableCollection<SummarizedGoalData>();
+            var elementCount = 1;
+            foreach (var data in filterData)
+            {
+                var categoryIcon = DataHelper.GetGoalIcon(data.GoalTitle);
+                Color categoryColor = DataHelper.GetColorCode(elementCount);
+                double remainingAmount = data.GoalAmount - data.ContributionAmount;
+                double utilizedPercent = Math.Round(((data.ContributionAmount / data.GoalAmount) * 100), 1, MidpointRounding.ToZero);
+                summarizedData.Add(new SummarizedGoalData() { GoalId = data.GoalId, GoalTitle = data.GoalTitle, GoalPriority = data.GoalPriority, GoalDate = data.GoalDate, GoalAmount = data.GoalAmount, CurrencySymbol = this.CurrencySymbol, Icon = categoryIcon, IconColor = categoryColor, ContributionAmount = data.ContributionAmount, RemainingAmount = remainingAmount, Utilization = utilizedPercent, Remarks = data.Remarks, RemainingDays = (data.GoalDate - DateTime.Today).Days, Transactions = data.Transactions });
+                elementCount++;
+            }
+            return summarizedData;
         }
     }
 

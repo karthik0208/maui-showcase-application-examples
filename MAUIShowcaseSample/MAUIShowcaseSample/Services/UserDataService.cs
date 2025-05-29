@@ -1,5 +1,7 @@
 ﻿using Microsoft.Maui.ApplicationModel.Communication;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace MAUIShowcaseSample
 {
@@ -36,7 +38,7 @@ namespace MAUIShowcaseSample
             return false;
         }
 
-        public bool ValidateUser(string email, string password)
+        public bool ValidateUser(string? email, string? password)
         {
             var user = _users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
             if (user != null)
@@ -56,6 +58,33 @@ namespace MAUIShowcaseSample
             return false;
         }
 
+        public bool UpdateBasicInfo(string email, UserCredentials profileValue)
+        {
+            var user = _users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+            if (user != null)
+            {
+                user.FirstName = profileValue.FirstName;
+                user.LastName = profileValue.LastName;
+                user.Gender = profileValue.Gender;
+                user.DOB = profileValue.DOB;
+                return true;
+            }
+            return false;
+        }
+
+        public bool UpdatePersonalizationInfo(string email, UserCredentials profileValue)
+        {
+            var user = _users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+            if (user != null)
+            {
+                user.Language = profileValue.Language;
+                user.Currency = profileValue.Currency;
+                user.TimeZone = profileValue.TimeZone;
+                return true;
+            }
+            return false;
+        }
+
         public bool UpdatePassword(string email, string password)
         {
             var user = _users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
@@ -63,7 +92,26 @@ namespace MAUIShowcaseSample
             return true;
         }
 
-        public bool AddAccountInfo(UserCredentials userData)
+        public bool UpdateEmail(string currentEmail, string newEmail)
+        {
+            var user = _users.FirstOrDefault(u => u.Email.Equals(currentEmail, StringComparison.OrdinalIgnoreCase));
+            user.Email = newEmail;
+            return true;
+        }
+
+        public bool UpdateNotification(string email, bool isNotificationEnabled)
+        {
+            var user = _users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+            user.IsNotificationEnabled = isNotificationEnabled;
+            return true;
+        }
+
+        public bool DeleteAccount(string userMail)
+        {
+            return _users.Remove(_users.FirstOrDefault(u => u.Email.Equals(userMail, StringComparison.OrdinalIgnoreCase)));
+        }
+        
+        public bool UpdateAccountInfo(UserCredentials userData)
         {
             var user = _users.FirstOrDefault(u => u.Email.Equals(userData.Email, StringComparison.OrdinalIgnoreCase));
 
@@ -76,6 +124,8 @@ namespace MAUIShowcaseSample
                 user.Gender = userData.Gender;
                 user.Language = userData.Language;
                 user.TimeZone = userData.TimeZone;
+                user.IsNotificationEnabled = userData.IsNotificationEnabled;
+                user.Theme = userData.Theme;
             }
             return ValidateAccountInfo(userData.Email);
         }
@@ -83,25 +133,29 @@ namespace MAUIShowcaseSample
         public string GetUserCurrencySymbol(string email)
         {
             var user = _users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-
-            var currency = user.Currency;
-
-            switch (currency)
+            string currencySymbol = string.Empty;
+            if (user != null)
             {
-                case "USD": return "$";
+                var currency = user.Currency;
 
-                case "EUR": return "€";
+                switch (currency)
+                {
+                    case "USD": return "$";
 
-                case "CNY": return "¥";
+                    case "EUR": return "€";
 
-                case "JPY": return "¥";
+                    case "CNY": return "¥";
 
-                case "RUB": return "₽";
+                    case "JPY": return "¥";
 
-                case "KRW": return "₩";
+                    case "RUB": return "₽";
 
-                default: return "₹";
+                    case "KRW": return "₩";
+
+                    default: return "₹";
+                }
             }
+            return currencySymbol;
         }
 
         public bool ValidateAccountInfo(string email)
@@ -125,29 +179,230 @@ namespace MAUIShowcaseSample
 
             return true;
         }
+
+        public async Task<UserCredentials> GetLoggedInUserProfile(string? email)
+        {
+            UserCredentials user = new UserCredentials();
+            if(email != null)
+            {
+                var loggedUser = _users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+                if(loggedUser != null)
+                {
+                    user.FirstName = loggedUser.FirstName;
+                    user.LastName = loggedUser.LastName;
+                    user.DOB = loggedUser.DOB;
+                    user.Language = loggedUser.Language;
+                    user.Gender = loggedUser.Gender;
+                    user.Currency = loggedUser.Currency;
+                    user.TimeZone = loggedUser.TimeZone;
+                    user.Email = loggedUser.Email;
+                    user.IsNotificationEnabled = loggedUser.IsNotificationEnabled;
+                    user.Theme = loggedUser.Theme;
+                }               
+            }      
+            return user;
+        }
     }
 
-    public class UserCredentials
+    public class UserCredentials : INotifyPropertyChanged
     {
-        public string UserName { get; set; }
+        private string? userName;
 
-        public string Email { get; set; }
+        private string? email;
 
-        public string Password { get; set; }
+        private string? password; 
 
-        public string FirstName { get; set; }
+        private string? firstName;
 
-        public string LastName { get; set; }
+        private string? lastName;
 
-        public DateTime DOB { get; set; }
+        private DateTime? dob;
 
-        public string Gender { get; set; }
+        private GenderEnum? gender;
 
-        public string Language { get; set; }
+        private string? language;
 
-        public string Currency { get; set; }
+        private string? currency;
 
-        public string TimeZone { get; set; }
+        private string? timeZone;
+
+        private bool? isNotificationEnabled;
+
+        private string? theme;
+
+        public string? UserName
+        {
+            get
+            {
+                return this.userName;
+            }
+            set
+            {
+                this.userName = value;
+                OnPropertyChanged(nameof(UserName));
+            }
+        }
+
+        public string? Email
+        {
+            get
+            {
+                return this.email;
+            }
+            set
+            {
+                this.email = value;
+                OnPropertyChanged(nameof(Email));
+            }
+        }
+
+        public string? Password
+        {
+            get
+            {
+                return this.password;
+            }
+            set
+            {
+                this.password = value;
+                OnPropertyChanged(nameof(Password));
+            }
+        }
+
+        public string? FirstName
+        {
+            get
+            {
+                return this.firstName;
+            }
+            set
+            {
+                this.firstName = value;
+                OnPropertyChanged(nameof(FirstName));
+            }
+        }
+
+        public string? LastName
+        {
+            get
+            {
+                return this.lastName;
+            }
+            set
+            {
+                this.lastName = value;
+                OnPropertyChanged(nameof(LastName));
+            }
+        }
+
+        public DateTime? DOB
+        {
+            get
+            {
+                return this.dob;
+            }
+            set
+            {
+                this.dob = value;
+                OnPropertyChanged(nameof(DOB));
+            }
+        }
+
+        public GenderEnum? Gender
+        {
+            get
+            {
+                return this.gender;
+            }
+            set
+            {
+                this.gender = value;
+                OnPropertyChanged(nameof(Gender));
+            }
+        }
+
+        public string? Language
+        {
+            get
+            {
+                return this.language;
+            }
+            set
+            {
+                this.language = value;
+                OnPropertyChanged(nameof(Language));
+            }
+        }
+
+        public string? Currency
+        {
+            get
+            {
+                return this.currency;
+            }
+            set
+            {
+                this.currency = value;
+                OnPropertyChanged(nameof(Currency));
+            }
+        }
+
+        public string? TimeZone
+        {
+            get
+            {
+                return this.timeZone;
+            }
+            set
+            {
+                this.timeZone = value;
+                OnPropertyChanged(nameof(TimeZone));
+            }
+        }
+
+        public bool? IsNotificationEnabled
+        {
+            get
+            {
+                return this.isNotificationEnabled;
+            }
+            set
+            {
+                this.isNotificationEnabled = value;
+                OnPropertyChanged(nameof(IsNotificationEnabled));
+            }
+        }
+
+        public string? Theme
+        {
+            get
+            {
+                return this.theme;
+            }
+            set
+            {
+                this.theme = value;
+                OnPropertyChanged(nameof(Theme));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public UserCredentials()
+        {           
+            this.IsNotificationEnabled = false;
+            this.Theme = DataHelper.GetAppThemes().Where(t => t.IsSelected == true).FirstOrDefault().Theme;
+        }
 
     }
+     
+    
+
 }
+
+

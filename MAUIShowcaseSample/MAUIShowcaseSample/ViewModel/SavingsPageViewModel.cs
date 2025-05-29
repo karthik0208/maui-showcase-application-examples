@@ -1,13 +1,15 @@
-﻿using MAUIShowcaseSample.Services;
+﻿using CommunityToolkit.Mvvm.Input;
+using MAUIShowcaseSample.Services;
 using Syncfusion.Maui.Buttons;
 using Syncfusion.Maui.Data;
+using Syncfusion.XlsIO;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace MAUIShowcaseSample
 {
-    public class SavingsPageViewModel : INotifyPropertyChanged
+    public partial class SavingsPageViewModel : INotifyPropertyChanged
     {
         private List<SfSegmentItem> segmentTitle;
         private int selectedSegmentIndex;
@@ -17,6 +19,10 @@ namespace MAUIShowcaseSample
         private DataStore _dataStore;
         private UserDataService _userDataService;
         private bool isAllRowsSelected;
+        private int selectedRowCount;
+        private string totalSavingCartValue;
+        private string currentMonthSavingsCartValue;
+        private string emergencyFundCartValue;
 
         public List<SfSegmentItem> SegmentTitle
         {
@@ -65,7 +71,7 @@ namespace MAUIShowcaseSample
             set
             {
                 this.selectedGridDateRange = value;
-                UpdateGridData(SegmentTitle.ElementAt(SelectedSegmentIndex).Text);
+                UpdateGridData();
                 OnPropertyChanged("SelectedChartDateRange");
             }
         }
@@ -98,6 +104,58 @@ namespace MAUIShowcaseSample
             }
         }
 
+        public int SelectedRowCount
+        {
+            get
+            {
+                return this.selectedRowCount;
+            }
+            set
+            {
+                this.selectedRowCount = value;
+                OnPropertyChanged(nameof(SelectedRowCount));
+            }
+        }
+
+        public string TotalSavingsCartValue 
+        { 
+            get
+            {
+                return this.totalSavingCartValue;
+            }
+            set
+            {
+                this.totalSavingCartValue = value;
+                OnPropertyChanged(nameof(TotalSavingsCartValue));
+            }
+        }
+
+        public string CurrentMonthSavingsCartValue
+        {
+            get
+            {
+                return this.currentMonthSavingsCartValue;
+            }
+            set
+            {
+                this.currentMonthSavingsCartValue = value;
+                OnPropertyChanged(nameof(CurrentMonthSavingsCartValue));
+            }
+        }
+
+        public string EmergencyFundCartValue
+        {
+            get
+            {
+                return this.emergencyFundCartValue;
+            }
+            set
+            {
+                this.emergencyFundCartValue = value;
+                OnPropertyChanged(nameof(EmergencyFundCartValue));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -124,14 +182,32 @@ namespace MAUIShowcaseSample
                 new ChartDateRange() {RangeType = "This Year", StartDate = new DateTime(DateTime.Today.Year, 1, 1), EndDate = new DateTime(DateTime.Today.Year, 12, 31)}
             };
             SelectedGridDateRange = DateRange[0];
-
-            GridData = GetGridData(dataStore.GetSavingsData(), "All");
+            UpdateGridData();            
+            UpdateCartValue();
         }
 
-        public void UpdateGridData(string transactionType)
+        public void UpdateGridData()
         {
             var savingsTransaction = _dataStore.GetSavingsData();
-            GridData = GetGridData(savingsTransaction, transactionType);
+            GridData = GetGridData(savingsTransaction, SegmentTitle[SelectedSegmentIndex].Text);
+        }
+
+        public void UpdateCartValue()
+        {
+            var currencySymbol = _userDataService.GetUserCurrencySymbol(_userDataService.LoggedInAccount);
+
+            var savingsTransaction = _dataStore.GetSavingsData();
+            var totalDeposit = savingsTransaction.Where(t => t.SavingsType == "Deposit").Sum(t => decimal.TryParse(t.SavingsAmount, out var amount) ? amount : 0);
+            var totalWithdraw = savingsTransaction.Where(t => t.SavingsType == "Withdrawal").Sum(t => decimal.TryParse(t.SavingsAmount, out var amount) ? amount : 0);
+            TotalSavingsCartValue = currencySymbol + (totalDeposit - totalWithdraw).ToString();
+
+            var currentMonthDeposit = savingsTransaction.Where(t => t.SavingsType == "Deposit" && t.SavingsDate >= DateRange[1].StartDate && t.SavingsDate <= DateRange[1].EndDate).Sum(t => decimal.TryParse(t.SavingsAmount, out var amount) ? amount : 0);
+            var currentMonthWithdrawal = savingsTransaction.Where(t => t.SavingsType == "Withdrawal" && t.SavingsDate >= DateRange[1].StartDate && t.SavingsDate <= DateRange[1].EndDate).Sum(t => decimal.TryParse(t.SavingsAmount, out var amount) ? amount : 0);
+            CurrentMonthSavingsCartValue = currencySymbol + (currentMonthDeposit - currentMonthWithdrawal).ToString();
+
+            var emergencyFundDeposit = savingsTransaction.Where(t => t.SavingsType == "Deposit" && t.SavingsDescription == "Emergency Fund").Sum(t => decimal.TryParse(t.SavingsAmount, out var amount) ? amount : 0);
+            var emergencyFundWithdrawal = savingsTransaction.Where(t => t.SavingsType == "Withdrawal" && t.SavingsDescription == "Emergency Access").Sum(t => decimal.TryParse(t.SavingsAmount, out var amount) ? amount : 0);
+            EmergencyFundCartValue = currencySymbol + (emergencyFundDeposit - emergencyFundWithdrawal).ToString();
         }
 
         private ObservableCollection<SavingsChartData> GetGridData(ObservableCollection<Savings> transactions, string transactionType)
@@ -145,6 +221,7 @@ namespace MAUIShowcaseSample
             {
                 _gridData.Add(new SavingsChartData()
                 {
+                    TransactionId = transaction.TransactionId,
                     SavingsAmount = transaction.SavingsAmount + currencySymbol,
                     SavingsDescription = transaction.SavingsDescription,
                     TransactionDate = transaction.SavingsDate,
@@ -174,16 +251,125 @@ namespace MAUIShowcaseSample
             }
         }
 
+        public bool ExportExcel(ObservableCollection<SavingsChartData> data)
+        {
+            try
+            {
+                using (ExcelEngine excelEngine = new ExcelEngine())
+                {
+                    Syncfusion.XlsIO.IApplication application = excelEngine.Excel;
+                    application.DefaultVersion = ExcelVersion.Xlsx;
+
+                    // Create a workbook and worksheet
+                    IWorkbook workbook = application.Workbooks.Create(1);
+                    IWorksheet worksheet = workbook.Worksheets[0];
+
+                    // Add headers
+                    worksheet.Range["A1"].Text = "Transaction Date";
+                    worksheet.Range["B1"].Text = "Description";
+                    worksheet.Range["C1"].Text = "Transaction Type";
+                    worksheet.Range["D1"].Text = "Amount";
+                    worksheet.Range["E1"].Text = "Remark";
+
+                    // Apply styles (optional)
+                    worksheet.Range["A1:E1"].CellStyle.Font.Bold = true;
+
+                    // Fill data from ObservableCollection
+                    int rowIndex = 2;
+                    foreach (var transaction in data)
+                    {
+                        worksheet.Range[$"A{rowIndex}"].Value = transaction.TransactionDate.ToString("dd/MM/yyyy");
+                        worksheet.Range[$"B{rowIndex}"].Value = transaction.SavingsDescription;
+                        worksheet.Range[$"C{rowIndex}"].Value = transaction.SavingsType;
+                        worksheet.Range[$"D{rowIndex}"].Value = transaction.SavingsAmount;
+                        worksheet.Range[$"E{rowIndex}"].Value = transaction.SavingsRemark;
+                        rowIndex++;
+                    }
+
+                    MemoryStream stream = new MemoryStream();
+                    workbook.SaveAs(stream);
+
+                    workbook.Close();
+                    //Dispose stream
+                    excelEngine.Dispose();
+
+                    string OutputFilename = "ExpenseAnalysis.xlsx";
+                    SaveService saveService = new();
+                    saveService.SaveAndView(OutputFilename, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", stream);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        [RelayCommand]
+        public async Task ExportAllDataAsync()
+        {
+            if (ExportExcel(GridData))
+            {
+                return;
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Failed", "Excel export failed", "Okay");
+            }
+        }
+
+        [RelayCommand]
+        public async Task ExportSelectedDataAsync()
+        {
+            var selectedData = GridData.Where(t => t.IsSelected).ToObservableCollection<SavingsChartData>();
+            if (ExportExcel(selectedData))
+            {
+                return;
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Failed", "Excel export failed", "Okay");
+            }
+        }
+
+        [RelayCommand]
+        public async Task DeleteTransactionAsync()
+        {
+            List<int> transactionIds = GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).ToList();
+            if(_dataStore.DeleteTransactions(transactionIds, "Savings"))
+            {
+                UpdateGridData();
+                UpdateCartValue();
+                await Application.Current.MainPage.DisplayAlert("Success", "Transaction deleted successfully", "Okay");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Failed", "Deleting transaction failed", "Okay");
+            }
+        }
     }
 
     public class SavingsChartData : INotifyPropertyChanged
     {
+        private int transactionId;
         private DateTime transactionDate;
         private string savingsDescription;
         private string savingsType;
         private string savingsAmount;
         private string savingsRemark;
         private bool isSelected;
+
+        public int TransactionId
+        {
+            get
+            {
+                return this.transactionId;
+            }
+            set
+            {
+                this.transactionId = value;
+            }
+        }
 
         public DateTime TransactionDate
         {

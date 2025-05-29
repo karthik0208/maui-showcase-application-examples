@@ -13,7 +13,7 @@
     <Style TargetType="Label" x:Key="SummaryValue">
         <Setter Property="TextColor" Value="{DynamicResource BlackText}"/>
         <Setter Property="FontFamily" Value="Roboto-Medium"/>
-        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontSize" Value="28"/>
         <Setter Property="VerticalOptions" Value="Start"/>
     </Style>
 
@@ -29,6 +29,13 @@
         <Setter Property="FontFamily" Value="Roboto-Regular"/>
         <Setter Property="FontSize" Value="28"/>
         <Setter Property="VerticalOptions" Value="Start"/>
+    </Style>
+
+    <Style TargetType="Label" x:Key="LabelHeader">
+        <Setter Property="TextColor" Value="{DynamicResource BlackText}"/>
+        <Setter Property="FontFamily" Value="Roboto-Medium"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="VerticalOptions" Value="End"/>
     </Style>
 
 </ResourceDictionary>

@@ -1,25 +1,37 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
-             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
              xmlns:dataForm="clr-namespace:Syncfusion.Maui.DataForm;assembly=Syncfusion.Maui.DataForm"
              xmlns:local="clr-namespace:MAUIShowcaseSample"
              x:Class="MAUIShowcaseSample.View.SignIn.UpdateAccountInfoPage"
              Title="UpdateAccountInfoPage">
     <Grid x:Name="UpdateAccountInfoView" ColumnDefinitions="*,*">
-        <Grid Grid.Column="0" Background="{DynamicResource PrimaryBackground}" />
+        <Grid Grid.Column="0">
+            <!-- Background Image -->
+            <Image Source="LeftLayout.png"
+     Aspect="AspectFill" />
+        </Grid>
         <Grid Grid.Column="1" Background="Transparent">
             <!-- Reset Password View -->
             <StackLayout WidthRequest="384" VerticalOptions="Center">
-                <Label Text="Let’s Set Up Your Account" FontFamily="RobotoMedium" FontSize="22" HeightRequest="28" TextColor="{DynamicResource BlackText}" HorizontalOptions="Center" />
-                <Label Text="Complete your profile for personalized insights." FontFamily="RobotoRegular" FontSize="16" HeightRequest="22" TextColor="{DynamicResource GrayText}" HorizontalOptions="Center" Margin="{OnPlatform WinUI='0,12,0,0'}"/>
-                <dataForm:SfDataForm x:Name="AccountInfoDataForm" ColumnCount="2" DataObject="{Binding AccountInfoDataFormModel}"  LayoutType="TextInputLayout" AutoGenerateItems="True" GenerateDataFormItem="OnAutoGeneratingDataFormItem" MinimumHeightRequest="250">
+                <Label Text="Let’s Set Up Your Account" FontFamily="Roboto-Medium" FontSize="22" HeightRequest="28" TextColor="{DynamicResource BlackText}" HorizontalOptions="Center" />
+                <Label Text="Complete your profile for personalized insights." FontFamily="Roboto-Regular" FontSize="16" HeightRequest="22" TextColor="{DynamicResource GrayText}" HorizontalOptions="Center" Margin="{OnPlatform WinUI='0,12,0,0'}"/>
+                <dataForm:SfDataForm x:Name="AccountInfoDataForm" ColumnCount="2" DataObject="{Binding AccountInfoDataFormModel, Mode=TwoWay}" LayoutType="TextInputLayout" AutoGenerateItems="True" CommitMode="PropertyChanged" GenerateDataFormItem="OnAutoGeneratingDataFormItem" MinimumHeightRequest="250">
+                    <dataForm:SfDataForm.Items>
+                        <dataForm:DataFormTextItem FieldName="FirstName" />
+                        <dataForm:DataFormTextItem FieldName="LastName" />
+                        <dataForm:DataFormDateItem FieldName="DOB"/>
+                        <dataForm:DataFormComboBoxItem FieldName="Gender" />
+                        <dataForm:DataFormComboBoxItem FieldName="Language" />
+                        <dataForm:DataFormComboBoxItem FieldName="Currency" />
+                        <dataForm:DataFormComboBoxItem FieldName="TimeZone" ColumnSpan="2"/>
+                    </dataForm:SfDataForm.Items>
                     <dataForm:SfDataForm.LabelTextStyle>
                         <dataForm:DataFormTextStyle FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" FontSize="16" />
                     </dataForm:SfDataForm.LabelTextStyle>
                 </dataForm:SfDataForm>
-                <Button Text="Finish Set Up" HeightRequest="44" HorizontalOptions="Fill" Margin="20,0,20,0" CornerRadius="30" FontFamily="RobotoMedium" FontSize="16" Background="{StaticResource PrimaryBackground}" Command="{Binding OnFinishSetupClickedCommand}" />               
+                <Button Text="Finish Set Up" HeightRequest="44" HorizontalOptions="Fill" Margin="20,0,20,0" CornerRadius="30" FontFamily="Roboto-Medium" FontSize="16" Background="{StaticResource PrimaryBackground}" Command="{Binding OnFinishSetupClickedCommand}" />               
             </StackLayout>
         </Grid>
     </Grid>

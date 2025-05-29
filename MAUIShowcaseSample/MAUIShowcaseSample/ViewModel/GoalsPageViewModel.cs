@@ -1,13 +1,8 @@
 ﻿using MAUIShowcaseSample.Services;
 using Syncfusion.Maui.Buttons;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MAUIShowcaseSample
 {
@@ -147,8 +142,12 @@ namespace MAUIShowcaseSample
             UpdateCardValues(dataStore.GetGoalsData());
         }
 
-        public void UpdateGoalsData(string selectedSegment)
+        public void UpdateGoalsData(string? selectedSegment = null)
         {
+            if (selectedSegment == null)
+            {
+                selectedSegment = SegmentTitle[SelectedSegmentIndex].Text;
+            }
             SelectedSegmentData = _dataStore.GetGoalsData(selectedSegment);
             GoalData = GetSummarizedGoalData(selectedSegmentData);
         }
@@ -159,55 +158,78 @@ namespace MAUIShowcaseSample
             var elementCount = 1;
             foreach (var data in filterData)
             {
-                var categoryIcon = GetGoalIcon(data.GoalTitle);
-                Color categoryColor = GetColorCode(elementCount);
-                double remainingAmount = data.GoalAmount - data.SpentAmount;
-                double utilizedPercent = Math.Round(((data.SpentAmount / data.GoalAmount) * 100), 1, MidpointRounding.ToZero);
-                summarizedData.Add(new SummarizedGoalData() { GoalTitle = data.GoalTitle, GoalPriority = data.GoalPriority, GoalDate = data.GoalDate, GoalAmount = data.GoalAmount, CurrencySymbol = this.CurrencySymbol, Icon = categoryIcon, IconColor = categoryColor, SpentAmount = data.SpentAmount, RemainingAmount = remainingAmount, Utilization = utilizedPercent, Remarks = data.Remarks });
+                var categoryIcon = DataHelper.GetGoalIcon(data.GoalTitle);
+                Color categoryColor = DataHelper.GetColorCode(elementCount);
+                double remainingAmount = data.GoalAmount - data.ContributionAmount;
+                double utilizedPercent = Math.Round(((data.ContributionAmount / data.GoalAmount) * 100), 1, MidpointRounding.ToZero);
+                summarizedData.Add(new SummarizedGoalData() { GoalId = data.GoalId, GoalTitle = data.GoalTitle, GoalPriority = data.GoalPriority, GoalDate = data.GoalDate, GoalAmount = data.GoalAmount, CurrencySymbol = this.CurrencySymbol, Icon = categoryIcon, IconColor = categoryColor, ContributionAmount = data.ContributionAmount, RemainingAmount = remainingAmount, Utilization = utilizedPercent, Remarks = data.Remarks, RemainingDays = (data.GoalDate - DateTime.Today).Days, Transactions = data.Transactions });
                 elementCount++;
             }
             return summarizedData;
         }
 
-        private void UpdateCardValues(ObservableCollection<Goal> goalData)
+        public void UpdateCardValues(ObservableCollection<Goal>? goalData = null)
         {
-            MonthlyContribution = 5000;
+            var startDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            var endDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+            double monthlyContribution = 0;
+            if (goalData == null)
+            {
+                goalData = _dataStore.GetGoalsData();
+            }
+            foreach(var goal in goalData)
+            {
+                monthlyContribution = monthlyContribution + goal.Transactions.Where(t => t.TransactionDate >= startDate && t.TransactionDate <= endDate).Sum(t => t.ContributionAmount);
+            }
+            MonthlyContribution = monthlyContribution;
             ActiveGoals = goalData.Where(t => t.IsCompleted == false).Count();
             CompletedGoals = goalData.Where(t => t.IsCompleted == true).Count();
         }
 
-        private string GetGoalIcon(string? title)
-        {
-            string iconCode = "\ue73d";
+       
 
-            if(title.Contains("Vacation", StringComparison.OrdinalIgnoreCase))
+        public void OpenPopup(int goalId)
+        {
+            foreach (var data in GoalData)
             {
-                iconCode = "\ue73b";
+                if (data.GoalId == goalId)
+                {
+                    if (data.IsPopupOpen == true)
+                    {
+                        data.IsPopupOpen = false;
+                    }
+                    else
+                    {
+                        data.IsPopupOpen = true;
+                    }
+                }
+                else
+                {
+                    data.IsPopupOpen = false;
+                }
             }
-            else if(title.Contains("Car", StringComparison.OrdinalIgnoreCase))
-            {
-                iconCode = "\ue72a";
-            }
-            else if (title.Contains("Wedding", StringComparison.OrdinalIgnoreCase))
-            {
-                iconCode = "\ue73c";
-            }
-            else if (title.Contains("Home", StringComparison.OrdinalIgnoreCase))
-            {
-                iconCode = "\ue716";
-            }
-            return iconCode;
         }
 
-        private Color GetColorCode(int elementCount)
+        public async void DeleteGoal()
         {
-            List<string> colorValues = new List<string>() { "#315A74", "#2196F5", "#963C70", "#EC5C7B" };
-            return Color.FromArgb(colorValues[elementCount]);
+            List<int> goalIds = GoalData.Where(t => t.IsPopupOpen == true).Select(t => t.GoalId).ToList();
+            if (_dataStore.DeleteTransactions(goalIds, "Goal"))
+            {
+                UpdateGoalsData();
+                UpdateCardValues();
+                await Application.Current.MainPage.DisplayAlert("Success", "Goal deleted successfully", "Okay");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Failed", "Deleting Goal failed", "Okay");
+            }
         }
     }
 
-    public class SummarizedGoalData
+    public class SummarizedGoalData : INotifyPropertyChanged
     {
+        private int goalId;
+
         private string? goalTitle;
 
         private GoalPriority goalPriority;
@@ -222,15 +244,33 @@ namespace MAUIShowcaseSample
 
         private string? currencySymbol;
 
-        private double spentAmount;
+        private double contributionAmount;
 
         private double remainingAmount;
 
+        private double remainingDays;
+
         private double utilization;
+
+        private ObservableCollection<GoalsTransaction> transactions;
 
         private string? icon;
 
         private Color? iconColor;
+
+        private bool isPopupOpen;
+
+        public int GoalId
+        {
+            get
+            {
+                return this.goalId;
+            }
+            set
+            {
+                this.goalId = value;
+            }
+        }
 
         public string? GoalTitle
         {
@@ -340,15 +380,15 @@ namespace MAUIShowcaseSample
             }
         }
 
-        public double SpentAmount
+        public double ContributionAmount
         {
             get
             {
-                return this.spentAmount;
+                return this.contributionAmount;
             }
             set
             {
-                this.spentAmount = value;
+                this.contributionAmount = value;
             }
         }
 
@@ -374,6 +414,55 @@ namespace MAUIShowcaseSample
             {
                 this.utilization = value;
             }
+        }
+
+        public ObservableCollection<GoalsTransaction> Transactions
+        {
+            get
+            {
+                return this.transactions;
+            }
+            set
+            {
+                this.transactions = value;
+            }
+        }
+
+        public double RemainingDays
+        {
+            get
+            {
+                return this.remainingDays;
+            }
+            set
+            {
+                this.remainingDays = value;
+            }
+        }
+
+        public bool IsPopupOpen
+        {
+            get
+            {
+                return this.isPopupOpen;
+            }
+            set
+            {
+                this.isPopupOpen = value;
+                OnPropertyChanged(nameof(IsPopupOpen));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public SummarizedGoalData()
+        {
+            IsPopupOpen = false;
         }
     }
 }

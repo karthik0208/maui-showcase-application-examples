@@ -4,80 +4,65 @@ using Syncfusion.XlsIO;
 
 namespace MAUIShowcaseSample.View.Dashboard;
 
-public partial class SavingsPage : ContentView
+public partial class SavingsPage : ContentPage
 {
-	public SavingsPage(SavingsPageViewModel _viewModel)
-	{
-		InitializeComponent();
-        BindingContext = _viewModel;
-	}
+    //DashboardLayoutPage layoutPage;
 
+    public SavingsPage(SavingsPageViewModel _viewModel, UserDataService dataService, DataStore dataStore)
+    {
+        string pageTitle = "Savings";
+        InitializeComponent();
+        BindingContext = _viewModel;
+        var layoutViewModel = new DashboardLayoutPageViewModel(dataService, dataStore, pageTitle);
+        this.contentcontainer.Content = new DashboardLayoutPage(layoutViewModel, dataService, dataStore);
+    }
+    
     private void GridSegmentChanged(object? sender, Syncfusion.Maui.Buttons.SelectionChangedEventArgs e)
     {
-        ((SavingsPageViewModel)BindingContext).UpdateGridData(e.NewValue.Text);
+        ((SavingsPageViewModel)BindingContext).UpdateGridData();        
     }
 
     private void OnCheckedChanged(object? sender, CheckedChangedEventArgs e)
     {
         ((SavingsPageViewModel)BindingContext).SelectAllRowsInGrid(e.Value);
     }
-    private async void OnExportClicked(object sender, EventArgs e)
+
+    private void OnSingleCheckboxChanged(object? sender, CheckedChangedEventArgs e)
     {
-        var selectedData = ((SavingsPageViewModel)BindingContext).GridData.Where(t => t.IsSelected).ToObservableCollection<SavingsChartData>();
-        if (selectedData.Count() == 0)
+
+        var selectedCount = ((SavingsPageViewModel)BindingContext).GridData.Where(t => t.IsSelected == true).Count();
+        ((SavingsPageViewModel)BindingContext).SelectedRowCount = selectedCount;
+
+        if (selectedCount > 0)
         {
-            await Application.Current.MainPage.DisplayAlert("Export failed", "Please select rows to export.", "OK");
+            if (selectedCount > 1)
+            {
+                this.editbutton.IsVisible = false;
+            }
+            else
+            {
+                this.editbutton.IsVisible = true;
+            }
+            this.segmentcontrol.IsVisible = false;
+            this.selectioncontrol.IsVisible = true;
         }
         else
         {
-            try
-            {
-                using (ExcelEngine excelEngine = new ExcelEngine())
-                {
-                    Syncfusion.XlsIO.IApplication application = excelEngine.Excel;
-                    application.DefaultVersion = ExcelVersion.Xlsx;
-
-                    // Create a workbook and worksheet
-                    IWorkbook workbook = application.Workbooks.Create(1);
-                    IWorksheet worksheet = workbook.Worksheets[0];
-
-                    // Add headers
-                    worksheet.Range["A1"].Text = "Transaction Date";
-                    worksheet.Range["B1"].Text = "Description";
-                    worksheet.Range["C1"].Text = "Transaction Type";
-                    worksheet.Range["D1"].Text = "Amount";
-                    worksheet.Range["E1"].Text = "Remark";
-
-                    // Apply styles (optional)
-                    worksheet.Range["A1:E1"].CellStyle.Font.Bold = true;
-
-                    // Fill data from ObservableCollection
-                    int rowIndex = 2;
-                    foreach (var transaction in selectedData)
-                    {
-                        worksheet.Range[$"A{rowIndex}"].Value = transaction.TransactionDate.ToString("dd/MM/yyyy");
-                        worksheet.Range[$"B{rowIndex}"].Value = transaction.SavingsDescription;
-                        worksheet.Range[$"C{rowIndex}"].Value = transaction.SavingsType;
-                        worksheet.Range[$"D{rowIndex}"].Value = transaction.SavingsAmount;
-                        worksheet.Range[$"E{rowIndex}"].Value = transaction.SavingsRemark;
-                        rowIndex++;
-                    }
-
-                    MemoryStream stream = new MemoryStream();
-                    workbook.SaveAs(stream);
-
-                    workbook.Close();
-                    //Dispose stream
-                    excelEngine.Dispose();
-
-                    string OutputFilename = "ExpenseAnalysis.xlsx";
-                    SaveService saveService = new();
-                    saveService.SaveAndView(OutputFilename, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", stream);
-                }
-            }
-            catch (Exception ex)
-            {
-            }
+            this.selectioncontrol.IsVisible = false;
+            this.segmentcontrol.IsVisible = true;
         }
+
+    }
+
+    private void OnSelectCloseButtonClicked(object sender, EventArgs e)
+    {
+        this.selectioncontrol.IsVisible = false;
+        this.segmentcontrol.IsVisible = true;
+    }
+
+    private async void OnEditSelection(object? sender, EventArgs e)
+    {
+        int transactionId = ((SavingsPageViewModel)BindingContext).GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).First();
+      //  layoutPage.TriggerEditSavePopup(transactionId);
     }
 }

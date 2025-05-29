@@ -3,15 +3,111 @@
     x:Class="MAUIShowcaseSample.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:button="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+    xmlns:view="clr-namespace:MAUIShowcaseSample.View"
     xmlns:signin="clr-namespace:MAUIShowcaseSample.View.SignIn"
     xmlns:dashboard="clr-namespace:MAUIShowcaseSample.View.Dashboard"
-    Shell.FlyoutBehavior="Flyout"
+    Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False"
-    Title="MAUIShowcaseSample">
+    Shell.FlyoutBackgroundColor="Transparent">
 
-    <ShellContent ContentTemplate="{DataTemplate signin:SignInPage}" Route="signin" />
-    <ShellContent ContentTemplate="{DataTemplate signin:SignUpPage}" Route="signup" />
-    <ShellContent ContentTemplate="{DataTemplate signin:ForgotPasswordPage}" Route="forgotpassword" />
-    <ShellContent ContentTemplate="{DataTemplate signin:UpdateAccountInfoPage}" Route="updateaccountinfo" />
-    <ShellContent ContentTemplate="{DataTemplate dashboard:DashboardLayoutPage}" Route="dashboardlayout" />
+    <ShellContent ContentTemplate="{DataTemplate view:SplashPage}" Route="splash" FlyoutItemIsVisible="False"/>
+    <ShellContent ContentTemplate="{DataTemplate signin:SignInPage}" Route="signin" FlyoutItemIsVisible="False"/>
+    <ShellContent ContentTemplate="{DataTemplate signin:SignUpPage}" Route="signup" FlyoutItemIsVisible="False"/>
+    <ShellContent ContentTemplate="{DataTemplate signin:ForgotPasswordPage}" Route="forgotpassword" FlyoutItemIsVisible="False" />
+    <ShellContent ContentTemplate="{DataTemplate signin:UpdateAccountInfoPage}" Route="updateaccountinfo" FlyoutItemIsVisible="False" />
+    <!-- Define all routes here -->
+    <ShellContent ContentTemplate="{DataTemplate dashboard:DashboardPage}" Route="dashboard" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:TransactionPage}" Route="transaction" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:BudgetPage}" Route="budget" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:BudgetDetailPage}" Route="budgetdetailpage" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:SavingsPage}" Route="savings" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:GoalsPage}" Route="goal" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:GoalDetailPage}" Route="goaldetailpage" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:SettingsPage}" Route="settings" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:SettingsAccountPage}" Route="settingsaccountpage" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:SettingsAppearancePage}" Route="settingsappearancepage" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:SettingsChangeEmail}" Route="settingschangeemail" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:SettingsChangePassword}" Route="settingschangepassword" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:SettingsNotificationPage}" Route="settingsnotificationpage" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:SettingsPersonalizationPage}" Route="settingspersonalizationpage" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:SettingsProfilePage}" Route="settingsprofilepage" />
+    <ShellContent ContentTemplate="{DataTemplate dashboard:HelpAndSupportPage}" Route="helpandsupport"/>
+   
+    <!-- Custom Flyout UI -->
+    <Shell.FlyoutContent>
+        
+        <ScrollView>
+            <Grid VerticalOptions="FillAndExpand" Background="{DynamicResource PrimaryBackground}">
+                <VerticalStackLayout VerticalOptions="Start">
+                    <HorizontalStackLayout HeightRequest="68" VerticalOptions="Center" Margin="32,0,0,0">
+                        <Image Source="dashboardlogo.png" HeightRequest="36" WidthRequest="36"/>
+                        <Label Text="Expense Analysis" FontFamily="Roboto-Regular" FontSize="22" TextColor="{DynamicResource White}" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>                    
+                    <button:SfButton ShowIcon="true" ImageSize="30" Text="Dashboard" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource White}" Padding="16,12,16,12" Command="{Binding NavigateCommand}" CommandParameter="dashboard" ImageAlignment="Start" HorizontalTextAlignment="Start">
+                        <button:SfButton.ImageSource>
+                            <FontImageSource FontFamily="FontIcons" Glyph="&#xe716;" Color="{DynamicResource White}" Size="30" />
+                        </button:SfButton.ImageSource>
+                    </button:SfButton>
+                    <button:SfButton ShowIcon="true" ImageSize="30" Text="Transaction" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource White}" Padding="16,12,16,12" Command="{Binding NavigateCommand}" CommandParameter="transaction" ImageAlignment="Start" HorizontalTextAlignment="Start">
+                        <button:SfButton.ImageSource>
+                            <FontImageSource FontFamily="FontIcons" Glyph="&#xe738;" Color="{DynamicResource White}" Size="30" />
+                        </button:SfButton.ImageSource>
+                    </button:SfButton>
+                    <button:SfButton ShowIcon="true" ImageSize="30" Text="Budget" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource White}" Padding="16,12,16,12" Command="{Binding NavigateCommand}" CommandParameter="budget" ImageAlignment="Start" HorizontalTextAlignment="Start">
+                        <button:SfButton.ImageSource>
+                            <FontImageSource FontFamily="FontIcons" Glyph="&#xe739;" Color="{DynamicResource White}" Size="30" />
+                        </button:SfButton.ImageSource>
+                    </button:SfButton>
+                    <button:SfButton ShowIcon="true" ImageSize="30" Text="Savings" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource White}" Padding="16,12,16,12" Command="{Binding NavigateCommand}" CommandParameter="savings" ImageAlignment="Start" HorizontalTextAlignment="Start">
+                        <button:SfButton.ImageSource>
+                            <FontImageSource FontFamily="FontIcons" Glyph="&#xe737;" Color="{DynamicResource White}" Size="30" />
+                        </button:SfButton.ImageSource>
+                    </button:SfButton>
+                    <button:SfButton ShowIcon="true" ImageSize="30" Text="Goal" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource White}" Padding="16,12,16,12" Command="{Binding NavigateCommand}" CommandParameter="goal" ImageAlignment="Start" HorizontalTextAlignment="Start">
+                        <button:SfButton.ImageSource>
+                            <FontImageSource FontFamily="FontIcons" Glyph="&#xe73a;" Color="{DynamicResource White}" Size="30" />
+                        </button:SfButton.ImageSource>
+                    </button:SfButton>
+                    <!--<Label Text="Dashboard" FontSize="18" TextColor="White">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="dashboard" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Text="Transaction" FontSize="18" TextColor="White">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="transaction" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Text="Budget" FontSize="18" TextColor="White">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="budget" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Text="Savings" FontSize="18" TextColor="White">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="savings" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Text="Goal" FontSize="18" TextColor="White">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="goal" />
+                        </Label.GestureRecognizers>
+                    </Label>-->
+                </VerticalStackLayout>
+                <VerticalStackLayout VerticalOptions="End">
+                    <button:SfButton ShowIcon="true" ImageSize="30" Text="Settings" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource White}" Padding="10,10,10,10" Command="{Binding NavigateCommand}" CommandParameter="settings" ImageAlignment="Start" HorizontalTextAlignment="Start">
+                        <button:SfButton.ImageSource>
+                            <FontImageSource FontFamily="FontIcons" Glyph="&#xe717;" Color="{DynamicResource White}" Size="30" />
+                        </button:SfButton.ImageSource>
+                    </button:SfButton>
+                    <button:SfButton ShowIcon="true" ImageSize="30" Text="Help &amp; Support" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource White}" Padding="10,10,10,10" Command="{Binding NavigateCommand}" CommandParameter="helpandsupport" ImageAlignment="Start" HorizontalTextAlignment="Start">
+                        <button:SfButton.ImageSource>
+                            <FontImageSource FontFamily="FontIcons" Glyph="&#xe70f;" Color="{DynamicResource White}" Size="30" />
+                        </button:SfButton.ImageSource>
+                    </button:SfButton>
+                </VerticalStackLayout>
+            </Grid>
+        </ScrollView>
+    </Shell.FlyoutContent>
 </Shell>

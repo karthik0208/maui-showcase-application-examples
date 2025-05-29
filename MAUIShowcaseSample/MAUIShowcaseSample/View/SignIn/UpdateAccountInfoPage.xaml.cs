@@ -8,16 +8,31 @@ namespace MAUIShowcaseSample.View.SignIn
         {
             InitializeComponent();
             BindingContext = model;
-            AccountInfoDataForm.GenerateDataFormItem += this.OnAutoGeneratingDataFormItem;
+            AccountInfoDataForm.GenerateDataFormItem += OnAutoGeneratingDataFormItem;
         }
 
         private void OnAutoGeneratingDataFormItem(object sender, GenerateDataFormItemEventArgs e)
         {
-            if (e.DataFormItem.FieldName == "TimeZone")
+            if (e.DataFormItem.FieldName == "TimeZone" && e.DataFormItem is DataFormComboBoxItem comboBoxItem)
             {
+                comboBoxItem.ItemsSource = Enum.GetNames(typeof(TimeZoneEnum)).ToList();
                 e.DataFormItem.ColumnSpan = 2; // Makes it span across two columns
             }
+            else if(e.DataFormItem.FieldName == "Currency" && e.DataFormItem is DataFormComboBoxItem comboBoxItem1)
+            {
+                comboBoxItem1.ItemsSource = Enum.GetNames(typeof(CurrencyEnum)).ToList();
+            }
+            else if (e.DataFormItem.FieldName == "Gender" && e.DataFormItem is DataFormComboBoxItem comboBoxItem2)
+            {
+                comboBoxItem2.ItemsSource = Enum.GetNames(typeof(GenderEnum)).ToList();
+            }
+            else if (e.DataFormItem.FieldName == "Language" && e.DataFormItem is DataFormComboBoxItem comboBoxItem3)
+            {
+                comboBoxItem3.ItemsSource = Enum.GetNames(typeof(GenderEnum)).ToList();
+            }
         }
+
+
 
         //private void CustomizeFormFields()
         //{

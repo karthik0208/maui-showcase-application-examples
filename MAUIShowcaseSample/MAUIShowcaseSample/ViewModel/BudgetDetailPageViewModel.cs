@@ -132,6 +132,8 @@ namespace MAUIShowcaseSample
             }
         }
 
+        public string CurrencySymbol { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -144,6 +146,7 @@ namespace MAUIShowcaseSample
             _userService = userDataService;
             _dataStore = dataStore;
             SelectedBudgetData = budgetData;
+            CurrencySymbol = _userService.GetUserCurrencySymbol(_userService.LoggedInAccount);
             TransactionData = GetTransactionData(dataStore, budgetData);
             DateRange = new List<ChartDateRange>
             {
@@ -165,16 +168,16 @@ namespace MAUIShowcaseSample
             List<string> expenseCategory = new List<string>();
             switch (budgetData.BudgetCategory)
             {
-                case BudgetCategory.MonthlyBudget:
+                case "Monthly Budget":
                     filteredData = dataStore.GetDailyTransactions(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1), new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1));
                     break;
 
-                case BudgetCategory.TransportBudget:                    
-                    expenseCategory = BudgetCategories.CategoryItems.GetValueOrDefault(BudgetCategory.TransportBudget);                    
+                case "Transport Budget":                    
+                    expenseCategory = BudgetCategories.CategoryItems.GetValueOrDefault("Transport Budget");                    
                     break;
 
-                case BudgetCategory.VacationBudget:
-                    expenseCategory = BudgetCategories.CategoryItems.GetValueOrDefault(BudgetCategory.VacationBudget);                    
+                case "Vacation Budget":
+                    expenseCategory = BudgetCategories.CategoryItems.GetValueOrDefault("Vacation Budget");                    
                     break;
             }
             return filteredData.Where(t => t.TransactionType == "Expense" && (expenseCategory.Count == 0 || expenseCategory.Contains(t.TransactionCategory))).ToObservableCollection<Transaction>();

@@ -22,24 +22,6 @@ namespace MAUIShowcaseSample
         [ObservableProperty]
         private string verifyOtp;
 
-        [ObservableProperty]
-        private string otp1;
-
-        [ObservableProperty]
-        private string otp2;
-
-        [ObservableProperty]
-        private string otp3;
-
-        [ObservableProperty]
-        private string otp4;
-
-        [ObservableProperty]
-        private string otp5;
-
-        [ObservableProperty]
-        private string otp6;
-
         private string otpValue;
 
         private ForgotPasswordDataForm forgotPasswordFormModel;

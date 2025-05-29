@@ -1,4 +1,5 @@
-﻿using MAUIShowcaseSample.Services;
+﻿using CommunityToolkit.Mvvm.Input;
+using MAUIShowcaseSample.Services;
 using Syncfusion.Maui.Buttons;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -7,7 +8,7 @@ using Transaction = MAUIShowcaseSample.Services.Transaction;
 
 namespace MAUIShowcaseSample
 {
-    public class BudgetPageViewModel : INotifyPropertyChanged
+    public partial class BudgetPageViewModel : INotifyPropertyChanged
     {
         private List<SfSegmentItem> segmentTitle;
 
@@ -109,10 +110,17 @@ namespace MAUIShowcaseSample
             BudgetData = GetSummarizedBudgetData(selectedSegmentData);
         }
 
-        public void UpdateBudgetData(string selectedSegment)
+        public void UpdateBudgetData(string? selectedSegment = null)
         {
-            SelectedSegmentData = _dataStore.GetBudgetList(selectedSegment);
-            BudgetData = GetSummarizedBudgetData(selectedSegmentData);
+            if(selectedSegment != null)
+            {
+                SelectedSegmentData = _dataStore.GetBudgetList(selectedSegment);
+            }
+            else
+            {
+                SelectedSegmentData = _dataStore.GetBudgetList(SegmentTitle[SelectedSegmentIndex].Text);
+            }
+            BudgetData = GetSummarizedBudgetData(SelectedSegmentData);
         }
 
         private ObservableCollection<SummarizedBudgetData> GetSummarizedBudgetData(ObservableCollection<Budget> filterData)
@@ -126,7 +134,7 @@ namespace MAUIShowcaseSample
                 double amountSpent = GetAmountSpent(_dataStore, data);
                 double remainingAmount = data.BudgetAmount - amountSpent;
                 double utilizedPercent = Math.Round(((amountSpent / data.BudgetAmount) * 100), 1, MidpointRounding.ToZero);
-                summarizedData.Add(new SummarizedBudgetData() { BudgetTitle = data.BudgetTitle, BudgetCategory = data.BudgetCategory, BudgetDate = data.BudgetDate, BudgetAmount = data.BudgetAmount, CurrencySymbol = this.currencySymbol, Icon = categoryIcon, CategoryColor = categoryColor, AmountSpent = amountSpent, RemainingAmount = remainingAmount, Utilization = utilizedPercent });
+                summarizedData.Add(new SummarizedBudgetData() {BudgetId = data.BudgetId, BudgetTitle = data.BudgetTitle, BudgetCategory = data.BudgetCategory, BudgetDate = data.BudgetDate, BudgetAmount = data.BudgetAmount, CurrencySymbol = this.currencySymbol, Icon = categoryIcon, CategoryColor = categoryColor, AmountSpent = amountSpent, RemainingAmount = remainingAmount, Utilization = utilizedPercent });
             }
             return summarizedData;
         }
@@ -135,23 +143,20 @@ namespace MAUIShowcaseSample
         {
             string iconCode = "\ue73d";
 
-            if (Enum.TryParse(category, out BudgetCategory budgetCategory))
+            switch (category)
             {
-                switch (budgetCategory)
-                {
-                    case BudgetCategory.MonthlyBudget:
-                        iconCode = "\ue723";
-                        break;
+                case "Monthly Budget":
+                    iconCode = "\ue723";
+                    break;
 
-                    case BudgetCategory.VacationBudget:
-                        iconCode = "\ue73b";
-                        break;
+                case "Vacation Budget":
+                    iconCode = "\ue73b";
+                    break;
 
-                    case BudgetCategory.TransportBudget:
-                        iconCode = "\ue740";
-                        break;                    
-                }
-            }           
+                case "Transport Budget":
+                    iconCode = "\ue740";
+                    break;
+            }
             return iconCode;
         }
 
@@ -159,31 +164,28 @@ namespace MAUIShowcaseSample
         {
             Color color = Color.FromArgb("#EC5C7B");
 
-            if (Enum.TryParse(category, out BudgetCategory budgetCategory))
+            switch (category)
             {
-                switch (budgetCategory)
-                {
-                    case BudgetCategory.MonthlyBudget:
-                        if(Application.Current.Resources.TryGetValue("SeriesColor1", out var series1))
-                        {
-                            color = (Color)series1;
-                        }                        
-                        break;
+                case "Monthly Budget":
+                    if (Application.Current.Resources.TryGetValue("SeriesColor1", out var series1))
+                    {
+                        color = (Color)series1;
+                    }
+                    break;
 
-                    case BudgetCategory.VacationBudget:
-                        if (Application.Current.Resources.TryGetValue("SeriesColor2", out var series2))
-                        {
-                            color = (Color)series2;
-                        }
-                        break;
+                case "Vacation Budget":
+                    if (Application.Current.Resources.TryGetValue("SeriesColor2", out var series2))
+                    {
+                        color = (Color)series2;
+                    }
+                    break;
 
-                    case BudgetCategory.TransportBudget:
-                        if (Application.Current.Resources.TryGetValue("SeriesColor3", out var series3))
-                        {
-                            color = (Color)series3;
-                        }
-                        break;
-                }
+                case "Transport Budget":
+                    if (Application.Current.Resources.TryGetValue("SeriesColor3", out var series3))
+                    {
+                        color = (Color)series3;
+                    }
+                    break;
             }
             return color;
         }
@@ -194,20 +196,20 @@ namespace MAUIShowcaseSample
             ObservableCollection<Transaction> filteredData = new ObservableCollection<Transaction>();
             switch(budgetData.BudgetCategory)
             {
-                case BudgetCategory.MonthlyBudget:
+                case "Monthly Budget":
                     filteredData = dataStore.GetDailyTransactions(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1), new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1));
                     amountSpent = filteredData.Where(t => t.TransactionType == "Expense").Sum(t => double.TryParse(t.TransactionAmount, out double amount) ? amount : 0);
                     break;
 
-                case BudgetCategory.TransportBudget:
+                case "Transport Budget":
                     filteredData = dataStore.GetDailyTransactions();
-                    List<string> transportExpenseCategory = BudgetCategories.CategoryItems.GetValueOrDefault(BudgetCategory.TransportBudget);
+                    List<string> transportExpenseCategory = BudgetCategories.CategoryItems.GetValueOrDefault("Transport Budget");
                     amountSpent = filteredData.Where(t => t.TransactionType == "Expense" && transportExpenseCategory.Contains(item: t.TransactionCategory)).Sum(t => double.TryParse(t.TransactionAmount, out double amount) ? amount : 0);
                     break;
 
-                case BudgetCategory.VacationBudget:
+                case "Vacation Budget":
                     filteredData = dataStore.GetDailyTransactions();
-                    List<string> vacationExpenseCategory = BudgetCategories.CategoryItems.GetValueOrDefault(BudgetCategory.VacationBudget);
+                    List<string> vacationExpenseCategory = BudgetCategories.CategoryItems.GetValueOrDefault("Vacation Budget");
                     amountSpent = filteredData.Where(t => t.TransactionType == "Expense" && vacationExpenseCategory.Contains(item: t.TransactionCategory)).Sum(t => double.TryParse(t.TransactionAmount, out double amount) ? amount : 0);
                     break;
             }
@@ -218,6 +220,43 @@ namespace MAUIShowcaseSample
         {
             var dailyTransaction = _dataStore.GetDailyTransactions();
             ChartData = GetChartData(dailyTransaction, transactionType);
+        }
+
+       
+        public void OpenPopup(int budgetId)
+        {
+            foreach(var data in BudgetData)
+            {
+                if(data.BudgetId == budgetId)
+                {
+                    if (data.IsPopupOpen == true)
+                    {
+                        data.IsPopupOpen = false;
+                    }                        
+                    else
+                    {
+                        data.IsPopupOpen = true;
+                    }                       
+                }
+                else
+                {
+                    data.IsPopupOpen = false;
+                }
+            }
+        }
+
+        public async void DeleteBudget()
+        {
+            List<int> transactionIds = BudgetData.Where(t => t.IsPopupOpen == true).Select(t => t.BudgetId).ToList();
+            if (_dataStore.DeleteTransactions(transactionIds, "Budget"))
+            {
+                UpdateBudgetData();
+                await Application.Current.MainPage.DisplayAlert("Success", "Transaction deleted successfully", "Okay");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Failed", "Deleting transaction failed", "Okay");
+            }
         }
 
         private ObservableCollection<TransactionChartData> GetChartData(ObservableCollection<Transaction> transactions, string transactionType)
@@ -244,11 +283,13 @@ namespace MAUIShowcaseSample
         }
     }
 
-    public class SummarizedBudgetData
+    public class SummarizedBudgetData : INotifyPropertyChanged
     {
+        private int budgetId;
+
         private string? budgetTitle;
 
-        private BudgetCategory budgetCategory;
+        private string? budgetCategory;
 
         private double? budgetAmount;
 
@@ -270,6 +311,33 @@ namespace MAUIShowcaseSample
 
         private Color? categoryColor;
 
+        private bool isPopupOpen;
+
+        public int BudgetId
+        { 
+            get
+            {
+                return this.budgetId;
+            }
+            set
+            {
+                this.budgetId = value;
+            }
+        }
+
+        public bool IsPopupOpen
+        {
+            get
+            {
+                return this.isPopupOpen;
+            }
+            set
+            {
+                this.isPopupOpen = value;
+                OnPropertyChanged(nameof(IsPopupOpen));
+            }
+        }
+
         public string? BudgetTitle
         {
             get
@@ -282,7 +350,7 @@ namespace MAUIShowcaseSample
             }
         }
 
-        public BudgetCategory BudgetCategory
+        public string? BudgetCategory
         {
             get
             {
@@ -412,15 +480,27 @@ namespace MAUIShowcaseSample
             {
                 this.utilization = value;
             }
+        }       
+
+        public SummarizedBudgetData()
+        {
+            IsPopupOpen = false;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
     public class BudgetCategories
     {
-        public static readonly Dictionary<BudgetCategory, List<string>> CategoryItems = new()
+        public static readonly Dictionary<string, List<string>> CategoryItems = new()
     {
-        { BudgetCategory.TransportBudget, new List<string> { "Transportation" } },
-        { BudgetCategory.VacationBudget, new List<string> { "Shopping" } }
+        { "Transport Budget", new List<string> { "Transportation" } },
+        { "Vacation Budget", new List<string> { "Shopping" } }
     };
     }
 }
