@@ -33,7 +33,25 @@
     <ShellContent ContentTemplate="{DataTemplate dashboard:SettingsPersonalizationPage}" Route="settingspersonalizationpage" />
     <ShellContent ContentTemplate="{DataTemplate dashboard:SettingsProfilePage}" Route="settingsprofilepage" />
     <ShellContent ContentTemplate="{DataTemplate dashboard:HelpAndSupportPage}" Route="helpandsupport"/>
-   
+
+    <TabBar x:Name="MainTabBar" IsVisible="{OnPlatform Android=true, Default=false}">
+        <Tab Title="Dashboard" Icon="dashboardlogo.png">
+            <ShellContent ContentTemplate="{DataTemplate dashboard:DashboardPage}" Route="dashboard" />
+        </Tab>
+        <Tab Title="Transaction" Icon="transactionicon.png">
+            <ShellContent ContentTemplate="{DataTemplate dashboard:TransactionPage}" Route="transaction" />
+        </Tab>
+        <Tab Title="Budget" Icon="budgeticon.png">
+            <ShellContent ContentTemplate="{DataTemplate dashboard:BudgetPage}" Route="budget" />
+        </Tab>
+        <Tab Title="Savings" Icon="savingsicon.png">
+            <ShellContent ContentTemplate="{DataTemplate dashboard:SavingsPage}" Route="savings" />
+        </Tab>
+        <Tab Title="Goal" Icon="goalicon.png">
+            <ShellContent ContentTemplate="{DataTemplate dashboard:GoalsPage}" Route="goal" />
+        </Tab>
+    </TabBar>
+    
     <!-- Custom Flyout UI -->
     <Shell.FlyoutContent>
         
@@ -68,33 +86,9 @@
                         <button:SfButton.ImageSource>
                             <FontImageSource FontFamily="FontIcons" Glyph="&#xe73a;" Color="{DynamicResource White}" Size="30" />
                         </button:SfButton.ImageSource>
-                    </button:SfButton>
-                    <!--<Label Text="Dashboard" FontSize="18" TextColor="White">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="dashboard" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                    <Label Text="Transaction" FontSize="18" TextColor="White">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="transaction" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                    <Label Text="Budget" FontSize="18" TextColor="White">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="budget" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                    <Label Text="Savings" FontSize="18" TextColor="White">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="savings" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                    <Label Text="Goal" FontSize="18" TextColor="White">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NavigateCommand}" CommandParameter="goal" />
-                        </Label.GestureRecognizers>
-                    </Label>-->
+                    </button:SfButton>                    
                 </VerticalStackLayout>
+                
                 <VerticalStackLayout VerticalOptions="End">
                     <button:SfButton ShowIcon="true" ImageSize="30" Text="Settings" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource White}" Padding="10,10,10,10" Command="{Binding NavigateCommand}" CommandParameter="settings" ImageAlignment="Start" HorizontalTextAlignment="Start">
                         <button:SfButton.ImageSource>

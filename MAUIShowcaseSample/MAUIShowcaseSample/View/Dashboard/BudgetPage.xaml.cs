@@ -1,5 +1,5 @@
 using MAUIShowcaseSample.Services;
-using Syncfusion.Maui.Buttons;
+using Syncfusion.Maui.Toolkit.Buttons;
 
 namespace MAUIShowcaseSample.View.Dashboard;
 

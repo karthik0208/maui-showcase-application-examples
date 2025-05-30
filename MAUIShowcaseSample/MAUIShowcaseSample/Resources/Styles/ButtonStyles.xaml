@@ -2,7 +2,8 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"  
              x:Class="MAUIShowcaseSample.Resources.Styles.ButtonStyles">
 
     <Style TargetType="Button" x:Key="NavigationButton">
@@ -25,10 +26,22 @@
 
     <Style TargetType="buttons:SfButton" x:Key="PopupButton">
         <Setter Property="TextColor" Value="{DynamicResource BlackText}"/>
-        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="HorizontalOptions" Value="Fill"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FontFamily" Value="Roboto-Regular"/>
         <Setter Property="HorizontalTextAlignment" Value="Start"/>
+        <Setter Property="HeightRequest" Value="40"/>
+    </Style>
+
+
+
+    <Style TargetType="input:SfComboBox" x:Key="ProfileComboBoxStyle">
+        <Setter Property="ShowBorder" Value="False"/>
+        <Setter Property="IsClearButtonVisible" Value="False"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontFamily" Value="Roboto-Regular"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="TextColor" Value="{DynamicResource BlackText}"/>
     </Style>
 </ResourceDictionary>

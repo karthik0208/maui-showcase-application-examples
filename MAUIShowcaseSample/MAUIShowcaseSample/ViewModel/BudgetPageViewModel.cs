@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MAUIShowcaseSample.Services;
-using Syncfusion.Maui.Buttons;
+using Syncfusion.Maui.Toolkit.SegmentedControl;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -247,7 +247,7 @@ namespace MAUIShowcaseSample
 
         public async void DeleteBudget()
         {
-            List<int> transactionIds = BudgetData.Where(t => t.IsPopupOpen == true).Select(t => t.BudgetId).ToList();
+            List<double> transactionIds = BudgetData.Where(t => t.IsPopupOpen == true).Select(t => t.BudgetId).ToList();
             if (_dataStore.DeleteTransactions(transactionIds, "Budget"))
             {
                 UpdateBudgetData();
@@ -285,7 +285,7 @@ namespace MAUIShowcaseSample
 
     public class SummarizedBudgetData : INotifyPropertyChanged
     {
-        private int budgetId;
+        private double budgetId;
 
         private string? budgetTitle;
 
@@ -313,7 +313,7 @@ namespace MAUIShowcaseSample
 
         private bool isPopupOpen;
 
-        public int BudgetId
+        public double BudgetId
         { 
             get
             {

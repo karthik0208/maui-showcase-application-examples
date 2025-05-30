@@ -79,7 +79,7 @@ public partial class TransactionPage : ContentPage
 
     private async void OnEditSelection(object? sender, EventArgs e)
     {
-        int transactionId = ((TransactionPageViewModel)BindingContext).GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).First();
+        double transactionId = ((TransactionPageViewModel)BindingContext).GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).First();
         ((DashboardLayoutPage)this.contentcontainer.Content).TriggerEditTransactionPopup(transactionId);
     }
 }

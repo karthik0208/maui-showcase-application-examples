@@ -42,7 +42,11 @@
 
                 <Grid Grid.Row="1" RowDefinitions="Auto,*" BackgroundColor="{DynamicResource SurfaceBackground}">
 
-                    <segmentedControl:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="BudgetSegment" SegmentWidth="167" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="334" HorizontalOptions="Start" Margin="32,32,0,0" SelectionChanged="GoalSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}"/>
+                    <segmentedControl:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="BudgetSegment" SegmentWidth="167" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="334" HorizontalOptions="Start" Margin="32,32,0,0" SelectionChanged="GoalSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}">
+                        <segmentedControl:SfSegmentedControl.TextStyle>
+                            <segmentedControl:SegmentTextStyle FontFamily="Roboto-Medium" FontSize="16"/>
+                        </segmentedControl:SfSegmentedControl.TextStyle>
+                    </segmentedControl:SfSegmentedControl>
 
                     <VerticalStackLayout Grid.Row="1" Padding="15" BackgroundColor="Transparent">
                         <ScrollView>
@@ -75,7 +79,7 @@
                                                         <buttons:SfButton Background="Transparent" BackgroundImageSource="dotsicon.png" Grid.Column="2" HorizontalOptions="End" WidthRequest="32" HeightRequest="32" Clicked="OnPopupClicked" CommandParameter="{Binding GoalId}"/>
                                                     </Grid>
                                                     <BoxView HeightRequest="1" Background="{DynamicResource LineBackground}" />
-                                                    <!--Budget Details-->
+                                                    <!--Goal Details-->
                                                     <Grid ColumnDefinitions="Auto,*">
                                                         <VerticalStackLayout Grid.Column="0" Spacing="5">
                                                             <HorizontalStackLayout>
@@ -123,7 +127,7 @@
 
                                                 <Border x:Name="UpdataGoalPopup" Background="{DynamicResource SurfaceBackground}" StrokeShape="RoundRectangle 10,10,10,10" HeightRequest="176" WidthRequest="172" HorizontalOptions="End" Margin="0,0,16,0" IsVisible="{Binding IsPopupOpen, Mode=TwoWay}">
                                                     <VerticalStackLayout>
-                                                        <buttons:SfButton ShowIcon="True" ImageAlignment="Start" Text="Add Fund" Style="{StaticResource PopupButton}" Clicked="OnAddSelection">
+                                                        <buttons:SfButton ShowIcon="True" ImageAlignment="Start" Text="Add Fund" Style="{StaticResource PopupButton}" Clicked="OnAddFund" CommandParameter="{Binding GoalId}">
                                                             <buttons:SfButton.ImageSource>
                                                                 <FontImageSource FontFamily="FontIcons" Glyph="&#xe720;" Size="16" Color="{DynamicResource BlackText}" />
                                                             </buttons:SfButton.ImageSource>

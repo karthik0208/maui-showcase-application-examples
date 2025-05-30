@@ -4,6 +4,7 @@
              x:Class="MAUIShowcaseSample.View.Dashboard.DashboardLayoutPage"
              xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
              xmlns:button="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
              xmlns:popup="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
              xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker;assembly=Syncfusion.Maui.Toolkit"
@@ -103,22 +104,22 @@ AvatarShape="Circle">
                             <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="2">
                                 <input:SfComboBox Grid.Column="0" ItemsSource="{Binding TransactionDetails.TransactionSubCategoryOptions}" SelectedItem="{Binding TransactionDetails.TransactionSubCategory, Mode=TwoWay}" IsClearButtonVisible="False" Placeholder="SubCategory" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" ShowBorder="False"/>
                             </Border>
-                            <!--<Entry Grid.Column="0" Text="{Binding TransactionDetails.transactiondate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="transaction date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>-->
                             <Border Grid.Column="1" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
                                 <Entry Keyboard="Numeric" Text="{Binding  TransactionDetails.TransactionAmount, Mode=TwoWay}" Placeholder="Transaction Amount" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent" TextChanged="OnEntryTextChanged"/>
                             </Border>
                         </Grid>
 
-                        <Border Grid.Row="2"  VerticalOptions="Center" Margin="16,16,16,0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
+                        <Border Grid.Row="2" VerticalOptions="Center" Margin="16,16,16,0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
                             <Grid ColumnDefinitions="*,auto,auto">
-                                <Entry Grid.Column="0" Text="{Binding TransactionDetails.TransactionDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Transaction Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
-
-                                <picker:SfDatePicker x:Name="transactiondatepicker" Grid.Column="1" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}" SelectedDate="{Binding TransactionDetails.TransactionDate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
+                                <Border Grid.Column="0" VerticalOptions="Fill" Stroke="Transparent">
+                                    <Entry Text="{Binding TransactionDetails.TransactionDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Transaction Date" PlaceholderColor="{DynamicResource GrayText}"  FontFamily="Roboto-Regular" FontSize="16"/>
+                                </Border>
+                                 <picker:SfDatePicker x:Name="transactiondatepicker" Grid.Column="1" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}" SelectedDate="{Binding TransactionDetails.TransactionDate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="Transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked">
                                     <picker:SfDatePicker.FooterView>
                                         <picker:PickerFooterView ShowOkButton="True" OkButtonText="OK" CancelButtonText="Cancel" Height="40" />
                                     </picker:SfDatePicker.FooterView>
                                 </picker:SfDatePicker>
-                                <button:SfButton x:Name="pickerButton" Grid.Column="2" FontFamily="FontIcons" Text="&#xe723;" TextColor="{DynamicResource GrayText}" MinimumHeightRequest="30" MinimumWidthRequest="30" FontSize="15" HorizontalOptions="End" VerticalOptions="Center" Padding="0" BackgroundColor="transparent" Clicked="CalendarIconClicked"/>
+                                <button:SfButton x:Name="pickerButton" Grid.Column="2" FontFamily="FontIcons" Text="&#xe723;" TextColor="{DynamicResource GrayText}" MinimumHeightRequest="30" MinimumWidthRequest="30" FontSize="18" HorizontalOptions="End" VerticalOptions="Center" Padding="0" Background="{DynamicResource White}" Clicked="CalendarIconClicked" StrokeThickness="0"/>
                             </Grid>
                         </Border>
 
@@ -127,8 +128,8 @@ AvatarShape="Circle">
                         </Border>
 
                         <HorizontalStackLayout Grid.Row="4" HorizontalOptions="End" Margin="0,16,16,16">
-                            <button:SfButton Text="Cancel" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnTransactionCancelClicked"/>
-                            <button:SfButton Text="{Binding TransactionDetails.ButtonText}" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnTransactionAddClicked"/>
+                            <button:SfButton Text="Cancel" Background="Transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnTransactionCancelClicked"/>
+                            <button:SfButton Text="{Binding TransactionDetails.ButtonText}" Background="Transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnTransactionAddClicked"/>
                         </HorizontalStackLayout>
                     </Grid>
                 </DataTemplate>
@@ -158,7 +159,9 @@ AvatarShape="Circle">
                             </Border>
                             <Border Grid.Column="1"  VerticalOptions="Center" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
                                 <Grid ColumnDefinitions="*,auto,auto">
-                                    <Entry Grid.Column="0" Text="{Binding BudgetDetails.BudgetDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Budget Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    <Border Grid.Column="0" VerticalOptions="Fill" Stroke="Transparent">
+                                        <Entry Text="{Binding BudgetDetails.BudgetDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Budget Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    </Border>                                    
                                     <picker:SfDatePicker x:Name="budgetdatepicker" Grid.Column="1" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}" SelectedDate="{Binding BudgetDetails.BudgetDate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
                                         <picker:SfDatePicker.FooterView>
                                             <picker:PickerFooterView ShowOkButton="True" OkButtonText="Ok" CancelButtonText="Cancel" Height="40" />
@@ -204,7 +207,9 @@ AvatarShape="Circle">
                             </Border>
                             <Border Grid.Column="1"  VerticalOptions="Center" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
                                 <Grid ColumnDefinitions="*,auto,auto">
-                                    <Entry Grid.Column="0" Text="{Binding SavingDetails.SavingDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Transaction Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    <Border Grid.Column="0" VerticalOptions="Fill" Stroke="Transparent">
+                                        <Entry Text="{Binding SavingDetails.SavingDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Transaction Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    </Border>                                   
                                     <picker:SfDatePicker x:Name="savingdatepicker" Grid.Column="1" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}" SelectedDate="{Binding SavingDetails.SavingDate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
                                         <picker:SfDatePicker.FooterView>
                                             <picker:PickerFooterView ShowOkButton="True" OkButtonText="Okay" CancelButtonText="Cancel" Height="40" />
@@ -252,7 +257,9 @@ AvatarShape="Circle">
 
                             <Border Grid.Column="1"  VerticalOptions="Center" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
                                 <Grid ColumnDefinitions="*,auto,auto">
-                                    <Entry Grid.Column="0" Text="{Binding GoalDetails.DeadlineDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Deadline Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    <Border Grid.Column="0" VerticalOptions="Fill" Stroke="Transparent">
+                                        <Entry Text="{Binding GoalDetails.DeadlineDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Deadline Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    </Border>                                    
                                     <picker:SfDatePicker x:Name="goaldatepicker" Grid.Column="1" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}" SelectedDate="{Binding GoalDetails.DeadlineDate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
                                         <picker:SfDatePicker.FooterView>
                                             <picker:PickerFooterView ShowOkButton="True" OkButtonText="Okay" CancelButtonText="Cancel" Height="40" />
@@ -286,22 +293,24 @@ AvatarShape="Circle">
                     <Grid RowDefinitions="auto,auto,*,auto">
                         <Grid Grid.Row="0" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
                             <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="2">
-                                <input:SfComboBox Grid.Column="1" ItemsSource="{Binding TransactionDetails.TransactionCategoryOptions, Mode=TwoWay}" SelectedItem="{Binding TransactionDetails.transactioncategory, Mode=TwoWay}" Placeholder="category" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" IsClearButtonVisible="False" ShowBorder="False"/>
+                                <input:SfComboBox Grid.Column="0" ItemsSource="{Binding TransactionDetails.TransactionCategoryOptions, Mode=TwoWay}" SelectedItem="{Binding TransactionDetails.TransactionCategory, Mode=TwoWay}" Placeholder="Category" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" IsClearButtonVisible="False" ShowBorder="False"/>
                             </Border>
 
                             <Border Grid.Column="1" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="2">
-                                <input:SfComboBox Grid.Column="0" ItemsSource="{Binding TransactionDetails.transactionsubcategoryoptions}" SelectedItem="{Binding TransactionDetails.transactionsubcategory, Mode=TwoWay}" IsClearButtonVisible="False" Placeholder="subcategory" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" ShowBorder="False"/>
+                                <input:SfComboBox Grid.Column="1" ItemsSource="{Binding TransactionDetails.TransactionSubCategoryOptions}" SelectedItem="{Binding TransactionDetails.TransactionSubCategory, Mode=TwoWay}" IsClearButtonVisible="False" Placeholder="Sub Category" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" ShowBorder="False"/>
                             </Border>
                         </Grid>
 
                         <Grid Grid.Row="1" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
                             <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
-                                <Entry Keyboard="Numeric" Text="{Binding  TransactionDetails.transactionamount, Mode=TwoWay}" Placeholder="transaction amount" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent" TextChanged="OnEntryTextChanged"/>
+                                <Entry Keyboard="Numeric" Text="{Binding  TransactionDetails.TransactionAmount, Mode=TwoWay}" Placeholder="Transaction Amount" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent" TextChanged="OnEntryTextChanged"/>
                             </Border>
                             <Border Grid.Column="1"  VerticalOptions="Center" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
                                 <Grid ColumnDefinitions="*,auto,auto">
-                                    <Entry Text="{Binding TransactionDetails.transactiondate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="transaction date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
-                                    <picker:SfDatePicker x:Name="transactiondatepicker" Grid.Column="1" IsOpen="{Binding ispickeropen, Mode=TwoWay}" SelectedDate="{Binding TransactionDetails.transactiondate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
+                                    <Border Grid.Column="0" VerticalOptions="Fill" Stroke="Transparent">
+                                        <Entry Text="{Binding TransactionDetails.TransactionDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Transaction Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    </Border>                                    
+                                    <picker:SfDatePicker x:Name="transactiondatepicker" Grid.Column="1" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}" SelectedDate="{Binding TransactionDetails.TransactionDate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
                                         <picker:SfDatePicker.FooterView>
                                             <picker:PickerFooterView ShowOkButton="True" OkButtonText="ok" CancelButtonText="Cancel" Height="40" />
                                         </picker:SfDatePicker.FooterView>
@@ -312,12 +321,58 @@ AvatarShape="Circle">
                         </Grid>
 
                         <Border Grid.Row="2" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="120"  Margin="16,16,16,0">
-                            <Entry Text="{Binding  TransactionDetails.remarks, Mode=TwoWay}" Placeholder="remark" VerticalTextAlignment="Start" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent"/>
+                            <Entry Text="{Binding  TransactionDetails.Remarks, Mode=TwoWay}" Placeholder="Remark" VerticalTextAlignment="Start" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent"/>
                         </Border>
 
                         <HorizontalStackLayout Grid.Row="4" HorizontalOptions="End" Margin="0,16,16,16">
                             <button:SfButton Text="Cancel" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnTransactionCancelClicked"/>
-                            <button:SfButton Text="{Binding TransactionDetails.ButtonText}" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnTransactionAddClicked"/>
+                            <button:SfButton Text="{Binding TransactionDetails.ButtonText}" Background="Transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnTransactionAddClicked"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <!--add fund popup-->
+        <popup:SfPopup x:Name="addfundpopup" WidthRequest="480" AutoSizeMode="Height" ShowCloseButton="True" ShowHeader="True" HeaderTitle="Add Fund" HorizontalOptions="Center" VerticalOptions="Center" IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="{DynamicResource Surface}" />
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Grid RowDefinitions="auto,auto,*,auto">
+                        <Grid Grid.Row="0" ColumnDefinitions="*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
+                                <Entry Text="{Binding  FundDetails.TransactionDescription}" Placeholder="Description" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent" IsReadOnly="True"/>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*" Margin="16,16,16,0" ColumnSpacing="16"  HeightRequest="44">
+                            <Border Grid.Column="0" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1">
+                                <Entry Keyboard="Numeric" Text="{Binding  FundDetails.ContributionAmount, Mode=TwoWay}" Placeholder="Contribution Amount" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent" TextChanged="OnEntryTextChanged"/>
+                            </Border>
+                            <Border Grid.Column="1"  VerticalOptions="Center" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="44">
+                                <Grid ColumnDefinitions="*,auto,auto">
+                                    <Border Grid.Column="0" VerticalOptions="Fill" Stroke="Transparent">
+                                        <Entry Text="{Binding FundDetails.TransactionDate, StringFormat='{0:dd/mm/yyyy}'}" Placeholder="Transaction Date" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16"/>
+                                    </Border>
+                                    <picker:SfDatePicker x:Name="fundDatepicker" Grid.Column="1" IsOpen="{Binding IsPickerOpen, Mode=TwoWay}" SelectedDate="{Binding FundDetails.TransactionDate, Mode=TwoWay, StringFormat='{0:dd/mm/yyyy}'}" Mode="Dialog" BackgroundColor="transparent" Background="White" OkButtonClicked="OKButtonClicked" CancelButtonClicked="CancelButtonClicked"  >
+                                        <picker:SfDatePicker.FooterView>
+                                            <picker:PickerFooterView ShowOkButton="True" OkButtonText="ok" CancelButtonText="Cancel" Height="40" />
+                                        </picker:SfDatePicker.FooterView>
+                                    </picker:SfDatePicker>
+                                    <Button x:Name="pickerButton" Grid.Column="2" FontFamily="FontIcons" Text="&#xe723;" TextColor="{DynamicResource GrayText}" MinimumHeightRequest="30" MinimumWidthRequest="30" FontSize="15" HorizontalOptions="End" VerticalOptions="Center" Padding="0" BackgroundColor="transparent" Clicked="CalendarIconClicked"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Row="2" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource Buttonoutline}" StrokeThickness="1" HeightRequest="120"  Margin="16,16,16,0">
+                            <Entry Text="{Binding  FundDetails.Remarks, Mode=TwoWay}" Placeholder="Remark" VerticalTextAlignment="Start" PlaceholderColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="16" BackgroundColor="transparent"/>
+                        </Border>
+
+                        <HorizontalStackLayout Grid.Row="4" HorizontalOptions="End" Margin="0,16,16,16">
+                            <button:SfButton Text="Cancel" Background="transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnFundCancelClicked"/>
+                            <button:SfButton Text="{Binding FundDetails.ButtonText}" Background="Transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnAddFundClicked"/>
                         </HorizontalStackLayout>
                     </Grid>
                 </DataTemplate>

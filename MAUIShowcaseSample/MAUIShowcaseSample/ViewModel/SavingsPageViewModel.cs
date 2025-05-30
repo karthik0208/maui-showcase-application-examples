@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MAUIShowcaseSample.Services;
-using Syncfusion.Maui.Buttons;
+using Syncfusion.Maui.Toolkit.SegmentedControl;
 using Syncfusion.Maui.Data;
 using Syncfusion.XlsIO;
 using System.Collections.ObjectModel;
@@ -335,7 +335,7 @@ namespace MAUIShowcaseSample
         [RelayCommand]
         public async Task DeleteTransactionAsync()
         {
-            List<int> transactionIds = GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).ToList();
+            List<double> transactionIds = GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).ToList();
             if(_dataStore.DeleteTransactions(transactionIds, "Savings"))
             {
                 UpdateGridData();
@@ -351,7 +351,7 @@ namespace MAUIShowcaseSample
 
     public class SavingsChartData : INotifyPropertyChanged
     {
-        private int transactionId;
+        private double transactionId;
         private DateTime transactionDate;
         private string savingsDescription;
         private string savingsType;
@@ -359,7 +359,7 @@ namespace MAUIShowcaseSample
         private string savingsRemark;
         private bool isSelected;
 
-        public int TransactionId
+        public double TransactionId
         {
             get
             {

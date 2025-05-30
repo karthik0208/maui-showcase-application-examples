@@ -76,18 +76,25 @@
                                     <Label Text="Financial Overview" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource LabelText}" VerticalOptions="Center" Margin="32,0,0,0"/>
                                 </Grid>
                                 <Grid Grid.Row="1" RowDefinitions="Auto,*" ColumnDefinitions="3*,2*">
-                                    <segmentedControl:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="TransactionSegment" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="200" HorizontalOptions="Start" Margin="32,0,0,0" SelectionChanged="ChartSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}" />
+                                    <segmentedControl:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="TransactionSegment" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="200" HorizontalOptions="Start" Margin="32,0,0,0" SelectionChanged="ChartSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}" >
+                                        <segmentedControl:SfSegmentedControl.TextStyle>
+                                            <segmentedControl:SegmentTextStyle FontFamily="Roboto-Medium" FontSize="16"/>
+                                        </segmentedControl:SfSegmentedControl.TextStyle>
+                                    </segmentedControl:SfSegmentedControl>
 
                                     <!-- Dropdown for Date Selection -->
                                     <Grid Grid.Row="0" Grid.Column="1" Padding="20">
 
                                         <!-- Dropdown (SfComboBox) for Date Selection -->
-                                        <input:SfComboBox ItemsSource="{Binding DateRange}"
-                                 SelectedItem="{Binding SelectedChartDateRange, Mode=TwoWay}"
-                                 DisplayMemberPath="RangeType"
-                                 IsClearButtonVisible="False"
-                                 HorizontalOptions="End"
-                                 VerticalOptions="Center" Stroke="Transparent" WidthRequest="175"/>
+                                        <input:SfComboBox x:Name="DateRangeCombo"  ItemsSource="{Binding DateRange}"  SelectedItem="{Binding SelectedChartDateRange, Mode=TwoWay}" DisplayMemberPath="RangeType" IsClearButtonVisible="False" HorizontalOptions="End" VerticalOptions="Center" Stroke="Transparent" WidthRequest="175">
+                                            <input:SfComboBox.CustomView>
+                                                <Grid ColumnDefinitions="Auto,*">
+                                                    <Label Grid.Column="0" FontFamily="FontIcons" Text="&#xe723;" VerticalOptions="Center" TextColor="{DynamicResource GrayText}" Padding="10"/>
+                                                    <!-- ComboBox Text: Bind to SelectedItem, not just ViewModel property -->
+                                                    <Label Grid.Column="1" Text="{Binding Source={x:Reference DateRangeCombo}, Path=SelectedItem.RangeType, Mode=OneWay}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14" FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" />
+                                                </Grid>
+                                            </input:SfComboBox.CustomView>
+                                        </input:SfComboBox>
                                     </Grid>
 
                                     <!-- Doughnut Chart -->

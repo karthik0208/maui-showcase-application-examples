@@ -1,6 +1,6 @@
 using MAUIShowcaseSample.Services;
 using MAUIShowcaseSample.ViewModel;
-using Syncfusion.Maui.Buttons;
+using Syncfusion.Maui.Toolkit.Buttons;
 
 namespace MAUIShowcaseSample.View.Dashboard;
 
@@ -45,18 +45,22 @@ public partial class GoalsPage : ContentPage
     private void OnPopupClicked(object sender, EventArgs e)
     {
         var button = sender as SfButton;
-        if (button?.CommandParameter is int goalId)
+        if (button?.CommandParameter is double goalId)
         {
             _viewModel.OpenPopup(goalId);
         }
     }
 
-    private async void OnAddSelection(object? sender, EventArgs e)
+    private async void OnAddFund(object? sender, EventArgs e)
     {
-        if (sender is SfButton button && button.BindingContext is SummarizedBudgetData selectedBudget)
+        if (sender is SfButton button && button.BindingContext is SummarizedGoalData selectedGoal)
         {
-            selectedBudget.IsPopupOpen = false;
-           // layoutPage.TriggerAddExpensePopup();
+            selectedGoal.IsPopupOpen = false;
+            if (button?.CommandParameter is double goalId)
+            {
+                string fundDescription = _dataStore.GetGoalById(goalId).GoalTitle;
+                ((DashboardLayoutPage)this.contentcontainer.Content).TriggerAddFundPopup(goalId, fundDescription);
+            }
         }
     }
 
@@ -68,7 +72,7 @@ public partial class GoalsPage : ContentPage
 
             if (button?.CommandParameter is int goalId)
             {
-               // layoutPage.TriggerEditGoalPopup(goalId);
+                ((DashboardLayoutPage)this.contentcontainer.Content).TriggerEditGoalPopup(goalId);
             }
         }
     }

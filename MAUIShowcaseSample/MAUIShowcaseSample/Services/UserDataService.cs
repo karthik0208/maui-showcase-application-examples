@@ -32,7 +32,7 @@ namespace MAUIShowcaseSample
         {
             if (!_users.Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase)))
             {
-                _users.Add(new UserCredentials { UserName = username, Email = email, Password = password });
+                _users.Add(new UserCredentials { UserName = username, Email = email, Password = password, Currency = CurrencyEnum.USD.ToString(), DOB = DateTime.Today, FirstName = "admin", LastName = "ad", Gender = GenderEnum.Male, IsNotificationEnabled = false, Language = LanguageEnum.English.ToString(), Theme = "Light", TimeZone = TimeZoneEnum.UTC_1.ToString()});
                 return true;
             }
             return false;

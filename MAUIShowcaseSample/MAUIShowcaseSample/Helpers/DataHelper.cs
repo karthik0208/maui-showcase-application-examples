@@ -183,7 +183,7 @@ namespace MAUIShowcaseSample
         private static Brush GetRandomLegendColor()
         {
             var randomKey = legendColors[_random.Next(legendColors.Count)];
-            legendColors.Remove(randomKey); // Removed from list to ensure duplicate colors in chart
+            //legendColors.Remove(randomKey); // Removed from list to ensure duplicate colors in chart
 
             if (Application.Current.Resources.TryGetValue(randomKey, out var colorValue) && colorValue is Color color)
             {

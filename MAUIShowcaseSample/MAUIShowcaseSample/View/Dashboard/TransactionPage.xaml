@@ -25,21 +25,31 @@
                     <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" HorizontalOptions="FillAndExpand">
 
                         <!-- Segment to select transaction type -->
-                        <segmentedControl:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="TransactionSegment" VerticalOptions="Center" SegmentWidth="103" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="310" HorizontalOptions="Start" Margin="32,32,0,32" SelectionChanged="GridSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}"/>
+                        <segmentedControl:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="TransactionSegment" VerticalOptions="Center" SegmentWidth="103" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="310" HorizontalOptions="Start" Margin="32,32,0,32" SelectionChanged="GridSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}">
+                            <segmentedControl:SfSegmentedControl.TextStyle>
+                                <segmentedControl:SegmentTextStyle FontFamily="Roboto-Medium" FontSize="16"/>
+                            </segmentedControl:SfSegmentedControl.TextStyle>
+                        </segmentedControl:SfSegmentedControl>
 
                         <!-- Dropdown (SfComboBox) for Date Range selection -->
                         <editors:SfComboBox x:Name="rangecombo" ItemsSource="{Binding DateRange}"  Grid.Column="1"
-                        SelectedItem="{Binding SelectedGridDateRange, Mode=TwoWay}"
-                        DisplayMemberPath="RangeType"
-                        IsClearButtonVisible="False" Stroke="Transparent"
-                        WidthRequest="175" 
-                                        HeightRequest="40"
-                        Margin="0,0,8,0" >
+                            SelectedItem="{Binding SelectedGridDateRange, Mode=TwoWay}"
+                            DisplayMemberPath="RangeType"
+                            IsClearButtonVisible="False" Stroke="Transparent"
+                            WidthRequest="175" 
+                            HeightRequest="40"
+                            Margin="0,0,8,0" >
                             <editors:SfComboBox.CustomView>
                                 <Grid ColumnDefinitions="Auto,*">
                                     <Label Grid.Column="0" FontFamily="FontIcons" Text="&#xe723;" VerticalOptions="Center" TextColor="{DynamicResource GrayText}" Padding="10"/>
-                                    <!-- ComboBox Text -->
-                                    <Label Grid.Column="1" Text="{Binding BindingContext.RangeType, Source={x:Reference Name=rangecombo}}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14" FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" />
+                                    <!-- ComboBox Text: Bind to SelectedItem, not just ViewModel property -->
+                                    <Label Grid.Column="1" 
+                                           Text="{Binding Source={x:Reference rangecombo}, Path=SelectedItem.RangeType, Mode=OneWay}" 
+                                           HorizontalOptions="Start" 
+                                           VerticalOptions="Center" 
+                                           FontSize="14" 
+                                           FontFamily="Roboto-Regular" 
+                                           TextColor="{DynamicResource GrayText}" />
                                 </Grid>
                             </editors:SfComboBox.CustomView>
                         </editors:SfComboBox>
@@ -65,7 +75,7 @@
                         </buttons:SfButton>
                     </Grid>
 
-                    <Border x:Name="selectioncontrol" Grid.Row="0" StrokeShape="RoundRectangle 68,68,68,68" Margin="16,16,16,16" HorizontalOptions="FillAndExpand" HeightRequest="40" IsVisible="False" StrokeThickness="0" Background="{DynamicResource SurfaceBackground}">
+                    <Border x:Name="selectioncontrol" Grid.Row="0" StrokeShape="RoundRectangle 68,68,68,68" Margin="16,16,16,16" HorizontalOptions="Fill" HeightRequest="40" IsVisible="False" StrokeThickness="0" Background="{DynamicResource SurfaceBackground}">
                         <HorizontalStackLayout>
                             <buttons:SfButton FontFamily="FontIcons" Text="&#xe721;" FontSize="16" TextColor="{DynamicResource GrayText}" Background="Transparent" WidthRequest="50" Clicked="OnSelectCloseButtonClicked"/>
                             <Label Text="{Binding SelectedRowCount}" WidthRequest="20" VerticalOptions="Center"/>
@@ -76,7 +86,7 @@
                         </HorizontalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="1" StrokeShape="RoundRectangle 20,20,20,20" Margin="16,0,16,16" VerticalOptions="FillAndExpand">
+                    <Border Grid.Row="1" StrokeShape="RoundRectangle 20,20,20,20" Margin="16,0,16,16" VerticalOptions="Fill">
                         <Grid RowDefinitions="*,Auto" >
 
                             <!-- Data grid page selection -->

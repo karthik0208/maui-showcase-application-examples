@@ -12,7 +12,11 @@
         <ContentView Grid.Row="0" x:Name="contentcontainer"/>
         <Grid Grid.Row="1" RowDefinitions="Auto,*" BackgroundColor="{DynamicResource SurfaceBackground}">
 
-            <segmentedControl:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="BudgetSegment" SegmentWidth="167" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="334" HorizontalOptions="Start" Margin="32,32,0,0" SelectionChanged="BudgetSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}"/>
+            <segmentedControl:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="BudgetSegment" SegmentWidth="167" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="334" HorizontalOptions="Start" Margin="32,32,0,0" SelectionChanged="BudgetSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}">
+                <segmentedControl:SfSegmentedControl.TextStyle>
+                    <segmentedControl:SegmentTextStyle FontFamily="Roboto-Medium" FontSize="16"/>
+                </segmentedControl:SfSegmentedControl.TextStyle>
+            </segmentedControl:SfSegmentedControl>
 
             <VerticalStackLayout Grid.Row="1" Padding="15" BackgroundColor="Transparent">
                 <ScrollView>
@@ -90,14 +94,14 @@
 
                                         </VerticalStackLayout>
 
-                                        <Border x:Name="UpdataBudgetPopup" Background="{DynamicResource SurfaceBackground}" StrokeShape="RoundRectangle 10,10,10,10" HeightRequest="176" WidthRequest="172" HorizontalOptions="End" Margin="0,0,16,0" IsVisible="{Binding IsPopupOpen, Mode=TwoWay}">
+                                        <Border x:Name="UpdataBudgetPopup" Background="{DynamicResource SurfaceBackground}" StrokeShape="RoundRectangle 10,10,10,10" VerticalOptions="Center"  WidthRequest="172" HorizontalOptions="End" Margin="0,0,16,0" IsVisible="{Binding IsPopupOpen, Mode=TwoWay}">
                                             <VerticalStackLayout>
-                                                <buttons:SfButton ShowIcon="True" ImageAlignment="Start" Text="Add Expense" Style="{StaticResource PopupButton}" Clicked="OnAddSelection">
+                                                <buttons:SfButton ShowIcon="True" ImageAlignment="Start" Text="Add Expense" Style="{StaticResource PopupButton}" Clicked="OnAddSelection" >
                                                     <buttons:SfButton.ImageSource>
                                                         <FontImageSource FontFamily="FontIcons" Glyph="&#xe720;" Size="16" Color="{DynamicResource BlackText}" />
                                                     </buttons:SfButton.ImageSource>
                                                 </buttons:SfButton>
-                                                <buttons:SfButton ShowIcon="True" ImageAlignment="Start" Text="View Details" Style="{StaticResource PopupButton}" Clicked="ViewDetailsClicked">
+                                                <buttons:SfButton ShowIcon="True" ImageAlignment="Start" Text="View Details" Style="{StaticResource PopupButton}" Clicked="ViewDetailsClicked" >
                                                     <buttons:SfButton.ImageSource>
                                                         <FontImageSource FontFamily="FontIcons" Glyph="&#xe71e;" Size="16" Color="{DynamicResource BlackText}" />
                                                     </buttons:SfButton.ImageSource>

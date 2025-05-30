@@ -26,6 +26,8 @@ namespace MAUIShowcaseSample
 
         private GoalDetails goalDetails;
 
+        private GoalTransactionDetails fundDetails;
+
         private bool isPickerOpen;
 
         public string PageTitle
@@ -101,6 +103,18 @@ namespace MAUIShowcaseSample
             }
         }
 
+        public GoalTransactionDetails FundDetails
+        {
+            get
+            {
+                return this.fundDetails;
+            }
+            set
+            {
+                this.fundDetails = value;
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -129,6 +143,7 @@ namespace MAUIShowcaseSample
             BudgetDetails = new BudgetDetails();
             SavingDetails = new SavingsDetails();
             GoalDetails = new GoalDetails();
+            FundDetails = new GoalTransactionDetails();
         }
 
         [ObservableProperty]
@@ -250,7 +265,44 @@ namespace MAUIShowcaseSample
             return _dataStore.UpdateGoal(goalData).Result;
         }
 
-        public async Task<bool> TriggerEditSavings(int transactionId)
+        public async Task<bool> OnAddFundClicked()
+        {
+            // Prepare the fund transaction from FundDetails
+            GoalsTransaction fundTransaction = new GoalsTransaction
+            {
+                TransactionDate = DateTime.ParseExact(FundDetails.TransactionDate, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                TransactionDescription = FundDetails.TransactionDescription,
+                ContributionAmount = Double.Parse(FundDetails.ContributionAmount),
+                Remarks = FundDetails.Remarks
+            };
+
+            bool result;
+            if (FundDetails.ButtonText == "Save")
+            {
+                fundTransaction.TransactionId = Double.Parse(FundDetails.TransactionId);
+                // Update existing transaction for the goal
+                result = _dataStore.UpdateGoalTransaction(
+                    fundTransaction,
+                    Double.Parse(FundDetails.GoalId),
+                    Double.Parse(FundDetails.TransactionId)
+                ).Result;
+            }
+            else
+            {
+                // Add new transaction for the goal
+                result = _dataStore.UpdateGoalTransaction(
+                    fundTransaction,
+                    Double.Parse(FundDetails.GoalId),
+                    null
+                ).Result;
+            }
+
+            this.FundDetails.Clear();
+            return result;
+        }
+
+
+        public async Task<bool> TriggerEditSavings(double transactionId)
         {
             try
             {
@@ -270,7 +322,7 @@ namespace MAUIShowcaseSample
             }            
         }
 
-        public async Task<bool> TriggerEditTransaction(int transactionId)
+        public async Task<bool> TriggerEditTransaction(double transactionId)
         {
             try
             {
@@ -291,7 +343,7 @@ namespace MAUIShowcaseSample
             }
         }
 
-        public async Task<bool> TriggerEditBudget(int budgetId)
+        public async Task<bool> TriggerEditBudget(double budgetId)
         {
             try
             {
@@ -311,7 +363,7 @@ namespace MAUIShowcaseSample
             }
         }
 
-        public async Task<bool> TriggerEditGoal(int goalId)
+        public async Task<bool> TriggerEditGoal(double goalId)
         {
             try
             {
@@ -466,7 +518,7 @@ namespace MAUIShowcaseSample
             }
         }
       
-        public int TransactionId { get; set; }
+        public double TransactionId { get; set; }
 
         public string ButtonText { get; set; }
 
@@ -588,7 +640,7 @@ namespace MAUIShowcaseSample
 
         private string buttonText;
 
-        private int budgdetId;
+        private double budgdetId;
 
         public string BudgetTitle
         {
@@ -683,7 +735,7 @@ namespace MAUIShowcaseSample
             }
         }
 
-        public int BudgetId
+        public double BudgetId
         {
             get
             {
@@ -704,6 +756,7 @@ namespace MAUIShowcaseSample
         public BudgetDetails()
         {
             BudgetCategoryOptions = DataStore.BudgetCategory;
+            ButtonText = "Create";
         }
         public void Clear()
         {
@@ -714,7 +767,7 @@ namespace MAUIShowcaseSample
 
     public class GoalDetails : INotifyPropertyChanged
     {
-        private int goalId;
+        private double goalId;
 
         private string goalTitle;
 
@@ -810,7 +863,7 @@ namespace MAUIShowcaseSample
             }
         }
 
-        public int GoalId
+        public double GoalId
         {
             get
             {
@@ -844,6 +897,7 @@ namespace MAUIShowcaseSample
         public GoalDetails()
         {
             GoalPriorityOptions = Enum.GetNames(typeof(GoalPriority)).ToList();
+            ButtonText = "Create";
         }
 
         public void Clear()
@@ -947,7 +1001,7 @@ namespace MAUIShowcaseSample
             }
         }
 
-        public int TransactionId { get; set; }
+        public double TransactionId { get; set; }
 
         public string ButtonText { get; set; }
 
@@ -971,6 +1025,125 @@ namespace MAUIShowcaseSample
         {
             ButtonText = "Add";
             SavingAmount = SavingDescription = SavingDate = SavingRemarks = SavingType = string.Empty;
+        }
+    }
+    public class GoalTransactionDetails : INotifyPropertyChanged
+    {
+        private string goalId;
+        private string transactionId;
+        private string transactionDate;
+        private string transactionDescription;
+        private string contributionAmount;
+        private string remarks;
+        private string buttonText;
+
+        public string GoalId
+        {
+            get => goalId;
+            set
+            {
+                if (goalId != value)
+                {
+                    goalId = value;
+                    OnPropertyChanged(nameof(GoalId));
+                }
+            }
+        }
+
+        public string TransactionId
+        {
+            get => transactionId;
+            set
+            {
+                if (transactionId != value)
+                {
+                    transactionId = value;
+                    OnPropertyChanged(nameof(TransactionId));
+                }
+            }
+        }
+
+        public string TransactionDate
+        {
+            get => transactionDate;
+            set
+            {
+                if (transactionDate != value)
+                {
+                    transactionDate = value != string.Empty ? DateTime.Parse(value).ToString("dd/MM/yyyy") : value;
+                    OnPropertyChanged(nameof(TransactionDate));
+                }
+            }
+        }
+
+        public string TransactionDescription
+        {
+            get => transactionDescription;
+            set
+            {
+                if (transactionDescription != value)
+                {
+                    transactionDescription = value;
+                    OnPropertyChanged(nameof(TransactionDescription));
+                }
+            }
+        }
+
+        public string ContributionAmount
+        {
+            get => contributionAmount;
+            set
+            {
+                if (contributionAmount != value)
+                {
+                    contributionAmount = value;
+                    OnPropertyChanged(nameof(ContributionAmount));
+                }
+            }
+        }
+
+        public string Remarks
+        {
+            get => remarks;
+            set
+            {
+                if (remarks != value)
+                {
+                    remarks = value;
+                    OnPropertyChanged(nameof(Remarks));
+                }
+            }
+        }
+
+        public string ButtonText
+        {
+            get => buttonText;
+            set
+            {
+                if (buttonText != value)
+                {
+                    buttonText = value;
+                    OnPropertyChanged(nameof(ButtonText));
+                }
+            }
+        }
+
+        public GoalTransactionDetails()
+        {
+            ButtonText = "Add";
+        }
+
+        public void Clear()
+        {
+            TransactionId = TransactionDescription = Remarks = ContributionAmount = TransactionDate = string.Empty;
+            ButtonText = "Add";
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

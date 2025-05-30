@@ -1,5 +1,5 @@
 ﻿using MAUIShowcaseSample.Services;
-using Syncfusion.Maui.Buttons;
+using Syncfusion.Maui.Toolkit.SegmentedControl;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -188,7 +188,7 @@ namespace MAUIShowcaseSample
 
        
 
-        public void OpenPopup(int goalId)
+        public void OpenPopup(double goalId)
         {
             foreach (var data in GoalData)
             {
@@ -212,7 +212,7 @@ namespace MAUIShowcaseSample
 
         public async void DeleteGoal()
         {
-            List<int> goalIds = GoalData.Where(t => t.IsPopupOpen == true).Select(t => t.GoalId).ToList();
+            List<double> goalIds = GoalData.Where(t => t.IsPopupOpen == true).Select(t => t.GoalId).ToList();
             if (_dataStore.DeleteTransactions(goalIds, "Goal"))
             {
                 UpdateGoalsData();
@@ -228,7 +228,7 @@ namespace MAUIShowcaseSample
 
     public class SummarizedGoalData : INotifyPropertyChanged
     {
-        private int goalId;
+        private double goalId;
 
         private string? goalTitle;
 
@@ -260,7 +260,7 @@ namespace MAUIShowcaseSample
 
         private bool isPopupOpen;
 
-        public int GoalId
+        public double GoalId
         {
             get
             {

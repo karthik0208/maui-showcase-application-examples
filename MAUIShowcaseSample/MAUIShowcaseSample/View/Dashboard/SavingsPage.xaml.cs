@@ -1,5 +1,6 @@
 using MAUIShowcaseSample.Services;
 using Syncfusion.Maui.Data;
+using Syncfusion.Maui.Toolkit.SegmentedControl;
 using Syncfusion.XlsIO;
 
 namespace MAUIShowcaseSample.View.Dashboard;
@@ -17,7 +18,7 @@ public partial class SavingsPage : ContentPage
         this.contentcontainer.Content = new DashboardLayoutPage(layoutViewModel, dataService, dataStore);
     }
     
-    private void GridSegmentChanged(object? sender, Syncfusion.Maui.Buttons.SelectionChangedEventArgs e)
+    private void GridSegmentChanged(object? sender, Syncfusion.Maui.Toolkit.SegmentedControl.SelectionChangedEventArgs e)
     {
         ((SavingsPageViewModel)BindingContext).UpdateGridData();        
     }
@@ -62,7 +63,7 @@ public partial class SavingsPage : ContentPage
 
     private async void OnEditSelection(object? sender, EventArgs e)
     {
-        int transactionId = ((SavingsPageViewModel)BindingContext).GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).First();
-      //  layoutPage.TriggerEditSavePopup(transactionId);
+        double transactionId = ((SavingsPageViewModel)BindingContext).GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).First();
+        ((DashboardLayoutPage)this.contentcontainer.Content).TriggerEditSavePopup(transactionId);
     }
 }

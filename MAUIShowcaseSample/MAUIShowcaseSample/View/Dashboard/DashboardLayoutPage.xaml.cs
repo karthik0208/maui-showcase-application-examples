@@ -161,11 +161,13 @@ public partial class DashboardLayoutPage : ContentView
         if (viewModel.OnAddTransactionClicked())
         {
             this.createtransactionpopup.IsOpen = false;
+            this.addexpensepopup.IsOpen = false;
             await Application.Current.MainPage.DisplayAlert("Success", "Transaction added successfully", "OK");
         }
         else
         {
             this.createtransactionpopup.IsOpen = false;
+            this.addexpensepopup.IsOpen = false;
             await Application.Current.MainPage.DisplayAlert("Failed", "Adding transaction failed", "OK");
         }
         viewModel.TransactionDetails.Clear();
@@ -225,7 +227,8 @@ public partial class DashboardLayoutPage : ContentView
 
     private async void OnAddSavingsClicked(object sender, System.EventArgs e)
     {
-        if (layoutViewModel.OnAddBSavingsClicked().Result)
+        var viewModel = BindingContext as DashboardLayoutPageViewModel;
+        if (viewModel.OnAddBSavingsClicked().Result)
         {
             this.addsavingspopup.IsOpen = false;
             await Application.Current.MainPage.DisplayAlert("Success", "Added Savings successfully", "OK");
@@ -235,7 +238,7 @@ public partial class DashboardLayoutPage : ContentView
             this.addsavingspopup.IsOpen = false;
             await Application.Current.MainPage.DisplayAlert("Failed", "Adding Savings failed", "OK");
         }
-        layoutViewModel.SavingDetails.Clear();
+        viewModel.SavingDetails.Clear();
         var currentPage = Shell.Current.CurrentState.Location.ToString();
         if (currentPage == "//savings")
         {
@@ -285,7 +288,7 @@ public partial class DashboardLayoutPage : ContentView
         }
     }
 
-    public async void TriggerEditSavePopup(int transactionId)
+    public async void TriggerEditSavePopup(double transactionId)
     {
         layoutViewModel.TriggerEditSavings(transactionId);
         this.addsavingspopup.HeaderTitle = "Edit Savings";
@@ -293,7 +296,7 @@ public partial class DashboardLayoutPage : ContentView
         this.addsavingspopup.IsOpen = true;
     }
 
-    public async void TriggerEditTransactionPopup(int transactionId)
+    public async void TriggerEditTransactionPopup(double transactionId)
     {
         layoutViewModel.TriggerEditTransaction(transactionId);
         this.createtransactionpopup.HeaderTitle = "Edit Transaction";
@@ -301,7 +304,7 @@ public partial class DashboardLayoutPage : ContentView
         this.createtransactionpopup.IsOpen = true;
     }
 
-    public async void TriggerEditBudgetPopup(int budgetId)
+    public async void TriggerEditBudgetPopup(double budgetId)
     {
         layoutViewModel.TriggerEditBudget(budgetId);
         this.createbudgetpopup.HeaderTitle = "Edit Budget";
@@ -311,11 +314,14 @@ public partial class DashboardLayoutPage : ContentView
 
     public async void TriggerAddExpensePopup()
     {
+        layoutViewModel.TransactionDetails.Clear();
         this.addexpensepopup.IsOpen = true;
         layoutViewModel.TransactionDetails.TransactionType = "Expense";
+        this.addexpensepopup.HeaderTitle = "Add Expense";
+        this.addexpensepopup.AcceptButtonText = "Add";
     }
 
-    public async void TriggerEditGoalPopup(int goalId)
+    public async void TriggerEditGoalPopup(double goalId)
     {
         layoutViewModel.TriggerEditGoal(goalId);
         this.creategoalpopup.HeaderTitle = "Edit Goal";
@@ -323,10 +329,33 @@ public partial class DashboardLayoutPage : ContentView
         this.creategoalpopup.IsOpen = true;
     }
 
-    public async void TriggerAddFundPopup()
+    public async void TriggerAddFundPopup(double goalId, string goalDescription)
     {
-        //this.AddExpensePopup.IsOpen = true;
-        //layoutViewModel.TransactionDetails.TransactionType = "Expense";
+        this.addfundpopup.IsOpen = true;
+        layoutViewModel.FundDetails.TransactionDescription = goalDescription;
+        layoutViewModel.FundDetails.GoalId = goalId.ToString(); // Convert double to string
+    }
+
+    public async void OnAddFundClicked(object sender, System.EventArgs e)
+    {
+        if (layoutViewModel.OnAddFundClicked().Result)
+        {
+            this.addfundpopup.IsOpen = false;
+            await Application.Current.MainPage.DisplayAlert("Success", "Added fund successfully", "OK");
+        }
+        else
+        {
+            this.addfundpopup.IsOpen = false;
+            await Application.Current.MainPage.DisplayAlert("Failed", "Adding fund failed", "OK");
+        }
+        layoutViewModel.FundDetails.Clear();
+    }
+
+    private void OnFundCancelClicked(object sender, System.EventArgs e)
+    {
+        var viewModel = BindingContext as DashboardLayoutPageViewModel;
+        viewModel.FundDetails.Clear();
+        this.addfundpopup.IsOpen = false;
     }
 
 }

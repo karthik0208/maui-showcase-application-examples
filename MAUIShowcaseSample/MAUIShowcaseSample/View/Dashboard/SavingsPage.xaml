@@ -41,10 +41,14 @@
                         <Grid x:Name="segmentcontrol" Grid.Row="0" ColumnDefinitions="*,Auto,Auto" HorizontalOptions="FillAndExpand" IsVisible="True">
 
                             <!-- Segment to select transaction type -->
-                            <segmentedControl:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="TransactionSegment" SegmentWidth="103" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="310" HorizontalOptions="Start" Margin="32,32,0,32" SelectionChanged="GridSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}"/>
+                            <segmentedControl:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="TransactionSegment" SegmentWidth="103" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="310" HorizontalOptions="Start" Margin="32,32,0,32" SelectionChanged="GridSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}">
+                                <segmentedControl:SfSegmentedControl.TextStyle>
+                                    <segmentedControl:SegmentTextStyle FontFamily="Roboto-Medium" FontSize="16"/>
+                                </segmentedControl:SfSegmentedControl.TextStyle>
+                            </segmentedControl:SfSegmentedControl>
 
                             <!-- Dropdown (SfComboBox) for Date Range selection -->
-                            <editors:SfComboBox ItemsSource="{Binding DateRange, Mode=TwoWay}"  Grid.Column="1"
+                            <editors:SfComboBox x:Name="DateRangeCombo" ItemsSource="{Binding DateRange, Mode=TwoWay}"  Grid.Column="1"
                 SelectedItem="{Binding SelectedGridDateRange, Mode=TwoWay}"
                 DisplayMemberPath="RangeType"
                 IsClearButtonVisible="False" Stroke="Transparent"
@@ -55,7 +59,7 @@
                                     <Grid ColumnDefinitions="Auto,*">
                                         <Label Grid.Column="0" FontFamily="FontIcons" Text="&#xe723;" VerticalOptions="Center" TextColor="{DynamicResource GrayText}" Padding="10"/>
                                         <!-- ComboBox Text -->
-                                        <Label Grid.Column="1" Text="{Binding SelectedGridDateRange.RangeType, Mode=TwoWay}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14" FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" />
+                                        <Label Grid.Column="1" Text="{Binding Source={x:Reference DateRangeCombo}, Path=SelectedItem.RangeType, Mode=OneWay}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14" FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" />
                                     </Grid>
                                 </editors:SfComboBox.CustomView>
                             </editors:SfComboBox>
@@ -96,7 +100,7 @@
                             <Grid RowDefinitions="*,Auto" >
 
                                 <!-- Data grid page selection -->
-                                <pager:SfDataPager Grid.Row="1" x:Name ="dataPager" PageSize="6" NumericButtonCount="10" UseOnDemandPaging="True" Source="{Binding GridData}" Margin="0,0,0,16" />
+                                <pager:SfDataPager Grid.Row="1" x:Name ="dataPager" PageSize="10" NumericButtonCount="10" UseOnDemandPaging="True" Source="{Binding GridData}" Margin="0,0,0,16" />
 
                                 <!-- Data grid -->
                                 <grid:SfDataGrid Grid.Row="0" x:Name="dataGrid" ColumnWidthMode="Fill" AutoGenerateColumnsMode="None"  RowHeight="68" ItemsSource="{Binding Source={x:Reference dataPager}, Path=PagedSource }" >

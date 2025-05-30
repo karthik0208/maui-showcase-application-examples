@@ -5,6 +5,7 @@ namespace MAUIShowcaseSample.View.SignIn
         public SignInPage(SignInPageViewModel model)
         {
             InitializeComponent();
+            Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
             this.BindingContext = model;          
         }
     }    

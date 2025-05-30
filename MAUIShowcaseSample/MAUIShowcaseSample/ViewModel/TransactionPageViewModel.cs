@@ -246,7 +246,7 @@ namespace MAUIShowcaseSample
         [RelayCommand]
         public async Task DeleteTransactionAsync()
         {
-            List<int> transactionIds = GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).ToList();
+            List<double> transactionIds = GridData.Where(t => t.IsSelected == true).Select(t => t.TransactionId).ToList();
             if (_dataStore.DeleteTransactions(transactionIds, "Transaction"))
             {
                 UpdateGridData();
@@ -414,7 +414,7 @@ namespace MAUIShowcaseSample
             }
         }
 
-        public int TransactionId { get; set; }
+        public double TransactionId { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

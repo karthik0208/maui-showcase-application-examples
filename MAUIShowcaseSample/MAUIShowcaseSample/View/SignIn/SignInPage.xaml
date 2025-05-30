@@ -8,17 +8,28 @@
              x:Class="MAUIShowcaseSample.View.SignIn.SignInPage"
              Title="SignInPage">
 
-    <Grid>    
-
+    <Grid>
         <!-- Signin Page -->
-        <Grid x:Name="SignInView" ColumnDefinitions="*,*">
+        <Grid x:Name="SignInView" ColumnDefinitions="*,*"
+              IsVisible="{OnPlatform Android=False, Default=True}">
+            <!-- Show LeftLayout image only on Windows -->
             <Grid Grid.Column="0">
-                <!-- Background Image -->
                 <Image Source="LeftLayout.png"
-                 Aspect="AspectFill" />
+                       Aspect="AspectFill">
+                    <Image.IsVisible>
+                        <OnPlatform x:TypeArguments="x:Boolean">
+                            <On Platform="WinUI" Value="True"/>
+                            <On Platform="Android,iOS,MacCatalyst" Value="False"/>
+                        </OnPlatform>
+                    </Image.IsVisible>
+                </Image>
             </Grid>
+            <!-- Main SignIn Form -->
             <Grid Grid.Column="1" Background="Transparent">
-                <StackLayout Padding="20" VerticalOptions="CenterAndExpand" WidthRequest="384" HorizontalOptions="Center">
+                <StackLayout Padding="20"
+                             VerticalOptions="{OnPlatform Android=FillAndExpand, Default=CenterAndExpand}"
+                             WidthRequest="{OnPlatform WinUI=384, Default=-1}"
+                             HorizontalOptions="{OnPlatform Android=FillAndExpand, WinUI=Center, Default=Center}">
                     <Label Text="Sign In" FontFamily="Roboto-Regular" FontSize="22" HeightRequest="28" TextColor="{DynamicResource DarkText}" HorizontalOptions="Center" />
                     <Label Text="Enter your credentials to sign in" FontFamily="Roboto-Regular" FontSize="16" HeightRequest="22" TextColor="{DynamicResource GrayText}" HorizontalOptions="Center" Margin="{OnPlatform WinUI='0,12,0,0'}" />
 
@@ -66,7 +77,58 @@
                     </Grid>
                 </StackLayout>
             </Grid>
-            
+        </Grid>
+        <!-- Make right layout vertically centered on Android -->
+        <Grid IsVisible="{OnPlatform Android=True, Default=False}" BackgroundColor="Transparent">
+            <StackLayout Padding="20"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="FillAndExpand">
+                <Label Text="Sign In" FontFamily="Roboto-Regular" FontSize="22" HeightRequest="28" TextColor="{DynamicResource DarkText}" HorizontalOptions="Center" />
+                <Label Text="Enter your credentials to sign in" FontFamily="Roboto-Regular" FontSize="16" HeightRequest="22" TextColor="{DynamicResource GrayText}" HorizontalOptions="Center" />
+
+                <dataForm:SfDataForm x:Name="SignInFormAndroid" DataObject="{Binding SignInFormModel}"  CommitMode="PropertyChanged" LayoutType="TextInputLayout" MinimumHeightRequest="120" MaximumHeightRequest="150">
+                    <dataForm:SfDataForm.LabelTextStyle>
+                        <dataForm:DataFormTextStyle FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" FontSize="16"/>
+                    </dataForm:SfDataForm.LabelTextStyle>
+                </dataForm:SfDataForm>
+                <Grid ColumnDefinitions="*,*" Padding="12,0,0,0" VerticalOptions="Start">
+                    <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center">
+                        <button:SfCheckBox Grid.Column="0" Background="Transparent" MinimumHeightRequest="18" MinimumWidthRequest="18"/>
+                        <Label Grid.Column="1"  Text="Remember me" FontFamily="Roboto-Regular" FontSize="16" VerticalOptions="Center" />
+                    </Grid>
+                    <Label Text="Forgot password?" Grid.Column="1" TextColor="{StaticResource Primary}" FontFamily="Roboto-Medium" FontSize="16" HorizontalTextAlignment="Center" Padding="10,0,0,0" VerticalOptions="Center" >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OnForgotPasswordTappedCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+
+                <buttons:SfButton Text="Sign In" x:Name="loginButtonAndroid" HeightRequest="44" HorizontalOptions="Fill" Margin="20,16,20,0" CornerRadius="30" FontFamily="Roboto-Medium" FontSize="16" Background="{StaticResource PrimaryBackground}" Command="{Binding OnSignInClickedCommand}"/>
+
+                <Label HorizontalOptions="Center" HorizontalTextAlignment="Center" HeightRequest="24" VerticalTextAlignment="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Don't have an account?   "  FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource GrayText}" />
+                            <Span Text="Sign Up" TextColor="{StaticResource PrimaryBackground}"  FontFamily="Roboto-Medium" FontSize="16">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OnSignUpTappedCommand}" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Grid ColumnDefinitions="*,Auto,*" HorizontalOptions="Fill" Margin="0,32,0,0" >
+                    <BoxView Grid.Column="0" HeightRequest="1" Color="{DynamicResource LineBackground}" HorizontalOptions="Fill" VerticalOptions="Center"/>
+                    <Label Grid.Column="1" Text="Or Continue with" TextColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="14" WidthRequest="108" VerticalOptions="Center"/>
+                    <BoxView Grid.Column="2" HeightRequest="1" Color="{DynamicResource LineBackground}" HorizontalOptions="Fill" VerticalOptions="Center"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*" HorizontalOptions="Fill" Margin="0,16,0,0">
+                    <buttons:SfButton Grid.Column="0" ImageSource="google_icon.png" ShowIcon="True" Text="Sign with Google" HorizontalTextAlignment="Start" x:Name="googlesigninAndroid" HeightRequest="44" HorizontalOptions="Fill" Margin="0,0,8,0" CornerRadius="30" FontFamily="Roboto-Medium" FontSize="12" TextColor="{DynamicResource PrimaryBackground}" Background="Transparent" Stroke="{DynamicResource ButtonOutline}" StrokeThickness="1" ImageAlignment="Default" Command="{Binding OnGoogleSignInClickedCommand}"/>
+                    <buttons:SfButton Grid.Column="1" ImageSource="microsoft_icon.png" ShowIcon="True" Text="Sign with Microsoft"  HorizontalTextAlignment="Start" x:Name="microsoftsigninAndroid" HeightRequest="44" HorizontalOptions="Fill" CornerRadius="30" FontFamily="Roboto-Medium" FontSize="12" TextColor="{DynamicResource PrimaryBackground}" Background="Transparent" Stroke="{DynamicResource ButtonOutline}" StrokeThickness="1" ImageAlignment="Default" Command="{Binding OnMicrosoftSignInClickedCommand}"/>
+                </Grid>
+            </StackLayout>
         </Grid>
     </Grid>
 </ContentPage>
