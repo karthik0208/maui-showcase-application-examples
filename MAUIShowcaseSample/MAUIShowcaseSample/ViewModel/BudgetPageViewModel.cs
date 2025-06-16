@@ -24,6 +24,8 @@ namespace MAUIShowcaseSample
 
         private string currencySymbol;
 
+        private bool isPageEnabled = false;
+
         public List<SfSegmentItem> SegmentTitle
         {
             get
@@ -87,6 +89,19 @@ namespace MAUIShowcaseSample
                 OnPropertyChanged(nameof(ChartData));
             }
 
+        }
+
+        public bool IsPageEnabled
+        {
+            get => isPageEnabled;
+            set
+            {
+                if (isPageEnabled != value)
+                {
+                    isPageEnabled = value;
+                    OnPropertyChanged(nameof(IsPageEnabled));
+                }
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -223,7 +238,7 @@ namespace MAUIShowcaseSample
         }
 
        
-        public void OpenPopup(int budgetId)
+        public void OpenPopup(double budgetId)
         {
             foreach(var data in BudgetData)
             {

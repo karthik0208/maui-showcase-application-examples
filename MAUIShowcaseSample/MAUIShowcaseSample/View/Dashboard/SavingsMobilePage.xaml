@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:grid="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:segmentedControl="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:pager="clr-namespace:Syncfusion.Maui.DataGrid.DataPager;assembly=Syncfusion.Maui.DataGrid"
+             xmlns:refresh="clr-namespace:Syncfusion.Maui.Toolkit.PullToRefresh;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:converter="clr-namespace:MAUIShowcaseSample.Converters"
+             x:Class="MAUIShowcaseSample.View.Dashboard.SavingsMobilePage">
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0" HorizontalScrollBarVisibility="Default" InputTransparent="{Binding IsPageEnabled, Mode=TwoWay}">
+            <Grid RowDefinitions="Auto,*">
+                <ContentView Grid.Row="0" x:Name="contentcontainer"/>
+                <Grid Grid.Row="1" RowDefinitions="Auto,*" BackgroundColor="{DynamicResource SurfaceBackground}">
+                    <!-- Summary Section for Mobile -->
+                    <Grid Grid.Row="0" RowDefinitions="Auto,Auto" ColumnDefinitions="*" Margin="12,0,12,0" RowSpacing="8">
+                        <!-- Total Savings in single row -->
+                        <Border Grid.Row="0" Style="{StaticResource SummaryBorder}" HeightRequest="64">
+                            <Grid RowDefinitions="*,*" Margin="16,0,0,0" RowSpacing="5">
+                                <Label Grid.Row="0" Text="Total Savings" Style="{StaticResource CardTitleMobile}" />
+                                <Label Grid.Row="1" Text="{Binding TotalSavingsCartValue}" Style="{StaticResource CardMobile}" />
+                            </Grid>
+                        </Border>
+                        <!-- This Month Saving and Emergency Fund in two columns -->
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Border Grid.Column="0" Style="{StaticResource SummaryBorder}" HeightRequest="64">
+                                <Grid RowDefinitions="*,*" Margin="16,0,0,0" RowSpacing="5">
+                                    <Label Grid.Row="0" Text="This Month Saving" Style="{StaticResource CardTitleMobile}" />
+                                    <Label Grid.Row="1" Text="{Binding CurrentMonthSavingsCartValue}" Style="{StaticResource CardMobile}" />
+                                </Grid>
+                            </Border>
+                            <Border Grid.Column="1" Style="{StaticResource SummaryBorder}" HeightRequest="64">
+                                <Grid RowDefinitions="*,*" Margin="16,0,0,0" RowSpacing="5">
+                                    <Label Grid.Row="0" Text="Emergency Fund" Style="{StaticResource CardTitleMobile}" />
+                                    <Label Grid.Row="1" Text="{Binding EmergencyFundCartValue}" Style="{StaticResource CardMobile}" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Grid>
+
+                    <Border Grid.Row="1" StrokeShape="RoundRectangle 10,10,10,10" BackgroundColor="{DynamicResource Surface}" Margin="16,24,16,24">
+                        <Grid RowDefinitions="Auto,Auto,*">
+                            <!-- Segmented Control in first row -->
+                            <Grid x:Name="segmentcontrol" Grid.Row="0" ColumnDefinitions="*" HorizontalOptions="Center" IsVisible="True" Margin="0,0,0,8">
+                                <segmentedControl:SfSegmentedControl x:Name="TransactionSegment"
+                                                             SegmentWidth="103"
+                                                             ItemsSource="{Binding SegmentTitle}"
+                                                             MinimumHeightRequest="40"
+                                                             MinimumWidthRequest="310"
+                                                             HorizontalOptions="Start"
+                                                             Margin="0,32,0,0"
+                                                             SelectionChanged="GridSegmentChanged"
+                                                             SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}">
+                                    <segmentedControl:SfSegmentedControl.TextStyle>
+                                        <segmentedControl:SegmentTextStyle FontFamily="Roboto-Medium" FontSize="16"/>
+                                    </segmentedControl:SfSegmentedControl.TextStyle>
+                                </segmentedControl:SfSegmentedControl>
+                            </Grid>
+                            <!-- ComboBox and Export in second row as two columns -->
+                            <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8" Margin="16,16,16,8">
+
+                                <Border StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource LineBackground}" StrokeThickness="1" HeightRequest="40" HorizontalOptions="Start">
+                                    <editors:SfComboBox x:Name="DateRangeCombo"
+                            ItemsSource="{Binding DateRange, Mode=TwoWay}"
+                            SelectedItem="{Binding SelectedGridDateRange, Mode=TwoWay}"
+                            DisplayMemberPath="RangeType"
+                            IsClearButtonVisible="False"
+                            Stroke="Transparent"
+                            WidthRequest="152"
+                            HeightRequest="40">
+                                        <editors:SfComboBox.CustomView>
+                                            <Grid ColumnDefinitions="Auto,*">
+                                                <Label Grid.Column="0" FontFamily="FontIcons" Text="&#xe723;" VerticalOptions="Center" TextColor="{DynamicResource GrayText}" Padding="10"/>
+                                                <Label Grid.Column="1" Text="{Binding Source={x:Reference DateRangeCombo}, Path=SelectedItem.RangeType, Mode=OneWay}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="14" FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" />
+                                            </Grid>
+                                        </editors:SfComboBox.CustomView>
+                                    </editors:SfComboBox>
+                                </Border>
+
+                                <buttons:SfButton Text="Export"
+                                          Grid.Column="1"
+                                          CornerRadius="20"
+                                          WidthRequest="108"
+                                          HeightRequest="40"
+                                          HorizontalOptions="End"
+                                          StrokeThickness="1"
+                                          Stroke="{DynamicResource LineBackground}"
+                                          TextColor="{DynamicResource GrayText}"
+                                          FontFamily="Roboto-Medium"
+                                          FontSize="14"
+                                          Background="Transparent"
+                                          ShowIcon="True"
+                                          Margin="0,0,0,0"
+                                          Command="{Binding ExportAllDataCommand}">
+                                    <buttons:SfButton.ImageSource>
+                                        <FontImageSource FontFamily="FontIcons" Glyph="&#xe733;" Size="16" Color="{DynamicResource GrayText}" />
+                                    </buttons:SfButton.ImageSource>
+                                </buttons:SfButton>
+                            </Grid>
+
+                            <Border x:Name="selectioncontrol" Grid.Row="0" StrokeShape="RoundRectangle 68,68,68,68" Margin="16,16,16,16" HorizontalOptions="FillAndExpand" HeightRequest="40" IsVisible="False" StrokeThickness="0" Background="{DynamicResource SurfaceBackground}">
+                                <HorizontalStackLayout>
+                                    <buttons:SfButton FontFamily="FontIcons" Text="&#xe721;" FontSize="16" TextColor="{DynamicResource GrayText}" Background="Transparent" WidthRequest="50" Clicked="OnSelectCloseButtonClicked"/>
+                                    <Label Text="{Binding SelectedRowCount}" WidthRequest="16" VerticalOptions="Center"/>
+                                    <Label Text="Item" WidthRequest="40" VerticalOptions="Center"/>
+                                    <buttons:SfButton x:Name="editbutton" FontFamily="FontIcons" Text="&#xe719;" FontSize="16" TextColor="{DynamicResource GrayText}" Background="Transparent" WidthRequest="50" Clicked="OnEditSelection"/>
+                                    <buttons:SfButton x:Name="excelbutton" FontFamily="FontIcons" Text="&#xe733;" FontSize="16" TextColor="{DynamicResource GrayText}" Background="Transparent" WidthRequest="50" Command="{Binding ExportSelectedDataCommand}"/>
+                                    <buttons:SfButton x:Name="deletebutton" FontFamily="FontIcons" Text="&#xe718;" FontSize="16" TextColor="{DynamicResource GrayText}" Background="Transparent" WidthRequest="50" Command="{Binding DeleteTransactionCommand}"/>
+                                </HorizontalStackLayout>
+                            </Border>
+
+                            <Border Grid.Row="2" StrokeShape="RoundRectangle 20,20,20,20" Margin="16,16,16,16" VerticalOptions="FillAndExpand">
+                                <Grid RowDefinitions="*,Auto" >
+                                    <pager:SfDataPager Grid.Row="1" x:Name ="dataPager" PageSize="10" NumericButtonCount="10" UseOnDemandPaging="True" Source="{Binding GridData}" Margin="0,0,0,16" />
+                                    <ScrollView Orientation="Both" HorizontalScrollBarVisibility="Always" VerticalScrollBarVisibility="Always">
+                                        <grid:SfDataGrid Grid.Row="0"
+                                                 x:Name="dataGrid"
+                                                 ColumnWidthMode="Fill"
+                                                 AutoGenerateColumnsMode="None"
+                                                 RowHeight="68"
+                                                 WidthRequest="900"
+                                                 ItemsSource="{Binding Source={x:Reference dataPager}, Path=PagedSource }"
+                                                 HorizontalScrollBarVisibility="Default"
+                                                 VerticalScrollBarVisibility="Default">
+                                            <grid:SfDataGrid.Columns>
+                                                <grid:DataGridTemplateColumn Width="60">
+                                                    <grid:DataGridTemplateColumn.HeaderTemplate>
+                                                        <DataTemplate>
+                                                            <CheckBox HorizontalOptions="End" IsChecked="{Binding IsAllRowsSelected, Mode=TwoWay}" CheckedChanged="OnCheckedChanged"/>
+                                                        </DataTemplate>
+                                                    </grid:DataGridTemplateColumn.HeaderTemplate>
+                                                    <grid:DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <CheckBox HorizontalOptions="End" IsChecked="{Binding IsSelected, Mode=TwoWay}" CheckedChanged="OnSingleCheckboxChanged" />
+                                                        </DataTemplate>
+                                                    </grid:DataGridTemplateColumn.CellTemplate>
+                                                </grid:DataGridTemplateColumn>
+                                                <grid:DataGridDateColumn HeaderText="Transaction Date" MappingName="TransactionDate" Format="dd/MM/yyyy" HeaderTextAlignment="Start" CellTextAlignment="Start"/>
+                                                <grid:DataGridDateColumn HeaderText="Description" MappingName="SavingsDescription" HeaderTextAlignment="Start" CellTextAlignment="Start"/>
+                                                <grid:DataGridTemplateColumn>
+                                                    <grid:DataGridTemplateColumn.HeaderTemplate>
+                                                        <DataTemplate>
+                                                            <Label FontAttributes="Bold" Text="Transaction Type" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                                        </DataTemplate>
+                                                    </grid:DataGridTemplateColumn.HeaderTemplate>
+                                                    <grid:DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Border StrokeShape="RoundRectangle 5,5,5,5" Background="{Binding SavingsType, Converter={x:StaticResource StringToColorConverter}, ConverterParameter='DataGridBackground'}" HeightRequest="22" WidthRequest="100" Stroke="Transparent" VerticalOptions="Center" HorizontalOptions="Start">
+                                                                <Label Text="{Binding SavingsType}" TextColor="{Binding SavingsType, Converter={x:StaticResource StringToColorConverter}, ConverterParameter='DataGridValue'}" FontSize="16" FontFamily="Roboto-Regular"/>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </grid:DataGridTemplateColumn.CellTemplate>
+                                                </grid:DataGridTemplateColumn>
+                                                <grid:DataGridTextColumn HeaderText="Amount" MappingName="SavingsAmount"/>
+                                                <grid:DataGridTextColumn HeaderText="Remark" MappingName="SavingsRemark"/>
+                                            </grid:SfDataGrid.Columns>
+                                        </grid:SfDataGrid>
+                                    </ScrollView>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </ScrollView>
+        <ContentView Grid.Row="1" x:Name="bottomcontainer" InputTransparent="{Binding IsPageEnabled, Mode=TwoWay}"/>
+        <ContentView x:Name="addtransactioncontainer"/>
+    </Grid>
+    
+</ContentPage>

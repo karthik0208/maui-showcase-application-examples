@@ -31,6 +31,8 @@ namespace MAUIShowcaseSample
 
         private bool isAllRowsSelected;
 
+        private bool isPageEnabled = false;
+
         public ObservableCollection<Transaction> Transactions
         {
             get
@@ -133,6 +135,19 @@ namespace MAUIShowcaseSample
             {
                 this.isAllRowsSelected = value;
                 OnPropertyChanged(nameof(IsAllRowsSelected));
+            }
+        }
+
+        public bool IsPageEnabled
+        {
+            get => isPageEnabled;
+            set
+            {
+                if (isPageEnabled != value)
+                {
+                    isPageEnabled = value;
+                    OnPropertyChanged(nameof(IsPageEnabled));
+                }
             }
         }
 

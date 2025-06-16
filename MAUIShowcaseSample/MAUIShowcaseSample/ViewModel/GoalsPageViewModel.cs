@@ -24,6 +24,8 @@ namespace MAUIShowcaseSample
 
         private double completedGoals;
 
+        private bool isPageEnabled = false;
+
         public List<SfSegmentItem> SegmentTitle
         {
             get
@@ -118,6 +120,19 @@ namespace MAUIShowcaseSample
         {
             get;
             set;
+        }
+
+        public bool IsPageEnabled
+        {
+            get => isPageEnabled;
+            set
+            {
+                if (isPageEnabled != value)
+                {
+                    isPageEnabled = value;
+                    OnPropertyChanged(nameof(IsPageEnabled));
+                }
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

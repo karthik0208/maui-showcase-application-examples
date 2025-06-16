@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"  
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"  
+             xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"  
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker;assembly=Syncfusion.Maui.Toolkit"  
+             x:Class="MAUIShowcaseSample.View.Dashboard.SettingsProfilePage">  
+    <ScrollView BackgroundColor="{DynamicResource SurfaceBackground}">  
+        <Grid RowDefinitions="Auto,*">  
+            <ContentView Grid.Row="0" x:Name="contentcontainer"/>  
+            <Border Grid.Row="1" Margin="24,24,24,24" BackgroundColor="{DynamicResource Surface}" StrokeShape="RoundRectangle 12,12,12,12" StrokeThickness="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >  
+                <Grid RowDefinitions="*,Auto,Auto" Margin="32">  
+                    <Grid Grid.Row="0" ColumnDefinitions="1.5*,*">  
+                        <VerticalStackLayout Grid.Column="0">  
+                            <Label Text="Basic Information" FontFamily="Roboto-Medium" FontSize="16"/>  
+                            <!-- First Name & Last Name Row -->  
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,16,0,0">  
+                                <inputLayout:SfTextInputLayout Hint="First Name" Grid.Column="0" ContainerType="Outlined" InputViewPadding="16,0,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="74">  
+                                    <Entry Text="{Binding ProfileValue.FirstName, Mode=TwoWay}" Style="{StaticResource InputStyle}" />  
+                                </inputLayout:SfTextInputLayout>  
+
+                                <inputLayout:SfTextInputLayout Hint="Last Name" Grid.Column="1" ContainerType="Outlined" InputViewPadding="16,0,0,0" HorizontalOptions="FillAndExpand" HeightRequest="74">  
+                                    <Entry Text="{Binding ProfileValue.LastName, Mode=TwoWay}" Style="{StaticResource InputStyle}"/>  
+                                </inputLayout:SfTextInputLayout>  
+                            </Grid>  
+
+                            <Border VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="44" Margin="0,0,0,20" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource ButtonOutline}">  
+                                <Grid ColumnDefinitions="*,Auto">  
+                                    <inputLayout:SfTextInputLayout Grid.Column="0" ContainerType="Filled" Stroke="Transparent" HorizontalOptions="Fill" VerticalOptions="Center" HeightRequest="44" ContainerBackground="Transparent">  
+                                        <Entry Text="{Binding ProfileValue.DOB, Mode=TwoWay, StringFormat='{}{0:dd/MM/yyyy}'}" VerticalOptions="Center" HeightRequest="40" Style="{StaticResource InputStyle}"/>  
+                                    </inputLayout:SfTextInputLayout>  
+                                    <Grid Grid.Column="1" HorizontalOptions="End" Margin="0,0,0,0">  
+                                        <Grid ColumnDefinitions="Auto,Auto" VerticalOptions="Center">  
+                                            <picker:SfDatePicker Grid.Column="0" x:Name="datepicker" SelectedDate="{Binding ProfileValue.DOB, Mode=TwoWay}" Mode="Dialog" BackgroundColor="Transparent" Background="White" CancelButtonClicked="CancelButtonClicked" OkButtonClicked="OKButtonClicked">  
+                                                <picker:SfDatePicker.FooterView>  
+                                                    <picker:PickerFooterView ShowOkButton="True" OkButtonText="OK" CancelButtonText="Cancel" Height="40" />  
+                                                </picker:SfDatePicker.FooterView>  
+                                            </picker:SfDatePicker>  
+                                            <Button x:Name="pickerButton" Grid.Column="1" FontFamily="FontIcons" Text="&#xe723;" TextColor="{DynamicResource GrayText}" MinimumHeightRequest="30" MinimumWidthRequest="30" FontSize="15" Clicked="CalendarIconClicked" HorizontalOptions="End" VerticalOptions="Center" Padding="0" BackgroundColor="Transparent"/>  
+                                        </Grid>  
+                                    </Grid>  
+                                </Grid>  
+                            </Border>  
+
+                            <!-- Gender Selection Dropdown -->  
+                            <inputLayout:SfTextInputLayout ContainerType="Outlined" InputViewPadding="16,0,0,0" HorizontalOptions="Fill" HeightRequest="74">
+                                <input:SfComboBox ItemsSource="{Binding GenderOptionsList}" SelectionMode="Single" Placeholder="Select Gender" SelectedItem="{Binding ProfileValue.Gender, Mode=TwoWay}"  Style="{StaticResource ProfileComboBoxStyle}" />  
+                            </inputLayout:SfTextInputLayout>  
+                        </VerticalStackLayout>  
+                    </Grid>  
+                    <BoxView Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Color="{DynamicResource LineBackground}" Margin="0,0,0,32"/>  
+                    <HorizontalStackLayout Grid.Row="2" HorizontalOptions="End" VerticalOptions="End" Spacing="8">  
+                        <Border StrokeShape="RoundRectangle 30,30,30,30" HeightRequest="44" WidthRequest="97" Stroke="{DynamicResource PrimaryBackground}">  
+                            <buttons:SfButton Text="Discard"  Background="Transparent" TextColor="{DynamicResource PrimaryBackground}" FontFamily="Roboto-Medium" FontSize="14" Clicked="OnDiscardButtonClicked" />  
+                        </Border>  
+                        <Border StrokeShape="RoundRectangle 30,30,30,30" HeightRequest="44" WidthRequest="97" Stroke="{DynamicResource PrimaryBackground}">  
+                            <buttons:SfButton Text="Update"  Background="Transparent" TextColor="{DynamicResource PrimaryBackground}" FontFamily="Roboto-Medium" FontSize="14" Clicked="OnUpdateButtonClicked"/>  
+                        </Border>  
+                    </HorizontalStackLayout>  
+                </Grid>  
+            </Border>  
+        </Grid>  
+    </ScrollView>  
+</ContentPage>

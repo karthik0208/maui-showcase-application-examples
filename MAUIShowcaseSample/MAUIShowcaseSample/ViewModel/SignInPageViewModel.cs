@@ -97,7 +97,7 @@ namespace MAUIShowcaseSample
                     await Application.Current?.Windows.FirstOrDefault()?.Page.DisplayAlert("Sign In", "Sign In Successful", "Okay");
 
                     var isInfoComplete = _userDataService.ValidateAccountInfo(email);
-                    await Shell.Current.GoToAsync("///dashboard");
+                    await Shell.Current.GoToAsync("dashboard");
                 }
                 else
                 {
@@ -111,10 +111,10 @@ namespace MAUIShowcaseSample
         }
 
         private async Task OnForgotPasswordTapped() =>
-            await Shell.Current.GoToAsync("///forgotpassword");
+            await Shell.Current.GoToAsync("forgotpassword");
 
         private async Task OnSignUpTapped() =>
-            await Shell.Current.GoToAsync("///signup");
+            await Shell.Current.GoToAsync("signup");
 
         private void OnGoogleSignInClicked()
         {
@@ -147,7 +147,7 @@ namespace MAUIShowcaseSample
                     await MainThread.InvokeOnMainThreadAsync(() =>
                         Application.Current?.Windows.FirstOrDefault()?.Page?.DisplayAlert("Account Information", "Successfully updated", "Okay"));
 
-                    await Shell.Current.GoToAsync("///signin");
+                    await Shell.Current.GoToAsync("signin");
                 }
                 else
                 {

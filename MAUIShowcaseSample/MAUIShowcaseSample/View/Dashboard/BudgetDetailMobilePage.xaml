@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:inputs="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:pager="clr-namespace:Syncfusion.Maui.DataGrid.DataPager;assembly=Syncfusion.Maui.DataGrid"
+             xmlns:grid="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+             x:Class="MAUIShowcaseSample.View.Dashboard.BudgetDetailMobilePage"
+             BackgroundColor="{DynamicResource SurfaceBackground}">
+    <Grid RowDefinitions="Auto,Auto,*"  BackgroundColor="{DynamicResource SurfaceBackground}">
+        <Border Grid.Row="0" HeightRequest="56" Stroke="Transparent" StrokeShape="RoundRectangle 12,12,12,12" Margin="0,0,0,16">
+            <Grid ColumnDefinitions="Auto,*" VerticalOptions="Center" HeightRequest="56">
+                <buttons:SfButton 
+             Grid.Column="0"
+             FontFamily="FontIcons"
+             Text="&#xE708;" 
+             VerticalOptions="Center"
+                    FontSize="24"
+                    Background="Transparent"
+                    
+             TextColor="{DynamicResource BlackText}"
+                    Clicked="OnBackButtonClicked"/>
+                    <Label 
+             Grid.Column="1"
+             Text="{Binding SelectedBudgetData.BudgetCategory}"
+             FontFamily="Roboto-SemiBold"
+             FontSize="16"
+             TextColor="{DynamicResource BlackText}"
+             VerticalOptions="Center"/>
+            </Grid>
+        </Border>
+        <BoxView HeightRequest="1" Color="{DynamicResource LineBackground}" HorizontalOptions="Fill" Margin="0,32,0,0"/>
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout Spacing="16" >
+                <Grid RowDefinitions="*,*" ColumnDefinitions="*,*" Margin="0,0,16,0" >
+                    <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource SummaryBorderMobile}" VerticalOptions="Start" HorizontalOptions="FillAndExpand" HeightRequest="64" >
+                        <Grid RowDefinitions="*,*" Margin="16,0,0,0" RowSpacing="5">
+                            <Label Grid.Row="0" Text="Total Budget" Style="{StaticResource CardTitleMobile}" />
+                            <HorizontalStackLayout Grid.Row="1">
+                                <Label Text="{Binding CurrencySymbol}" Style="{StaticResource CardMobile}" />
+                                <Label Text="{Binding SelectedBudgetData.BudgetAmount}" Style="{StaticResource CardMobile}" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+                    <Border  Grid.Row="0" Grid.Column="1" Style="{StaticResource SummaryBorderMobile}"  VerticalOptions="Start" HorizontalOptions="FillAndExpand"  HeightRequest="64">
+                        <Grid RowDefinitions="*,*" Margin="16,0,0,0" RowSpacing="5">
+                            <Label Grid.Row="0" Text="Spent Amount" Style="{StaticResource CardTitleMobile}" />
+                            <HorizontalStackLayout  Grid.Row="1">
+                                <Label Text="{Binding CurrencySymbol}" Style="{StaticResource CardMobile}" />
+                                <Label Text="{Binding SelectedBudgetData.AmountSpent}" Style="{StaticResource CardMobile}" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource SummaryBorderMobile}"  VerticalOptions="Start" HorizontalOptions="FillAndExpand"  HeightRequest="64">
+                        <Grid RowDefinitions="*,*" Margin="16,0,0,0" RowSpacing="5">
+                            <Label Grid.Row="0" Text="Remaining Amount" Style="{StaticResource CardTitleMobile}" />
+                            <HorizontalStackLayout  Grid.Row="1">
+                                <Label Text="{Binding CurrencySymbol}" Style="{StaticResource CardMobile}" />
+                                <Label Text="{Binding SelectedBudgetData.RemainingAmount}" Style="{StaticResource CardMobile}" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource SummaryBorderMobile}"  VerticalOptions="Start" HorizontalOptions="FillAndExpand"  HeightRequest="64">
+                        <Grid RowDefinitions="*,*" Margin="16,0,0,0" RowSpacing="5">
+                            <Label Grid.Row="0" Text="Utilization" Style="{StaticResource CardTitleMobile}" />
+                            <HorizontalStackLayout  Grid.Row="1">
+                                <Label Text="{Binding SelectedBudgetData.Utilization}" Style="{StaticResource CardMobile}" />
+                                <Label Text="%" Style="{StaticResource CardMobile}" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+                </Grid>
+                
+                <!-- Budget Info Card -->
+                <Border Margin="12,12,12,12" BackgroundColor="{DynamicResource Surface}" StrokeShape="RoundRectangle 12,12,12,12" StrokeThickness="0">
+                    <VerticalStackLayout>
+                        <VerticalStackLayout Spacing="16" Padding="16,16,16,16">
+                            <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+                                <Border WidthRequest="48" HeightRequest="48" Stroke="Transparent">
+                                    <AbsoluteLayout>
+                                        <Border Background="{Binding SelectedBudgetData.CategoryColor}" Opacity="0.1" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" StrokeShape="RoundRectangle 10,10,10,10" Stroke="Transparent"/>
+                                        <Label FontFamily="FontIcons" Text="{Binding SelectedBudgetData.Icon}" FontSize="32" TextColor="{Binding SelectedBudgetData.CategoryColor}" AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1" AbsoluteLayout.LayoutFlags="PositionProportional" VerticalOptions="Center"/>
+                                    </AbsoluteLayout>
+                                </Border>
+                                <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                                    <Label Text="{Binding SelectedBudgetData.BudgetCategory}" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource BlackText}" />
+                                    <Label Text="{Binding SelectedBudgetData.BudgetTitle}" FontFamily="Roboto-Regular" FontSize="14" TextColor="{DynamicResource GrayText}" />
+                                </VerticalStackLayout>
+                                <HorizontalStackLayout Spacing="8" HorizontalOptions="EndAndExpand" IsVisible="False">
+                                    <buttons:SfButton Text="Add Expense" Style="{StaticResource BasicButton}" />
+                                    <buttons:SfButton Text="Edit" Style="{StaticResource BasicButton}" />
+                                    <buttons:SfButton Text="Delete" Style="{StaticResource BasicButton}" />
+                                </HorizontalStackLayout>
+                            </HorizontalStackLayout>
+                            
+                            <BoxView HeightRequest="1"
+                                     BackgroundColor="{DynamicResource LineBackground}"
+                                     Margin="8,8,8,0"
+                                     HorizontalOptions="FillAndExpand" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="16" Padding="16,8,16,8" VerticalOptions="Fill">
+                            <Label Text="Spending Breakdown" FontFamily="Roboto-Medium" FontSize="16" />
+                            <chart:SfCircularChart VerticalOptions="Fill" HorizontalOptions="Fill">
+                                <chart:SfCircularChart.Series>
+                                    <chart:DoughnutSeries ItemsSource="{Binding TransactionChartData, Mode=TwoWay}" XBindingPath="TransactionCategory" YBindingPath="TransactionPercent" StartAngle="0" EndAngle="360" PaletteBrushes="{Binding LegendColors}" ShowDataLabels="True">
+                                        <chart:DoughnutSeries.DataLabelSettings>
+                                            <chart:CircularDataLabelSettings>
+                                                <chart:CircularDataLabelSettings.LabelStyle>
+                                                    <chart:ChartDataLabelStyle LabelFormat="0.##'%'"/>
+                                                </chart:CircularDataLabelSettings.LabelStyle>
+                                            </chart:CircularDataLabelSettings>
+                                        </chart:DoughnutSeries.DataLabelSettings>
+                                    </chart:DoughnutSeries>
+                                </chart:SfCircularChart.Series>
+                            </chart:SfCircularChart>
+                            <CollectionView ItemsSource="{Binding TransactionChartData, Mode=TwoWay}" VerticalOptions="Start" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical"/>
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="Auto,Auto,*">
+                                            <Border Grid.Column="0" Stroke="Transparent" Background="{Binding CategoryColor}" StrokeShape="RoundRectangle 6,6,6,6" HeightRequest="12" WidthRequest="12" Margin="0,0,12,0"/>
+                                            <Label Grid.Column="1" Padding="0,8,0,8" Text="{Binding TransactionCategory}" FontFamily="Roboto-Regular" FontSize="14"/>
+                                            <Label Grid.Column="2" HorizontalTextAlignment="End" Padding="0,8,0,8" Text="{Binding TransactionAmount}" FontFamily="Roboto-Regular" FontSize="14"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+
+                        <!-- Spending Over Time -->
+                        <VerticalStackLayout Spacing="16" Padding="16,8,16,8">
+                            <Label Text="Spending Over Time" FontFamily="Roboto-Medium" FontSize="16" />
+                            <Border StrokeShape="RoundRectangle 6,6,6,6"  Grid.Column="1" WidthRequest="152" HeightRequest="40" Stroke="{DynamicResource LineBackground}" StrokeThickness="1" HorizontalOptions="End">
+                                <inputs:SfComboBox x:Name="Combobox" ItemsSource="{Binding DateRange}"
+SelectedItem="{Binding SelectedChartDateRange, Mode=TwoWay}"
+DisplayMemberPath="RangeType"
+IsClearButtonVisible="False"
+HorizontalOptions="End"
+VerticalOptions="Center"
+Stroke="Transparent"
+                                                   WidthRequest="150"
+Margin="0,0,0,8">
+                                    
+                                    <inputs:SfComboBox.CustomView>
+                                        <Grid ColumnDefinitions="Auto,*" VerticalOptions="Center">
+                                            <Label Grid.Column="0" FontFamily="FontIcons" Text="&#xe723;" VerticalOptions="Center" TextColor="{DynamicResource GrayText}" Padding="8"/>
+                                            <Label Grid.Column="1" Text="{Binding Source={x:Reference Combobox}, Path=SelectedItem.RangeType, Mode=OneWay}" HorizontalOptions="Start" VerticalOptions="Center" FontSize="13" FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" />
+                                        </Grid>
+                                    </inputs:SfComboBox.CustomView>
+                                </inputs:SfComboBox>
+                            </Border>
+                           
+                            <chart:SfCartesianChart HeightRequest="220">
+                                <chart:SfCartesianChart.XAxes>
+                                    <chart:CategoryAxis/>
+                                </chart:SfCartesianChart.XAxes>
+                                <chart:SfCartesianChart.YAxes>
+                                    <chart:NumericalAxis Minimum="0"/>
+                                </chart:SfCartesianChart.YAxes>
+                                <chart:SplineAreaSeries ShowMarkers="True" StrokeWidth="2" Stroke="{DynamicResource Pink}" ItemsSource="{Binding TransactionAreaChartData, Mode=TwoWay}" XBindingPath="TimeInterval" YBindingPath="Data">
+                                    <chart:AreaSeries.MarkerSettings>
+                                        <chart:ChartMarkerSettings Fill="White" StrokeWidth="1" Stroke="{DynamicResource Pink}" Height="12" Width="12" />
+                                    </chart:AreaSeries.MarkerSettings>
+                                    <chart:SplineAreaSeries.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="{DynamicResource Pink}" Offset="0.1"/>
+                                            <GradientStop Color="#30B03AFC" Offset="1.0"/>
+                                        </LinearGradientBrush>
+                                    </chart:SplineAreaSeries.Fill>
+                                </chart:SplineAreaSeries>
+                            </chart:SfCartesianChart>
+                        </VerticalStackLayout>
+
+                        <!-- Expense Transactions -->
+                        <VerticalStackLayout Spacing="8" Padding="16,8,16,0">
+                            <Label Text="Expense Transaction" FontSize="16" FontFamily="Roboto-Medium" />
+                            <grid:SfDataGrid x:Name="dataGrid" ColumnWidthMode="None" AutoGenerateColumnsMode="None" DetailsViewPadding="0" HorizontalScrollBarVisibility="Always" RowHeight="68" ItemsSource="{Binding Source={x:Reference dataPager}, Path=PagedSource}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
+                                <grid:SfDataGrid.Columns>
+                                    <grid:DataGridTemplateColumn Width="60">
+                                        <grid:DataGridTemplateColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <CheckBox HorizontalOptions="End" IsChecked="{Binding IsAllRowsSelected, Mode=TwoWay}" CheckedChanged="OnCheckedChanged"/>
+                                            </DataTemplate>
+                                        </grid:DataGridTemplateColumn.HeaderTemplate>
+                                        <grid:DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox HorizontalOptions="End" IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                            </DataTemplate>
+                                        </grid:DataGridTemplateColumn.CellTemplate>
+                                    </grid:DataGridTemplateColumn>
+                                    <grid:DataGridDateColumn HeaderText="Transaction Date" MappingName="TransactionDate" Format="dd/MM/yyyy" HeaderTextAlignment="Start" CellTextAlignment="Start" ColumnWidthMode="Auto" />
+                                    <grid:DataGridTemplateColumn>
+                                        <grid:DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid RowDefinitions="Auto,Auto" VerticalOptions="Center" RowSpacing="5">
+                                                    <Label Grid.Row="0" Text="{Binding TransactionCategory}"/>
+                                                    <Label Grid.Row="1" Text="{Binding TransactionName}" TextColor="{DynamicResource GrayText}"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </grid:DataGridTemplateColumn.CellTemplate>
+                                        <grid:DataGridTemplateColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <Label Text="Category" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                            </DataTemplate>
+                                        </grid:DataGridTemplateColumn.HeaderTemplate>
+                                    </grid:DataGridTemplateColumn>
+                                    <grid:DataGridTextColumn HeaderText="Amount" MappingName="TransactionAmount"/>
+                                    <grid:DataGridTextColumn HeaderText="Remark" MappingName="TransactionDescription"/>
+                                </grid:SfDataGrid.Columns>
+                            </grid:SfDataGrid>
+                            <pager:SfDataPager x:Name="dataPager" PageSize="6" NumericButtonCount="10" UseOnDemandPaging="True" Source="{Binding TransactionGridData}" Margin="0,0,0,8" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                   
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

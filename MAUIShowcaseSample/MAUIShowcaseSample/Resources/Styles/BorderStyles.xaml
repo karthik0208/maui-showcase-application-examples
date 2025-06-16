@@ -18,5 +18,12 @@
         <Setter Property="BackgroundColor" Value="{DynamicResource Surface}"/>
         <Setter Property="StrokeShape" Value="RoundRectangle 12,12,12,12"/>
         <Setter Property="StrokeThickness" Value="0"/>
-    </Style>    
+    </Style>
+
+    <Style TargetType="Border" x:Key="SummaryBorderMobile">
+        <Setter Property="Margin" Value="12,12,0,0"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource Surface}"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 12,12,12,12"/>
+        <Setter Property="StrokeThickness" Value="0"/>
+    </Style>
 </ResourceDictionary>

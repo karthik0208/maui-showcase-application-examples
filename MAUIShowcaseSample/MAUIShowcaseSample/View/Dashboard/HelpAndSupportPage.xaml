@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Expander;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             x:Class="MAUIShowcaseSample.View.Dashboard.HelpAndSupportPage">
+    <ScrollView BackgroundColor="{DynamicResource SurfaceBackground}">
+        <Grid RowDefinitions="Auto,*">
+            <ContentView Grid.Row="0" x:Name="contentcontainer"/>
+            <Border Grid.Row="1" StrokeShape="RoundRectangle 12,12,12,12" Padding="15" Stroke="Transparent" Background="{DynamicResource Surface}" Margin="32,32,32,32">
+                <Grid RowDefinitions="Auto, Auto, *" Margin="64,32,64,32">
+                    <Label Text="How Can we help you?" Grid.Row="0" FontFamily="Roboto-Regular" FontSize="28" HorizontalOptions="Center"/>
+
+                    <!-- Search Box -->
+                    <inputLayout:SfTextInputLayout Grid.Row="1" Hint="Describe your Issue" ContainerType="Outlined" Margin="0,32,0,32">
+                        <Entry Text="{Binding SearchText, Mode=TwoWay}"/>
+                    </inputLayout:SfTextInputLayout>
+
+                    <!-- FAQ List -->
+                    <CollectionView Grid.Row="2" ItemsSource="{Binding FAQItemList, Mode=TwoWay}" >
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <syncfusion:SfExpander 
+                                   HeaderBackground="Transparent"
+                                   Padding="0,8,0,8">
+                                    <syncfusion:SfExpander.Header Margin="32,0,32,0">
+                                        <Label Text="{Binding Question}" BackgroundColor="Transparent" FontSize="16" TextColor="{DynamicResource BlackText}" HeightRequest="40" LineBreakMode="WordWrap"/>
+                                    </syncfusion:SfExpander.Header>
+                                    <syncfusion:SfExpander.Content>
+                                        <Border BackgroundColor="{DynamicResource SurfaceBackground}" Stroke="Transparent">
+                                            <Label Text="{Binding Answer}" FontSize="16" TextColor="{DynamicResource GrayText}" Margin="16,8,16,8" MinimumHeightRequest="44" LineBreakMode="WordWrap"/>
+                                        </Border>
+                                    </syncfusion:SfExpander.Content>
+                                </syncfusion:SfExpander>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+
+                    <!--<CollectionView ItemsSource="{Binding AccountSettingValue}" Grid.Row="1" SelectionMode="None" Margin="16,32,0,0" >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid RowDefinitions="Auto,Auto">
+                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                        <Label Text="{Binding SettingsTitle}" FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource BlackText}"/>
+                                        <Label Text="{Binding SettingsDescription}" FontFamily="Roboto-Regular" FontSize="14" TextColor="{DynamicResource GrayText}"/>
+                                    </VerticalStackLayout>
+                                    -->
+                    <!--<button:SfButton Grid.Column="1" HorizontalOptions="End" Background="Transparent" FontSize="24" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnButtonClicked" />-->
+                    <!--
+
+
+                                </Grid>
+                                <BoxView Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Color="{DynamicResource LineBackground}" Margin="0,16,0,16"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>-->
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>

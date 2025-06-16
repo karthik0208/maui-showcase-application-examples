@@ -1,25 +1,49 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:button="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
-             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
-             xmlns:dataForm="clr-namespace:Syncfusion.Maui.DataForm;assembly=Syncfusion.Maui.DataForm"
-             xmlns:local="clr-namespace:MAUIShowcaseSample"
-             x:Class="MAUIShowcaseSample.View.SignIn.SignUpPage"
-             Title="SignUpPage">
-    
-    <Grid x:Name="SignUpView" ColumnDefinitions="*,*">
-        <Grid Grid.Column="0">
-            <!-- Background Image -->
-            <Image Source="LeftLayout.png"
-     Aspect="AspectFill" />
-        </Grid>
-        <Grid Grid.Column="1" Background="Transparent">
-            <StackLayout Padding="20" VerticalOptions="CenterAndExpand" WidthRequest="384" HorizontalOptions="Center">
-                <Label Text="Sign Up" FontFamily="Roboto-Regular" FontSize="22" HeightRequest="28" TextColor="{DynamicResource DarkText}" HorizontalOptions="Center" />
-                <Label Text="Enter your information to sign up" FontFamily="Roboto-Regular" FontSize="16" HeightRequest="22" TextColor="{DynamicResource GrayText}" HorizontalOptions="Center" Margin="{OnPlatform WinUI='0,12,0,0'}" />
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+             xmlns:button="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"  
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"  
+             xmlns:dataForm="clr-namespace:Syncfusion.Maui.DataForm;assembly=Syncfusion.Maui.DataForm"  
+             xmlns:local="clr-namespace:MAUIShowcaseSample"  
+             x:Class="MAUIShowcaseSample.View.SignIn.SignUpPage"  
+             Title="SignUpPage">  
 
-                <dataForm:SfDataForm x:Name="SignUpForm" DataObject="{Binding SignUpFormModel}"  CommitMode="PropertyChanged" MinimumHeightRequest="260" LayoutType="TextInputLayout" >
+    <Grid x:Name="SignUpView" ColumnDefinitions="{OnPlatform WinUI='*,*'}">  
+        <Grid Grid.Column="0"  
+              IsVisible="{OnPlatform Android=False, WinUI=True, iOS=False, MacCatalyst=False}">  
+            <!-- Background Image -->  
+            <Image Source="LeftLayout.png"  
+                   Aspect="AspectFill" />  
+        </Grid>  
+        <Grid Grid.Column="1" Background="Transparent">
+            <!-- Center the inner grid both vertically and horizontally for all platforms -->
+            <Grid Padding="20"
+                  WidthRequest="384"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Text="Sign Up" FontFamily="Roboto-Regular" FontSize="22" HeightRequest="28" TextColor="{DynamicResource DarkText}" HorizontalOptions="Center" VerticalOptions="Center" />
+                <Label Grid.Row="1" Text="Enter your information to sign up" FontFamily="Roboto-Regular" FontSize="16" HeightRequest="22" TextColor="{DynamicResource GrayText}" HorizontalOptions="Center" VerticalOptions="Center" Margin="{OnPlatform WinUI='0,12,0,0'}" />
+
+                <dataForm:SfDataForm Grid.Row="2"
+                                     x:Name="SignUpForm"
+                                     DataObject="{Binding SignUpFormModel}"
+                                     CommitMode="PropertyChanged"
+                                     HeightRequest="280"
+                                     MinimumHeightRequest="{OnPlatform WinUI=260}"
+                                     LayoutType="TextInputLayout"
+                                     VerticalOptions="Start">
                     <dataForm:SfDataForm.LabelTextStyle>
                         <dataForm:DataFormTextStyle FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" FontSize="16" />
                     </dataForm:SfDataForm.LabelTextStyle>
@@ -28,39 +52,38 @@
                     </dataForm:SfDataForm.TextInputLayoutSettings>
                 </dataForm:SfDataForm>
 
-                <HorizontalStackLayout VerticalOptions="Center" Padding="10,0,0,0" >
+                <HorizontalStackLayout Grid.Row="3" VerticalOptions="Center" Padding="10,0,0,0" HorizontalOptions="Center">
                     <button:SfCheckBox Background="Transparent" IsChecked="{Binding IsTermsChecked}"/>
-                    <Label  Text="I agree to the" FontSize="12" VerticalOptions="Center" />
-                    <Label  Text=" Terms and Conditions." FontSize="12" VerticalOptions="Center" TextColor="{DynamicResource PrimaryBackground}">
+                    <Label Text="I agree to the" FontSize="12" VerticalOptions="Center" />
+                    <Label Text=" Terms and Conditions." FontSize="12" VerticalOptions="Center" TextColor="{DynamicResource PrimaryBackground}">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding OnTermsClickedCommand}" />
                         </Label.GestureRecognizers>
                     </Label>
                 </HorizontalStackLayout>
 
-                <buttons:SfButton Text="Sign Up" x:Name="signupButton" HeightRequest="44" HorizontalOptions="Fill" Margin="20,16,20,0" CornerRadius="30" FontFamily="Roboto-Medium" FontSize="16" Background="{StaticResource PrimaryBackground}" Command="{Binding OnSignUpClickedCommand}" IsEnabled="{Binding IsTermsChecked}"/>
-            
-                <Grid ColumnDefinitions="*,Auto,*" HorizontalOptions="Fill" Margin="0,32,0,0" >
+                <buttons:SfButton Grid.Row="4" Text="Sign Up" x:Name="signupButton" HeightRequest="44" HorizontalOptions="Fill" Margin="20,16,20,0" CornerRadius="30" FontFamily="Roboto-Medium" FontSize="16" Background="{StaticResource PrimaryBackground}" Command="{Binding OnSignUpClickedCommand}" IsEnabled="{Binding IsTermsChecked}" VerticalOptions="Center"/>
+
+                <Grid Grid.Row="5" ColumnDefinitions="*,Auto,*" HorizontalOptions="Fill" Margin="0,32,0,0" VerticalOptions="Center">
                     <BoxView Grid.Column="0" HeightRequest="1" Color="{DynamicResource LineBackground}" HorizontalOptions="Fill" VerticalOptions="Center"/>
                     <Label Grid.Column="1" Text="Or sign up with" TextColor="{DynamicResource GrayText}" FontFamily="Roboto-Regular" FontSize="14" WidthRequest="108" VerticalOptions="Center"/>
                     <BoxView Grid.Column="2" HeightRequest="1" Color="{DynamicResource LineBackground}" HorizontalOptions="Fill" VerticalOptions="Center"/>
                 </Grid>
 
-                <Grid ColumnDefinitions="*,*" HorizontalOptions="Fill" Margin="0,16,0,0">
+                <Grid Grid.Row="6" ColumnDefinitions="*,*" HorizontalOptions="Fill" Margin="0,16,0,0" VerticalOptions="Center">
                     <buttons:SfButton Grid.Column="0" ImageSource="google_icon.png" ShowIcon="True" Text="Sign with Google" HorizontalTextAlignment="Start" x:Name="googlesignin" HeightRequest="44" HorizontalOptions="Fill" Margin="0,0,8,0" CornerRadius="30" FontFamily="Roboto-Medium" FontSize="12" TextColor="{DynamicResource PrimaryBackground}" Background="Transparent" Stroke="{DynamicResource ButtonOutline}" StrokeThickness="1" ImageAlignment="Default" Command="{Binding OnGoogleSignInClickedCommand}"/>
                     <buttons:SfButton Grid.Column="1" ImageSource="microsoft_icon.png" ShowIcon="True" Text="Sign with Microsoft"  HorizontalTextAlignment="Start" x:Name="microsoftsignin" HeightRequest="44" HorizontalOptions="Fill" CornerRadius="30" FontFamily="Roboto-Medium" FontSize="12" TextColor="{DynamicResource PrimaryBackground}" Background="Transparent" Stroke="{DynamicResource ButtonOutline}" StrokeThickness="1" ImageAlignment="Default" Command="{Binding OnMicrosoftSignInClickedCommand}"/>
                 </Grid>
 
-                <Grid ColumnDefinitions="2*,*" Margin="{OnPlatform WinUI='0,16,0,0'}">
-                    <Label Grid.Column="0" Text="Already have an account?"  FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource GrayText}" HorizontalOptions="Center"/>
-                    <Label Grid.Column="1" Text="Sign In" TextColor="{StaticResource PrimaryBackground}"  FontFamily="Roboto-Medium" FontSize="16" HorizontalOptions="Start">
+                <Grid Grid.Row="7" ColumnDefinitions="2*,*" Margin="0,16,0,0" VerticalOptions="Center">
+                    <Label Grid.Column="0" Text="Already have an account?"  FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource GrayText}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Label Grid.Column="1" Text="Sign In" TextColor="{StaticResource PrimaryBackground}"  FontFamily="Roboto-Medium" FontSize="16" HorizontalOptions="Start" VerticalOptions="Center">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding OnSignInTappedCommand}" />
                         </Label.GestureRecognizers>
                     </Label>
                 </Grid>
-            </StackLayout>
+            </Grid>
         </Grid>
-
     </Grid>
 </ContentPage>

@@ -34,8 +34,6 @@
         <Setter Property="HeightRequest" Value="40"/>
     </Style>
 
-
-
     <Style TargetType="input:SfComboBox" x:Key="ProfileComboBoxStyle">
         <Setter Property="ShowBorder" Value="False"/>
         <Setter Property="IsClearButtonVisible" Value="False"/>
@@ -44,4 +42,30 @@
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="TextColor" Value="{DynamicResource BlackText}"/>
     </Style>
+
+    <Style TargetType="buttons:SfButton" x:Key="TabBarButton">
+        <Setter Property="HeightRequest" Value="42"/>
+        <Setter Property="CornerRadius" Value="24"/>
+        <Setter Property="Stroke" Value="Transparent"/>
+        <Setter Property="FontFamily" Value="FontIcons"/>
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="TextColor" Value="{DynamicResource GrayText}"/>
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+    </Style>
+    
+    
+    <Style TargetType="buttons:SfButton" x:Key="RoundedWhiteButton">
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource White}"/>
+        <Setter Property="Background" Value="{DynamicResource White}"/>
+        <Setter Property="FontFamily" Value="Roboto-SemiBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="TextColor" Value="{DynamicResource BlackText}"/>
+        <Setter Property="ShowIcon" Value="True"/>
+        <Setter Property="ImageAlignment" Value="End"/>
+        <Setter Property="HorizontalTextAlignment" Value="End"/>
+        <Setter Property="HorizontalOptions" Value="End" />
+    </Style>
+    
 </ResourceDictionary>

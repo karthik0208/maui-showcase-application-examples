@@ -52,6 +52,10 @@ namespace MAUIShowcaseSample
 
         private string currencySymbol;
 
+        private bool isPageEnabled = false;
+
+        private Color pageBackgroundColor = Colors.Gray;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public List<Brush> LegendColors { get; set; } = new();
@@ -69,7 +73,7 @@ namespace MAUIShowcaseSample
             set
             {
                 this.selectedChartDateRange = value;
-                UpdateChartData(SegmentTitle.ElementAt(SelectedSegmentIndex).Text);
+                UpdateChartData(GetSegmentTitle(SelectedSegmentIndex));
                 OnPropertyChanged("SelectedChartDateRange");
             }
         }
@@ -280,17 +284,57 @@ namespace MAUIShowcaseSample
             }
         }
 
+        public bool IsPageEnabled
+        {
+            get => isPageEnabled;
+            set
+            {
+                if (isPageEnabled != value)
+                {
+                    isPageEnabled = value;
+                    OnPropertyChanged(nameof(IsPageEnabled));
+                }
+            }
+        }
+
+        public Color PageBackgroundColor
+        {
+            get => pageBackgroundColor;
+            set
+            {
+                if (pageBackgroundColor != value)
+                {
+                    pageBackgroundColor = value;
+                    OnPropertyChanged(nameof(PageBackgroundColor));
+                }
+            }
+        }
         public DashboardPageViewModel(UserDataService userService, DataStore dataStore)
         {
             _userService = userService;
             _dataStore = dataStore;
             CurrencySymbol = _userService.GetUserCurrencySymbol(userService.LoggedInAccount);
-            SegmentTitle = new List<SfSegmentItem>() 
-            { 
-                new SfSegmentItem(){ Text = "Income"},
 
-                new SfSegmentItem() {Text = "Expense"}
-            };
+#if WINDOWS
+SegmentTitle = new List<SfSegmentItem>()
+{
+    new SfSegmentItem() { Text = "Income" },
+    new SfSegmentItem() { Text = "Expense" }
+};
+#elif ANDROID
+SegmentTitle = new List<SfSegmentItem>()
+{
+    new SfSegmentItem() { Text = "\ue735" },
+    new SfSegmentItem() { Text = "\ue736" }
+};
+#else
+            SegmentTitle = new List<SfSegmentItem>()
+{
+    new SfSegmentItem() { Text = "Income" },
+    new SfSegmentItem() { Text = "Expense" }
+};
+#endif
+
             SelectedSegmentIndex = 0;
             DateRange = new List<ChartDateRange>
             {
@@ -311,29 +355,31 @@ namespace MAUIShowcaseSample
                 new ChartDateRange() { RangeType = "This Week",StartDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday), EndDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday).AddDays(6) },
                 new ChartDateRange() { RangeType = "Last Week", StartDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday - 7), EndDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday - 1) },
                 new ChartDateRange() { RangeType = "This Month", StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1), EndDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1) },
-                new ChartDateRange() { RangeType = "Last 6 Months", StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-5), EndDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1) },
+               // new ChartDateRange() { RangeType = "Last 6 Months", StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-5), EndDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1) },
                 new ChartDateRange() { RangeType = "This Year", StartDate = new DateTime(DateTime.Today.Year, 1, 1), EndDate = new DateTime(DateTime.Today.Year, 12, 31) }
             };
 
             SelectedChartDateRange = DateRange.ElementAt(1);
             SelectedAreaChartDateRange = AreaChartDateRange.ElementAt(1);
-            SelectedSavingsChartDateRange = SavingsChartDateRange.ElementAt(3);
+            SelectedSavingsChartDateRange = SavingsChartDateRange.ElementAt(2);
             var activeGoalData = dataStore.GetGoalsData().Where(t => t.IsCompleted == false).ToObservableCollection();
             GoalData = GetSummarizedGoalData(activeGoalData);
             UpdateDashboardPage();
-            //var incomeTransactions = (dailyTransaction.Where(t => t.TransactionType == "Income")).ToObservableCollection<Transaction>();
-            //var expenseTransactions = (dailyTransaction.Where(t => t.TransactionType == "Expense")).ToObservableCollection<Transaction>();
-            //DashboardIncomeAreaChart = DataHelper.GetAreaChartData(incomeTransactions, SelectedAreaChartDateRange.RangeType, SelectedChartDateRange.StartDate, SelectedChartDateRange.EndDate);
-            //DashboardExpenseAreaChart = DataHelper.GetAreaChartData(expenseTransactions, SelectedAreaChartDateRange.RangeType, SelectedChartDateRange.StartDate, SelectedChartDateRange.EndDate);
-           
-           // GoalsPageViewModel = new GoalsPageViewModel(_userService, _dataStore);
+        }
+
+        private string GetSegmentTitle(int segmentIndex)
+        {
+            if (segmentIndex == 0)
+                return "Income";
+            else
+                return "Expense";
         }
 
         public void UpdateDashboardPage()
         {
             var dailyTransaction = _dataStore.GetDailyTransactions();
             Transactions = UpdateRecentTransaction(dailyTransaction, 8);
-            ChartData = GetChartData(dailyTransaction, SegmentTitle.ElementAt(SelectedSegmentIndex).Text);
+            ChartData = GetChartData(dailyTransaction, GetSegmentTitle(SelectedSegmentIndex));
             UpdateAreaChartData(SelectedAreaChartDateRange.RangeType, SelectedChartDateRange.StartDate, SelectedChartDateRange.EndDate);
             UpdateSavingsAreaChartData(SelectedSavingsChartDateRange.RangeType, SelectedSavingsChartDateRange.StartDate, SelectedSavingsChartDateRange.EndDate);
             TotalTransactionSummary = GetTransactionSummary(dailyTransaction);

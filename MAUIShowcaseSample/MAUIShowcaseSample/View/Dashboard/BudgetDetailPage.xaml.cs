@@ -10,9 +10,7 @@ public partial class BudgetDetailPage : ContentPage
     {
         string pageTitle = "Budget";
         InitializeComponent();
-        BindingContext = NavigationDataStore.BudgetDetailPageViewModel;
-        var layoutViewModel = new DashboardLayoutPageViewModel(dataService, dataStore, pageTitle);
-        this.contentcontainer.Content = new DashboardLayoutPage(layoutViewModel, dataService, dataStore);
+        BindingContext = NavigationDataStore.BudgetDetailPageViewModel;       
     }
 
     private void ChartSegmentChanged(object? sender, Syncfusion.Maui.Buttons.SelectionChangedEventArgs e)

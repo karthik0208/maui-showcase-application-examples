@@ -29,7 +29,7 @@ namespace MAUIShowcaseSample
         private GoalTransactionDetails fundDetails;
 
         private bool isPickerOpen;
-
+        
         public string PageTitle
         {
             get
@@ -760,8 +760,7 @@ namespace MAUIShowcaseSample
         }
         public void Clear()
         {
-            BudgetAmount = BudgetDate = BudgetTitle = BudgetRemarks = string.Empty;
-            BudgetCategory = null;
+            BudgetAmount = BudgetDate = BudgetTitle = BudgetRemarks = BudgetCategory = string.Empty;
         }
     }
 

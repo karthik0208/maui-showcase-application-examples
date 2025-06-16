@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             x:Class="MAUIShowcaseSample.View.Dashboard.SettingsPersonalizationPage">
+    <ScrollView BackgroundColor="{DynamicResource SurfaceBackground}">
+        <Grid RowDefinitions="Auto,*">
+            <ContentView Grid.Row="0" x:Name="contentcontainer"/>
+            <Border Grid.Row="1" Margin="24,24,24,24" BackgroundColor="{DynamicResource Surface}" StrokeShape="RoundRectangle 12,12,12,12" StrokeThickness="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" >
+                <Grid RowDefinitions="*,Auto,Auto" Margin="32">
+                    <Grid Grid.Row="0" ColumnDefinitions="1.5*,*">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="Personalization" FontFamily="Roboto-Medium" FontSize="16" Margin="0,0,0,32"/>
+
+                            <!-- Preferred Language Dropdown -->
+                            <inputLayout:SfTextInputLayout ContainerType="Outlined" InputViewPadding="16,0,0,0" HorizontalOptions="FillAndExpand" HeightRequest="74">
+                                <input:SfComboBox 
+                                    ItemsSource="{Binding LanguageOptions}" 
+                                    SelectionMode="Single" 
+                                    SelectedItem="{Binding ProfileValue.Language, Mode=TwoWay}"
+                                    Style="{StaticResource ProfileComboBoxStyle}"/>
+                            </inputLayout:SfTextInputLayout>
+
+                            <!-- Currency Dropdown -->
+                            <inputLayout:SfTextInputLayout ContainerType="Outlined" InputViewPadding="16,0,0,0" HorizontalOptions="FillAndExpand" HeightRequest="74">
+                                <input:SfComboBox 
+                                    ItemsSource="{Binding CurrencyOptions}" 
+                                    SelectionMode="Single" 
+                                    SelectedItem="{Binding ProfileValue.Currency, Mode=TwoWay}"
+                                    Style="{StaticResource ProfileComboBoxStyle}"/>
+                            </inputLayout:SfTextInputLayout>
+
+                            <!-- Time Zone Dropdown -->
+                            <inputLayout:SfTextInputLayout ContainerType="Outlined" InputViewPadding="16,0,0,0" HorizontalOptions="FillAndExpand" HeightRequest="74">
+                                <input:SfComboBox 
+                                    ItemsSource="{Binding TimeZoneOptions}" 
+                                    SelectionMode="Single" 
+                                    SelectedItem="{Binding ProfileValue.TimeZone, Mode=TwoWay}"
+                                    Style="{StaticResource ProfileComboBoxStyle}"/>
+                            </inputLayout:SfTextInputLayout>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <BoxView Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Color="{DynamicResource LineBackground}" Margin="0,0,0,32"/>
+                    <HorizontalStackLayout Grid.Row="2" HorizontalOptions="End" VerticalOptions="End" Spacing="8">
+                        <Border StrokeShape="RoundRectangle 30,30,30,30" HeightRequest="44" WidthRequest="97" Stroke="{DynamicResource PrimaryBackground}">
+                            <buttons:SfButton Text="Discard"  Background="Transparent" TextColor="{DynamicResource PrimaryBackground}" FontFamily="Roboto-Medium" FontSize="14" Clicked="OnDiscardButtonClicked" />
+                        </Border>
+                        <Border StrokeShape="RoundRectangle 30,30,30,30" HeightRequest="44" WidthRequest="97" Stroke="{DynamicResource PrimaryBackground}">
+                            <buttons:SfButton Text="Update"  Background="Transparent" TextColor="{DynamicResource PrimaryBackground}" FontFamily="Roboto-Medium" FontSize="14" Clicked="OnUpdateButtonClicked" />
+                        </Border>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>

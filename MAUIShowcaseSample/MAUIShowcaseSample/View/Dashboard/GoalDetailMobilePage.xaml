@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:inputs="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:pager="clr-namespace:Syncfusion.Maui.DataGrid.DataPager;assembly=Syncfusion.Maui.DataGrid"
+             xmlns:grid="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+             x:Class="MAUIShowcaseSample.View.Dashboard.GoalDetailMobilePage"
+             BackgroundColor="{DynamicResource PageBackground}">
+    <Grid RowDefinitions="Auto,Auto,*" BackgroundColor="{DynamicResource SurfaceBackground}">
+        <Border Grid.Row="0" HeightRequest="56" Stroke="Transparent" StrokeShape="RoundRectangle 12,12,12,12" Margin="0,0,0,16">
+            <Grid ColumnDefinitions="Auto,*" VerticalOptions="Center" HeightRequest="56">
+                <buttons:SfButton 
+      Grid.Column="0"
+      FontFamily="FontIcons"
+      Text="&#xE708;" 
+      VerticalOptions="Center"
+             FontSize="24"
+             Background="Transparent"
+             
+      TextColor="{DynamicResource BlackText}" />
+                <Label 
+      Grid.Column="1"
+      Text="{Binding GoalData.GoalTitle}"
+      FontFamily="Roboto-SemiBold"
+      FontSize="16"
+      TextColor="{DynamicResource BlackText}"
+      VerticalOptions="Center"/>
+            </Grid>
+        </Border>
+        <BoxView HeightRequest="1" Color="{DynamicResource LineBackground}" HorizontalOptions="Fill" Margin="0,32,0,0"/>
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout Spacing="16" BackgroundColor="{DynamicResource SurfaceBackground}">
+
+                <!-- Summary Cards -->
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" Margin="4,0,16,0">
+                    <!-- Target Amount spans both columns in first row -->
+                    <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource SummaryBorderMobile}" VerticalOptions="Start" HorizontalOptions="FillAndExpand" HeightRequest="64">
+                        <VerticalStackLayout VerticalOptions="Center"  Margin="16,0,0,0" Spacing="5">
+                            <Label Text="Target Amount" Style="{StaticResource CardTitleMobile}" />
+                            <HorizontalStackLayout>
+                                <Label Text="{Binding GoalData.CurrencySymbol}" Style="{StaticResource CardMobile}" />
+                                <Label Text="{Binding GoalData.GoalAmount, StringFormat='{}{0:N2}'}" Style="{StaticResource CardMobile}" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                    <!-- Contribution Amount in second row, first column -->
+                    <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource SummaryBorderMobile}" VerticalOptions="Start" HorizontalOptions="FillAndExpand" HeightRequest="64">
+                        <VerticalStackLayout VerticalOptions="Center" Margin="16,0,0,0" Spacing="5">
+                            <Label Text="Contribution Amount" Style="{StaticResource CardTitleMobile}" />
+                            <HorizontalStackLayout>
+                                <Label Text="{Binding GoalData.CurrencySymbol}" Style="{StaticResource CardMobile}" />
+                                <Label Text="{Binding GoalData.ContributionAmount, StringFormat='{}{0:N2}'}" Style="{StaticResource CardMobile}" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                    <!-- Remaining Amount in second row, second column -->
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource SummaryBorderMobile}" VerticalOptions="Start" HorizontalOptions="FillAndExpand" HeightRequest="64">
+                        <VerticalStackLayout VerticalOptions="Center" Margin="16,0,0,0" Spacing="5">
+                            <Label Text="Remaining Amount" Style="{StaticResource CardTitleMobile}" />
+                            <HorizontalStackLayout>
+                                <Label Text="{Binding GoalData.CurrencySymbol}" Style="{StaticResource CardMobile}" />
+                                <Label Text="{Binding GoalData.RemainingAmount, StringFormat='{}{0:N2}'}" Style="{StaticResource CardMobile}" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+
+                <!-- Header Card -->
+                <Border BackgroundColor="{DynamicResource Surface}" StrokeShape="RoundRectangle 16,16,16,16" Margin="16,0,16,16">
+                    <VerticalStackLayout>
+                        <VerticalStackLayout>
+                            <VerticalStackLayout Spacing="16" Padding="16,16,16,16">
+                                <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+                                    <Border WidthRequest="48" HeightRequest="48" Stroke="Transparent">
+                                        <AbsoluteLayout>
+                                            <Border Background="{Binding GoalData.IconColor}" Opacity="0.1" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" StrokeShape="RoundRectangle 10,10,10,10" Stroke="Transparent"/>
+                                            <Label FontFamily="FontIcons" Text="{Binding GoalData.Icon}" FontSize="32" TextColor="{Binding GoalData.IconColor}" AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1" AbsoluteLayout.LayoutFlags="PositionProportional" VerticalOptions="Center"/>
+                                        </AbsoluteLayout>
+                                    </Border>
+                                    <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                                        <Label Text="{Binding GoalData.GoalTitle}" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource BlackText}" />
+                                        <Label Text="{Binding GoalData.Remarks}" FontFamily="Roboto-Regular" FontSize="14" TextColor="{DynamicResource GrayText}" />
+                                    </VerticalStackLayout>
+                                    <HorizontalStackLayout Spacing="8" HorizontalOptions="EndAndExpand" IsVisible="False">
+                                        <buttons:SfButton Text="Add Expense" Style="{StaticResource BasicButton}" />
+                                        <buttons:SfButton Text="Edit" Style="{StaticResource BasicButton}" />
+                                        <buttons:SfButton Text="Delete" Style="{StaticResource BasicButton}" />
+                                    </HorizontalStackLayout>
+                                </HorizontalStackLayout>
+                                <BoxView HeightRequest="1"
+                                     BackgroundColor="{DynamicResource LineBackground}"
+                                     Margin="8,0,8,0"
+                                     HorizontalOptions="FillAndExpand" />
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="12" Margin="16,16,16,16">
+                            <Label Text="Contribution Over time" FontFamily="Roboto-Medium" FontSize="16" Margin="0,0,0,0"/>
+                            <Border StrokeShape="RoundRectangle 6,6,6,6"  WidthRequest="152" HeightRequest="40" Stroke="{DynamicResource LineBackground}" StrokeThickness="1" HorizontalOptions="End">
+                                <inputs:SfComboBox x:Name="Combobox" ItemsSource="{Binding DateRange}" SelectedItem="{Binding SelectedChartDateRange, Mode=TwoWay}" DisplayMemberPath="RangeType" IsClearButtonVisible="False" HorizontalOptions="End" VerticalOptions="Center" Stroke="Transparent" WidthRequest="152" Margin="0,0,0,8" >
+                                    <inputs:SfComboBox.CustomView>
+                                        <Grid ColumnDefinitions="Auto,*" VerticalOptions="Center">
+                                            <Label Grid.Column="0" FontFamily="FontIcons" Text="&#xe723;" VerticalOptions="Center" FontSize="16" TextColor="{DynamicResource GrayText}" Padding="8"/>
+                                            <Label Grid.Column="1" Text="{Binding Source={x:Reference Combobox}, Path=SelectedItem.RangeType, Mode=OneWay}" FontSize="16" HorizontalOptions="Start" VerticalOptions="Center" FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" />
+                                        </Grid>
+                                    </inputs:SfComboBox.CustomView>
+                                </inputs:SfComboBox>
+                            </Border>
+
+                            <chart:SfCartesianChart HeightRequest="220">
+                                <chart:SfCartesianChart.XAxes>
+                                    <chart:CategoryAxis/>
+                                </chart:SfCartesianChart.XAxes>
+                                <chart:SfCartesianChart.YAxes>
+                                    <chart:NumericalAxis Minimum="0"/>
+                                </chart:SfCartesianChart.YAxes>
+                                <chart:SplineAreaSeries ShowMarkers="True"
+                                                        StrokeWidth="2"
+                                                        Stroke="{Binding GoalData.IconColor}"
+                                                        ItemsSource="{Binding GoalAreaChart, Mode=TwoWay}"
+                                                        XBindingPath="TimeInterval"
+                                                        YBindingPath="Data">
+                                    <chart:AreaSeries.MarkerSettings>
+                                        <chart:ChartMarkerSettings Fill="White"
+                                                                   StrokeWidth="1"
+                                                                   Stroke="{Binding GoalData.IconColor}"
+                                                                   Height="12"
+                                                                   Width="12" />
+                                    </chart:AreaSeries.MarkerSettings>
+                                    <chart:SplineAreaSeries.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <!--<GradientStop Color="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoalData.IconColor, FallbackValue='Gray'}" Offset="0.1"/>
+                                            <GradientStop Color="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoalData.IconColor, FallbackValue='Gray'}" Offset="1.0"/>-->
+                                            <GradientStop Color="{Binding GoalData.IconColor}" Offset="0.1"/>
+                                            <GradientStop Color="{Binding GoalData.IconColor}" Offset="1.0"/>
+                                        </LinearGradientBrush>
+                                    </chart:SplineAreaSeries.Fill>
+                                </chart:SplineAreaSeries>
+                            </chart:SfCartesianChart>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="8" Margin="16,8,16,0">
+                            <Label Text="Fund Contribution" FontSize="16" FontFamily="Roboto-Medium"  />
+                            <Border StrokeShape="RoundRectangle 6,6,6,6"  Stroke="{DynamicResource LineBackground}" StrokeThickness="1" HorizontalOptions="Fill">
+                                <VerticalStackLayout>
+                                    <grid:SfDataGrid x:Name="goalDataGrid" ColumnWidthMode="Auto" AutoGenerateColumnsMode="None" DetailsViewPadding="0" HorizontalScrollBarVisibility="Always" RowHeight="68" ItemsSource="{Binding Source={x:Reference goalDataPager}, Path=PagedSource}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="0,8,0,0">
+                                        <grid:SfDataGrid.Columns>
+                                            <grid:DataGridTemplateColumn>
+                                                <grid:DataGridTemplateColumn.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox HorizontalOptions="End" IsChecked="{Binding IsAllRowsSelected, Mode=TwoWay}" CheckedChanged="OnCheckedChanged"/>
+                                                    </DataTemplate>
+                                                </grid:DataGridTemplateColumn.HeaderTemplate>
+                                                <grid:DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox HorizontalOptions="End" IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                                    </DataTemplate>
+                                                </grid:DataGridTemplateColumn.CellTemplate>
+                                            </grid:DataGridTemplateColumn>
+                                            <grid:DataGridDateColumn HeaderText="Transaction Date" MappingName="TransactionDate" Format="dd/MM/yyyy" HeaderTextAlignment="Start" CellTextAlignment="Start"/>
+                                            <grid:DataGridTextColumn HeaderText="Description" MappingName="TransactionDescription"/>
+                                            <grid:DataGridTextColumn HeaderText="Contribution Amount" MappingName="ContributionAmount"/>
+                                            <grid:DataGridTextColumn HeaderText="Remark" MappingName="Remarks"/>
+                                        </grid:SfDataGrid.Columns>
+                                    </grid:SfDataGrid>
+                                    <pager:SfDataPager x:Name="goalDataPager"
+PageSize="6"
+NumericButtonCount="5"
+UseOnDemandPaging="True"
+Source="{Binding GoalData.Transactions}"
+Margin="0,0,0,8"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+
+
+
+
+
+                    <!-- Chart Card -->
+                    <!--
+            <Border BackgroundColor="{DynamicResource Surface}" StrokeShape="RoundRectangle 16,16,16,16" Padding="16" Margin="0,0,0,0">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Contribution Over time" FontFamily="Roboto-Medium" FontSize="16" Margin="0,0,0,0"/>
+                    <inputs:SfComboBox ItemsSource="{Binding DateRange}"
+                                       SelectedItem="{Binding SelectedChartDateRange, Mode=TwoWay}"
+                                       DisplayMemberPath="RangeType"
+                                       IsClearButtonVisible="False"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center"
+                                       Stroke="Transparent"
+                                       WidthRequest="175"
+                                       Margin="0,0,0,8"/>
+                    <chart:SfCartesianChart HeightRequest="220">
+                        <chart:SfCartesianChart.XAxes>
+                            <chart:CategoryAxis/>
+                        </chart:SfCartesianChart.XAxes>
+                        <chart:SfCartesianChart.YAxes>
+                            <chart:NumericalAxis Minimum="0"/>
+                        </chart:SfCartesianChart.YAxes>
+                        <chart:SplineAreaSeries ShowMarkers="True" StrokeWidth="2" Stroke="{Binding GoalData.IconColor}" ItemsSource="{Binding GoalAreaChart, Mode=TwoWay}" XBindingPath="TimeInterval" YBindingPath="Data">
+                            <chart:AreaSeries.MarkerSettings>
+                                <chart:ChartMarkerSettings Fill="White" StrokeWidth="1" Stroke="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoalData.IconColor}" Height="12" Width="12" />
+                            </chart:AreaSeries.MarkerSettings>
+                            <chart:SplineAreaSeries.Fill>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoalData.IconColor}" Offset="0.1"/>
+                                    <GradientStop Color="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoalData.IconColor}" Offset="1.0"/>
+                                </LinearGradientBrush>
+                            </chart:SplineAreaSeries.Fill>
+                        </chart:SplineAreaSeries>
+                    </chart:SfCartesianChart>
+                </VerticalStackLayout>
+            </Border>-->
+
+                    <!-- Transactions Card -->
+                    <!--<Border BackgroundColor="{DynamicResource Surface}" StrokeShape="RoundRectangle 16,16,16,16" Padding="0" Margin="0,0,0,0">-->
+
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+    
+</ContentPage>

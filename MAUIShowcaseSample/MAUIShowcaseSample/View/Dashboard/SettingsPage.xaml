@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             x:Class="MAUIShowcaseSample.View.Dashboard.SettingsPage">
+    <ScrollView BackgroundColor="{DynamicResource SurfaceBackground}">
+        <Grid RowDefinitions="Auto,*">
+            <ContentView Grid.Row="0" x:Name="contentcontainer"/>
+            <Border Grid.Row="1" StrokeShape="RoundRectangle 12,12,12,12" Padding="15" Stroke="Transparent" Background="{DynamicResource Surface}" Margin="32,32,32,32">
+                <Grid RowDefinitions="Auto,Auto, *" Margin="16">
+                    <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" HeightRequest="64">
+                        <syncfusion:SfAvatarView x:Name="ProfileAvatar" Grid.Column="0" ContentType="Custom" ImageSource="{Binding ProfileAvatar}" AvatarShape="Circle" VerticalOptions="Fill" MaximumHeightRequest="64" MaximumWidthRequest="64"/>
+                        <VerticalStackLayout Grid.Column="1" Margin="16,8,0,8" VerticalOptions="Center">
+                            <Label Text="Alex" Style="{StaticResource LabelHeader}"/>
+                            <Label Text="Alex" FontFamily="Roboto-Regular" FontSize="14" TextColor="{DynamicResource GrayText}" VerticalOptions="Start" Margin="0,8,0,0"/>
+                        </VerticalStackLayout>
+                        <Border Grid.Column="2" StrokeShape="RoundRectangle 30,30,30,30" HorizontalOptions="End" HeightRequest="44" WidthRequest="93" Background="Transparent" Stroke="{DynamicResource Red}">
+                            <buttons:SfButton Text="Logout" FontFamily="Roboto-Medium" FontSize="14" TextColor="{DynamicResource Red}" Background="Transparent" Clicked="OnLogoutClicked"/>
+                        </Border>
+                    </Grid>
+                    <BoxView Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Color="{DynamicResource LineBackground}" Margin="0,16,0,16"/>
+                    <CollectionView ItemsSource="{Binding SettingsValue}" Grid.Row="2" SelectionMode="None" >
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid RowDefinitions="Auto,Auto">
+                                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                            <Label Text="{Binding SettingsTitle}" FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource BlackText}"/>
+                                            <Label Text="{Binding SettingsDescription}" FontFamily="Roboto-Regular" FontSize="14" TextColor="{DynamicResource GrayText}"/>
+                                        </VerticalStackLayout>
+                                        <buttons:SfButton Grid.Column="1"  HorizontalOptions="End" Background="Transparent" FontSize="24" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnButtonClicked" />
+
+
+                                    </Grid>
+                                    <BoxView Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Color="{DynamicResource LineBackground}" Margin="0,16,0,16"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--<VerticalStackLayout Padding="16" Spacing="12">
+
+            --><!-- User Profile Section --><!--
+            <Border StrokeThickness="1"
+                    Stroke="LightGray"
+                    Background="White"
+                    Padding="16"
+                    StrokeShape="RoundRectangle 12">
+                <Grid ColumnDefinitions="Auto, *"
+                      VerticalOptions="Center">
+                    <avatar:SfAvatarView Grid.Column="0"
+                                         WidthRequest="50"
+                                         HeightRequest="50"
+                                         CornerRadius="25"
+                                         ImageSource="profile_placeholder.png"/>
+                    <VerticalStackLayout Grid.Column="1" Padding="10,0,0,0">
+                        <Label Text="Alex Johnson"
+                               FontAttributes="Bold"
+                               FontSize="16"/>
+                        <Label Text="alexjohnson@gmail.com"
+                               FontSize="14"
+                               TextColor="Gray"/>
+                    </VerticalStackLayout>
+                    <Button Grid.Column="2"
+                            Text="Logout"
+                            BackgroundColor="Transparent"
+                            TextColor="Red"
+                            BorderColor="Red"
+                            BorderWidth="1"
+                            CornerRadius="20"
+                            Padding="10,5"
+                            WidthRequest="93"
+                            HeightRequest="44"/>
+                </Grid>
+
+                --><!-- Settings List --><!--
+                <Border StrokeThickness="1"
+          Stroke="LightGray"
+          Background="White"
+          Padding="0"
+          StrokeShape="RoundRectangle 12">
+                    <syncfusion:SfListView x:Name="SettingsListView"
+                             ItemsSource="{Binding SettingsItems}"
+                             SelectionMode="None"
+                             >
+                        <syncfusion:SfListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="16"
+                        ColumnDefinitions="*, Auto"
+                        RowDefinitions="Auto, Auto">
+                                    <Label Grid.Column="0"
+                             Text="{Binding Title}"
+                             FontAttributes="Bold"
+                             FontSize="16"/>
+                                    <Label Grid.Column="0"
+                             Grid.Row="1"
+                             Text="{Binding Description}"
+                             FontSize="14"
+                             TextColor="Gray"/>
+                                    <Image Grid.Column="1"
+                             Source="right_arrow.png"
+                             WidthRequest="20"
+                             HeightRequest="20"
+                             VerticalOptions="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </syncfusion:SfListView.ItemTemplate>
+                    </syncfusion:SfListView>
+                </Border>
+            </Border>--><!--
+
+          
+
+        </VerticalStackLayout>-->
+    </ScrollView>
+</ContentPage>

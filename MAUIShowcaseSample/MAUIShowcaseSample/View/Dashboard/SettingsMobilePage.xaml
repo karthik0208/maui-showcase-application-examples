@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:expander="clr-namespace:Syncfusion.Maui.Toolkit.Expander;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:button="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:popup="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"  
+             xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"  
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker;assembly=Syncfusion.Maui.Toolkit"  
+             x:Class="MAUIShowcaseSample.View.Dashboard.SettingsMobilePage">
+    
+    <Grid>
+        <popup:SfPopup
+      x:Name="SettingsMobilePopup"
+      ShowCloseButton="False"
+      HorizontalOptions="FillAndExpand"
+      VerticalOptions="FillAndExpand"
+      BackgroundColor="Transparent"
+      ShowHeader="True"
+      HeaderTitle="Settings"
+      IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="{DynamicResource Surface}" CornerRadius="0"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <Grid x:Name="MobileSettingsHeader" ColumnDefinitions="Auto,*,Auto" RowDefinitions="*,Auto" IsVisible="{OnPlatform Default=False, Android=True, iOS=True}" Padding="10,0,10,0">
+                        <Button Grid.Column="0" Grid.Row="0" Text="&#x2715;" FontSize="20" FontFamily="FontIcons" BackgroundColor="Transparent" TextColor="{DynamicResource GrayText}" Clicked="OnSettingsCancelClicked" WidthRequest="48" HeightRequest="48" HorizontalOptions="Start" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Grid.Row="0" Text="{Binding Source={x:Reference SettingsMobilePopup}, Path=HeaderTitle}" FontSize="20" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start"/>
+                        <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="2" VerticalOptions="Start" Color="{DynamicResource LineBackground}" Margin="-10,0,-10,0" />
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.HeaderTemplate>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 0,0,0,0" Padding="0" Stroke="Transparent" Background="{DynamicResource Surface}" Margin="0">
+                        <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="0">
+                            <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" HeightRequest="64" Margin="16">
+                                <syncfusion:SfAvatarView x:Name="ProfileAvatar" Grid.Column="0" ContentType="Custom" ImageSource="{Binding ProfileAvatar}" AvatarShape="Circle" VerticalOptions="Fill" MaximumHeightRequest="64" MaximumWidthRequest="64"/>
+                                <VerticalStackLayout Grid.Column="1" Margin="16,8,0,8" VerticalOptions="Center">
+                                    <Label Text="Alex" Style="{StaticResource LabelHeader}"/>
+                                    <Label Text="Alex" FontFamily="Roboto-Regular" FontSize="14" TextColor="{DynamicResource GrayText}" VerticalOptions="Start" Margin="0,8,0,0"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                            <BoxView Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Color="{DynamicResource LineBackground}" Margin="16,0,16,0"/>
+                            <CollectionView ItemsSource="{Binding SettingsValue}" Grid.Row="2" SelectionMode="None" Margin="16,0,16,0">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <buttons:SfButton HorizontalOptions="Fill" Background="Transparent" Stroke="Transparent" Clicked="OnEditSettingsClicked">
+                                                <buttons:SfButton.Content>
+                                                    <DataTemplate>
+                                                        <Grid ColumnDefinitions="Auto,*" Margin="8,8,8,8" HeightRequest="64" ColumnSpacing="16">
+                                                            <Label Grid.Column="0" Text="{Binding Icon}" FontFamily="FontIcons" FontSize="30"/>
+                                                            <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                                                <Label Text="{Binding SettingsTitle}" FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource BlackText}"/>
+                                                                <Label Text="{Binding SettingsDescription}" FontFamily="Roboto-Regular" FontSize="14" TextColor="{DynamicResource GrayText}"/>
+                                                            </VerticalStackLayout>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </buttons:SfButton.Content>
+                                            </buttons:SfButton>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                            <VerticalStackLayout Grid.Row="3" Margin="16,0,16,16">
+                                <buttons:SfButton HorizontalOptions="Fill" Background="Transparent" Stroke="Transparent" Clicked="OnHelpAndSupportClicked">
+                                    <buttons:SfButton.Content>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="Auto,*" Margin="8,0,8,0" HeightRequest="64" ColumnSpacing="16">
+                                                <Label Grid.Column="0" Text="&#xE70f;" FontFamily="FontIcons" FontSize="30" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                                                <Label Grid.Column="1" Text="Help and Support" FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource BlackText}" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </buttons:SfButton.Content>
+                                </buttons:SfButton>
+                                <buttons:SfButton HorizontalOptions="Fill" Background="Transparent" Stroke="Transparent" Clicked="OnLogoutClicked">
+                                    <buttons:SfButton.Content>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="Auto,*" Margin="8,0,8,0" HeightRequest="64" ColumnSpacing="16">
+                                                <Label Grid.Column="0" Text="&#xE73e;" FontFamily="FontIcons" FontSize="30" TextColor="{DynamicResource Red}" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"/>
+                                                <Label Grid.Column="1" Text="Log out" FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource Red}" VerticalTextAlignment="Center" HorizontalTextAlignment="Start"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </buttons:SfButton.Content>
+                                </buttons:SfButton>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+        
+        <popup:SfPopup
+    x:Name="ProfileMobilePopup"
+    ShowCloseButton="False"
+    HorizontalOptions="FillAndExpand"
+    VerticalOptions="FillAndExpand"
+    BackgroundColor="Transparent"
+    ShowHeader="True"
+    HeaderTitle="Edit Profile"
+    IsOpen="False">
+    <popup:SfPopup.PopupStyle>
+        <popup:PopupStyle PopupBackground="{DynamicResource Surface}" CornerRadius="12"/>
+    </popup:SfPopup.PopupStyle>
+    <popup:SfPopup.HeaderTemplate>
+        <DataTemplate>
+            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="*,Auto" Padding="10,0,10,0">
+                <Button Grid.Column="0" Grid.Row="0" Text="&#x2715;" FontSize="20" FontFamily="FontIcons" BackgroundColor="Transparent" TextColor="{DynamicResource BlackText}" Clicked="OnProfileCancelClicked" WidthRequest="48" HeightRequest="48" HorizontalOptions="Start" FontAttributes="Bold"/>
+                <Label Grid.Column="1" Grid.Row="0" Text="{Binding Source={x:Reference ProfileMobilePopup}, Path=HeaderTitle}" FontSize="20" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{DynamicResource BlackText}"/>
+                <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="2" VerticalOptions="Start" Color="{DynamicResource LineBackground}" Margin="-10,0,-10,0" />
+            </Grid>
+        </DataTemplate>
+    </popup:SfPopup.HeaderTemplate>
+    <popup:SfPopup.ContentTemplate>
+        <DataTemplate>
+            <Border StrokeShape="RoundRectangle 0,0,0,0" Padding="0" Stroke="Transparent" Background="{DynamicResource Surface}" Margin="24">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto" Margin="16" RowSpacing="16">
+                    <!-- First Name -->
+                    <inputLayout:SfTextInputLayout Grid.Row="0" Hint="First Name" ContainerType="Outlined" Padding="16,0,0,0" InputViewPadding="0"  VerticalOptions="Center" HorizontalOptions="FillAndExpand" MinimumHeightRequest="44">
+                        <Entry Text="{Binding ProfileValue.FirstName, Mode=TwoWay}" FontFamily="Roboto-Regular" FontSize="16" Style="{StaticResource InputStyle}" TextColor="{DynamicResource BlackText}" />
+                    </inputLayout:SfTextInputLayout>
+                    <!-- Spacer -->
+                    <!-- Last Name -->
+                    <inputLayout:SfTextInputLayout Grid.Row="1" Hint="Last Name" ContainerType="Outlined" Padding="16,0,0,0" InputViewPadding="0" VerticalOptions="Center" HorizontalOptions="FillAndExpand" MinimumHeightRequest="44">
+                        <Entry Text="{Binding ProfileValue.LastName, Mode=TwoWay}" FontFamily="Roboto-Regular" FontSize="16" Style="{StaticResource InputStyle}" TextColor="{DynamicResource BlackText}" />
+                    </inputLayout:SfTextInputLayout>
+                    <!-- Spacer -->
+                    <!-- Date of Birth -->
+                    <Border Grid.Row="2" VerticalOptions="Center" HorizontalOptions="FillAndExpand" HeightRequest="44" StrokeShape="RoundRectangle 6,6,6,6" Stroke="{DynamicResource ButtonOutline}">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <inputLayout:SfTextInputLayout Grid.Column="0" ContainerType="Filled" Stroke="Transparent" HorizontalOptions="Fill" VerticalOptions="Center" HeightRequest="44" ContainerBackground="Transparent">
+                                <Entry Text="{Binding ProfileValue.DOB, Mode=TwoWay, StringFormat='{}{0:dd/MM/yyyy}'}" FontFamily="Roboto-Regular" FontSize="16" VerticalOptions="Center" HeightRequest="40" Style="{StaticResource InputStyle}" TextColor="{DynamicResource BlackText}"/>
+                            </inputLayout:SfTextInputLayout>
+                            <Grid Grid.Column="1" HorizontalOptions="End">
+                                <Grid ColumnDefinitions="Auto,Auto" VerticalOptions="Center">
+                                    <picker:SfDatePicker Grid.Column="0" x:Name="datepicker" SelectedDate="{Binding ProfileValue.DOB, Mode=TwoWay}" Mode="Dialog" BackgroundColor="Transparent" Background="White" CancelButtonClicked="CancelButtonClicked" OkButtonClicked="OKButtonClicked">
+                                        <picker:SfDatePicker.FooterView>
+                                            <picker:PickerFooterView ShowOkButton="True" OkButtonText="OK" CancelButtonText="Cancel" Height="40" />
+                                        </picker:SfDatePicker.FooterView>
+                                    </picker:SfDatePicker>
+                                    <Button x:Name="pickerButton" Grid.Column="1" FontFamily="FontIcons" Text="&#xe723;" TextColor="{DynamicResource BlackText}" MinimumHeightRequest="30" MinimumWidthRequest="30" FontSize="15" Clicked="CalendarIconClicked" HorizontalOptions="End" VerticalOptions="Center" Padding="0" BackgroundColor="Transparent"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <!-- Spacer -->
+                    <!-- Gender Selection Dropdown -->
+                    <inputLayout:SfTextInputLayout Grid.Row="3" ContainerType="Outlined" Padding="0" InputViewPadding="16,0,0,0" HorizontalOptions="Fill" MinimumHeightRequest="44" VerticalOptions="Center" Margin="0,8,0,0">
+                        <input:SfComboBox 
+                            ItemsSource="{Binding GenderOptionsList}" 
+                            SelectionMode="Single" 
+                            Placeholder="Select Gender" 
+                            SelectedItem="{Binding ProfileValue.Gender, Mode=TwoWay}" 
+                            FontFamily="Roboto-Regular" 
+                            FontSize="16" 
+                            Style="{StaticResource ProfileComboBoxStyle}" 
+                            VerticalTextAlignment="Center" 
+                            TextColor="{DynamicResource BlackText}" 
+                            PlaceholderColor="{DynamicResource BlackText}" 
+                            Margin="0"
+                            HorizontalOptions="FillAndExpand"
+                            />
+                    </inputLayout:SfTextInputLayout>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </popup:SfPopup.ContentTemplate>
+</popup:SfPopup>
+
+        <popup:SfPopup
+     x:Name="PersonalizationMobilePopup"
+     ShowCloseButton="False"
+     HorizontalOptions="FillAndExpand"
+     VerticalOptions="FillAndExpand"
+     BackgroundColor="Transparent"
+     ShowHeader="True"
+     HeaderTitle="Personalization"
+     IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="{DynamicResource Surface}" CornerRadius="12"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="*,Auto" Padding="10,0,10,0">
+                        <Button Grid.Column="0" Grid.Row="0" Text="&#x2715;" FontSize="20" FontFamily="FontIcons" BackgroundColor="Transparent" TextColor="{DynamicResource BlackText}" Clicked="OnPersonalizationCancelClicked" WidthRequest="48" HeightRequest="48" HorizontalOptions="Start" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Grid.Row="0" Text="{Binding Source={x:Reference PersonalizationMobilePopup}, Path=HeaderTitle}" FontSize="20" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{DynamicResource BlackText}"/>
+                        <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="2" VerticalOptions="Start" Color="{DynamicResource LineBackground}" Margin="-10,0,-10,0" />
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.HeaderTemplate>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 0,0,0,0" Padding="0" Stroke="Transparent" Background="{DynamicResource Surface}" Margin="24">
+                        <VerticalStackLayout>
+
+                            <!-- Preferred Language Dropdown -->
+                            <inputLayout:SfTextInputLayout ContainerType="Outlined" InputViewPadding="16,0,0,0" HorizontalOptions="FillAndExpand" HeightRequest="74">
+                                <input:SfComboBox 
+     ItemsSource="{Binding LanguageOptions}" 
+     SelectionMode="Single" 
+     SelectedItem="{Binding ProfileValue.Language, Mode=TwoWay}"
+     Style="{StaticResource ProfileComboBoxStyle}"/>
+                            </inputLayout:SfTextInputLayout>
+
+                            <!-- Currency Dropdown -->
+                            <inputLayout:SfTextInputLayout ContainerType="Outlined" InputViewPadding="16,0,0,0" HorizontalOptions="FillAndExpand" HeightRequest="74">
+                                <input:SfComboBox 
+     ItemsSource="{Binding CurrencyOptions}" 
+     SelectionMode="Single" 
+     SelectedItem="{Binding ProfileValue.Currency, Mode=TwoWay}"
+     Style="{StaticResource ProfileComboBoxStyle}"/>
+                            </inputLayout:SfTextInputLayout>
+
+                            <!-- Time Zone Dropdown -->
+                            <inputLayout:SfTextInputLayout ContainerType="Outlined" InputViewPadding="16,0,0,0" HorizontalOptions="FillAndExpand" HeightRequest="74">
+                                <input:SfComboBox 
+     ItemsSource="{Binding TimeZoneOptions}" 
+     SelectionMode="Single" 
+     SelectedItem="{Binding ProfileValue.TimeZone, Mode=TwoWay}"
+     Style="{StaticResource ProfileComboBoxStyle}"/>
+                            </inputLayout:SfTextInputLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <popup:SfPopup
+            x:Name="AppearanceMobilePopup"
+            ShowCloseButton="False"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            BackgroundColor="Transparent"
+            ShowHeader="True"
+            HeaderTitle="Appearance"
+            IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="{DynamicResource Surface}" CornerRadius="12"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="*,Auto" Padding="10,0,10,0">
+                        <Button Grid.Column="0" Grid.Row="0" Text="&#x2715;" FontSize="20" FontFamily="FontIcons" BackgroundColor="Transparent" TextColor="{DynamicResource BlackText}" Clicked="OnAppearanceCancelClicked" WidthRequest="48" HeightRequest="48" HorizontalOptions="Start" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Grid.Row="0" Text="{Binding Source={x:Reference AppearanceMobilePopup}, Path=HeaderTitle}" FontSize="20" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{DynamicResource BlackText}"/>
+                        <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="2" VerticalOptions="Start" Color="{DynamicResource LineBackground}" Margin="-10,0,-10,0" />
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.HeaderTemplate>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 6,6,6,6" Padding="0" Stroke="Transparent" Background="{DynamicResource Surface}" Margin="24">
+                        <VerticalStackLayout Grid.Column="0">
+                            <button:SfRadioGroup x:Name="radioGroup" Margin="0,16,0,0">
+                                <CollectionView ItemsSource="{Binding ThemeOptions}">
+                                    <CollectionView.ItemsLayout>
+                                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="6"/>
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Stroke="Transparent" HorizontalOptions="FillAndExpand">
+                                                <button:SfRadioButton TextColor="Black" FontSize="16" FontFamily="Roboto-Regular" Text="{Binding Theme}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </button:SfRadioGroup>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <popup:SfPopup
+            x:Name="NotificationMobilePopup"
+            ShowCloseButton="False"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            BackgroundColor="Transparent"
+            ShowHeader="True"
+            HeaderTitle="Notification"
+            IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="{DynamicResource Surface}" CornerRadius="12"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="*,Auto" Padding="10,0,10,0">
+                        <Button Grid.Column="0" Grid.Row="0" Text="&#x2715;" FontSize="20" FontFamily="FontIcons" BackgroundColor="Transparent" TextColor="{DynamicResource BlackText}" Clicked="OnNotificationCancelClicked" WidthRequest="48" HeightRequest="48" HorizontalOptions="Start" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Grid.Row="0" Text="{Binding Source={x:Reference NotificationMobilePopup}, Path=HeaderTitle}" FontSize="20" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{DynamicResource BlackText}"/>
+                        <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="2" VerticalOptions="Start" Color="{DynamicResource LineBackground}" Margin="-10,0,-10,0" />
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.HeaderTemplate>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 0,0,0,0" Padding="16" Stroke="Transparent" Background="{DynamicResource Surface}">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                <Label Text="Notification" FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource BlackText}"/>
+                                <Label Text="Set up alerts based on your preferences" FontFamily="Roboto-Regular" FontSize="14" TextColor="{DynamicResource GrayText}"/>
+                            </VerticalStackLayout>
+                            <button:SfSwitch Grid.Column="1" x:Name="sfSwitch" IsOn="{Binding ProfileValue.IsNotificationEnabled}" VerticalOptions="Start" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <popup:SfPopup
+                x:Name="AccountMobilePopup"
+                ShowCloseButton="False"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                BackgroundColor="Transparent"
+                ShowHeader="True"
+                HeaderTitle="Account"
+                IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="{DynamicResource Surface}" CornerRadius="12"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="*,Auto" Padding="10,0,10,0">
+                        <Button Grid.Column="0" Grid.Row="0" Text="&#x2715;" FontSize="20" FontFamily="FontIcons" BackgroundColor="Transparent" TextColor="{DynamicResource BlackText}" Clicked="OnAccountCancelClicked" WidthRequest="48" HeightRequest="48" HorizontalOptions="Start" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Grid.Row="0" Text="{Binding Source={x:Reference AccountMobilePopup}, Path=HeaderTitle}" FontSize="20" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{DynamicResource BlackText}"/>
+                        <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="2" VerticalOptions="Start" Color="{DynamicResource LineBackground}" Margin="-10,0,-10,0" />
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.HeaderTemplate>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 0,0,0,0" Padding="0" Stroke="Transparent" Background="{DynamicResource Surface}" Margin="24">
+                        <CollectionView ItemsSource="{Binding AccountSettingValue}" Grid.Row="1" SelectionMode="None" >
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <buttons:SfButton HorizontalOptions="FillAndExpand" CornerRadius="0" Background="Transparent" FontSize="24" TextColor="{DynamicResource PrimaryBackground}" Margin="0,0,0,32" CommandParameter="{Binding SettingsTitle}" Clicked="OnUpdateAccountClicked">
+                                        <buttons:SfButton.Content>
+                                            <DataTemplate>
+                                                <VerticalStackLayout Spacing="10">
+                                                    <Label Text="{Binding SettingsTitle}" FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource BlackText}"/>
+                                                    <Label Text="{Binding SettingsDescription}" FontFamily="Roboto-Regular" FontSize="14" TextColor="{DynamicResource GrayText}"/>
+                                                </VerticalStackLayout>
+                                            </DataTemplate>
+                                        </buttons:SfButton.Content>
+                                    </buttons:SfButton>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Border>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <popup:SfPopup
+            x:Name="ChangeEmailMobilePopup"
+            ShowCloseButton="False"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="End"
+            BackgroundColor="Transparent"
+            ShowHeader="True"
+            HeaderTitle="Change Email"
+            IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle 
+                    PopupBackground="{DynamicResource Surface}" 
+                    CornerRadius="12"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,*" Padding="10,0,10,0">
+                        <BoxView Grid.Row="0" Grid.ColumnSpan="3" HeightRequest="2" WidthRequest="24" VerticalOptions="Start" HorizontalOptions="Center" Color="{DynamicResource GrayText}" Margin="0,16,0,32" />
+                        <Label Grid.Column="0" Grid.Row="1" Text="{Binding Source={x:Reference ChangeEmailMobilePopup}, Path=HeaderTitle}" FontSize="22" FontFamily="Roboto-Regular" FontAttributes="Bold" VerticalOptions="Start" HorizontalOptions="Start" TextColor="{DynamicResource BlackText}" HeightRequest="42" Margin="16,0,0,0"/>
+                        <Button Grid.Column="1" Grid.Row="1" Text="&#x2715;" FontSize="24" FontFamily="FontIcons" BackgroundColor="Transparent" TextColor="{DynamicResource GrayText}" Clicked="OnChangeEmailCancelClicked" HorizontalOptions="End" FontAttributes="Bold" HeightRequest="42"  Margin="0,0,16,0"/>
+                     </Grid>
+                </DataTemplate>
+            </popup:SfPopup.HeaderTemplate>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 12,12,12,12" Padding="15" Stroke="Transparent" Background="{DynamicResource Surface}">
+                        <Grid RowDefinitions="*,Auto" Margin="16">
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                                <inputLayout:SfTextInputLayout Hint="Current email" ContainerType="Outlined" Padding="16,0,0,0" InputViewPadding="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" MinimumHeightRequest="44">
+                                    <Entry Text="{Binding CurrentEmail, Mode=TwoWay}" />
+                                </inputLayout:SfTextInputLayout>
+                                <inputLayout:SfTextInputLayout Hint="New email" ContainerType="Outlined"  Padding="16,0,0,0" InputViewPadding="0" HorizontalOptions="FillAndExpand" MinimumHeightRequest="44">
+                                    <Entry Text="{Binding NewEmail, Mode=TwoWay}"/>
+                                </inputLayout:SfTextInputLayout>
+                            </VerticalStackLayout>
+                            <buttons:SfButton Grid.Row="1" Text="Get Verfication Code" Background="{DynamicResource PrimaryBackground}" TextColor="{DynamicResource White}" FontFamily="Roboto-SemiBold" FontSize="14"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <popup:SfPopup
+            x:Name="ChangePasswordMobilePopup"
+            ShowCloseButton="False"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="End"
+            BackgroundColor="Transparent"
+            ShowHeader="True"
+            HeaderTitle="Change Password"
+            IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle 
+                    PopupBackground="{DynamicResource Surface}" 
+                    CornerRadius="12"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,*" Padding="10,0,10,0">
+                        <BoxView Grid.Row="0" Grid.ColumnSpan="3" HeightRequest="2" WidthRequest="24" VerticalOptions="Start" HorizontalOptions="Center" Color="{DynamicResource GrayText}" Margin="0,16,0,32" />
+                        <Label Grid.Column="0" Grid.Row="1" Text="{Binding Source={x:Reference ChangePasswordMobilePopup}, Path=HeaderTitle}" FontSize="22" FontFamily="Roboto-Regular" FontAttributes="Bold" VerticalOptions="Start" HorizontalOptions="Start" TextColor="{DynamicResource BlackText}" HeightRequest="42" Margin="16,0,0,0"/>
+                        <Button Grid.Column="1" Grid.Row="1" Text="&#x2715;" FontSize="24" FontFamily="FontIcons" BackgroundColor="Transparent" TextColor="{DynamicResource GrayText}" Clicked="OnChangePasswordCancelClicked" HorizontalOptions="End" FontAttributes="Bold" HeightRequest="42"  Margin="0,0,16,0"/>
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.HeaderTemplate>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 12,12,12,12" Padding="15" Stroke="Transparent" Background="{DynamicResource Surface}">
+                        <Grid RowDefinitions="*,Auto" Margin="16">
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                                <inputLayout:SfTextInputLayout Hint="Current Password" ContainerType="Outlined" Padding="16,0,0,0" InputViewPadding="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" MinimumHeightRequest="44">
+                                    <Entry Text="{Binding CurrentPassword, Mode=TwoWay}" />
+                                </inputLayout:SfTextInputLayout>
+                                <inputLayout:SfTextInputLayout Hint="New Password" ContainerType="Outlined" Padding="16,0,0,0" InputViewPadding="0" HorizontalOptions="FillAndExpand" MinimumHeightRequest="44">
+                                    <Entry Text="{Binding NewPassword, Mode=TwoWay}"/>
+                                </inputLayout:SfTextInputLayout>
+                                <inputLayout:SfTextInputLayout Hint="Confirm Password" ContainerType="Outlined" Padding="16,0,0,0" InputViewPadding="0" HorizontalOptions="FillAndExpand" MinimumHeightRequest="44">
+                                    <Entry Text="{Binding ConfirmPassword, Mode=TwoWay}"/>
+                                </inputLayout:SfTextInputLayout>
+                            </VerticalStackLayout>
+                            <buttons:SfButton Grid.Row="1" Text="Update" Background="{DynamicResource PrimaryBackground}" TextColor="{DynamicResource White}" FontFamily="Roboto-SemiBold" FontSize="14" Clicked="OnChangePasswordClicked"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <popup:SfPopup
+     x:Name="DeleteAccountMobilePopup"
+     ShowCloseButton="False"
+     HorizontalOptions="FillAndExpand"
+     VerticalOptions="End"
+     BackgroundColor="Transparent"
+     ShowHeader="True"
+     HeaderTitle="Delete Account"
+     IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle 
+             PopupBackground="{DynamicResource Surface}" 
+             CornerRadius="12"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,*" Padding="10,0,10,0">
+                        <BoxView Grid.Row="0" Grid.ColumnSpan="3" HeightRequest="2" WidthRequest="24" VerticalOptions="Start" HorizontalOptions="Center" Color="{DynamicResource GrayText}" Margin="0,16,0,32" />
+                        <Label Grid.Column="0" Grid.Row="1" Text="{Binding Source={x:Reference DeleteAccountMobilePopup}, Path=HeaderTitle}" FontSize="22" FontFamily="Roboto-Regular" FontAttributes="Bold" VerticalOptions="Start" HorizontalOptions="Start" TextColor="{DynamicResource BlackText}" HeightRequest="42" Margin="16,0,0,0"/>
+                        <Button Grid.Column="1" Grid.Row="1" Text="&#x2715;" FontSize="24" FontFamily="FontIcons" BackgroundColor="Transparent" TextColor="{DynamicResource GrayText}" Clicked="OnDeleteAccountCancelClicked" HorizontalOptions="End" FontAttributes="Bold" HeightRequest="42"  Margin="0,0,16,0"/>
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.HeaderTemplate>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 12,12,12,12" Padding="15" Stroke="Transparent" Background="{DynamicResource Surface}">
+                        <VerticalStackLayout Spacing="24" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                            <Label Text="Are you sure, you want to delete this account permanently ?" FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource BlackText}" HorizontalOptions="Center" />
+                            <buttons:SfButton 
+                         Text="Delete" 
+                         Background="Transparent" 
+                         Stroke="{DynamicResource Red}" 
+                         StrokeThickness="1"
+                         TextColor="{DynamicResource Red}" 
+                         FontFamily="Roboto-SemiBold" 
+                         FontSize="16"
+                         HorizontalOptions="Fill"
+                         Clicked="OnDeleteAccountClicked"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+        
+        <popup:SfPopup
+            x:Name="PasswordUpdatedMobilePopup"
+            ShowCloseButton="False"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="End"
+            BackgroundColor="Transparent"
+            ShowHeader="True"
+            HeaderTitle="Password Updated"
+            IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle 
+                    PopupBackground="{DynamicResource Surface}" 
+                    CornerRadius="12"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,*" Padding="10,0,10,0">
+                        <BoxView Grid.Row="0" Grid.ColumnSpan="3" HeightRequest="2" WidthRequest="24" VerticalOptions="Start" HorizontalOptions="Center" Color="{DynamicResource GrayText}" Margin="0,16,0,32" />
+                        <Label Grid.Column="0" Grid.Row="1" Text="{Binding Source={x:Reference PasswordUpdatedMobilePopup}, Path=HeaderTitle}" FontSize="22" FontFamily="Roboto-Regular" FontAttributes="Bold" VerticalOptions="Start" HorizontalOptions="Start" TextColor="{DynamicResource BlackText}" HeightRequest="42" Margin="16,0,0,0"/>
+                        <Button Grid.Column="1" Grid.Row="1" Text="&#x2715;" FontSize="24" FontFamily="FontIcons" BackgroundColor="Transparent" TextColor="{DynamicResource GrayText}" Clicked="OnPasswordUpdatedCancelClicked" HorizontalOptions="End" FontAttributes="Bold" HeightRequest="42"  Margin="0,0,16,0"/>
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.HeaderTemplate>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Border StrokeShape="RoundRectangle 12,12,12,12" Padding="15" Stroke="Transparent" Background="{DynamicResource Surface}">
+                        <VerticalStackLayout Spacing="24" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                            <Label Text="Your password has been updated successfully. Please use your new password for log in." FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource BlackText}" HorizontalOptions="Center" />
+                            <buttons:SfButton 
+                                Text="Login" 
+                                Background="{DynamicResource PrimaryBackground}" 
+                                StrokeThickness="0"
+                                TextColor="{DynamicResource White}" 
+                                FontFamily="Roboto-SemiBold" 
+                                FontSize="16"
+                                HorizontalOptions="Fill"
+                                Clicked="OnLoginClicked"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <popup:SfPopup
+                x:Name="HelpAndSupportMobilePopup"
+                ShowCloseButton="False"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="End"
+                BackgroundColor="Transparent"
+                ShowHeader="True"
+                HeaderTitle="Help &amp; Support"
+                IsOpen="False">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle 
+                        PopupBackground="{DynamicResource Surface}" 
+                        CornerRadius="12"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,*" HeightRequest="56">                       
+                        <Label Grid.Column="1" Grid.Row="0" Text="{Binding Source={x:Reference HelpAndSupportMobilePopup}, Path=HeaderTitle}" FontSize="22" FontFamily="Roboto-Regular" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{DynamicResource BlackText}" HeightRequest="42" Margin="8,0,0,0"/>
+                        <Button Grid.Column="0" Grid.Row="0" Text="X" FontSize="22" FontFamily="Roboto-Regular" BackgroundColor="Transparent" TextColor="{DynamicResource GrayText}" Clicked="OnHelpAndSupportCancelClicked" HorizontalOptions="Start" VerticalOptions="Center" FontAttributes="Bold" HeightRequest="42"  Margin="8,0,0,0"/>
+                        <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="2" VerticalOptions="Start" Color="{DynamicResource LineBackground}" Margin="-10,0,-10,0" />
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.HeaderTemplate>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Border Padding="15" Stroke="Transparent" Background="{DynamicResource Surface}" StrokeShape="RoundRectangle 0,0,0,0">
+                        <Grid RowDefinitions="Auto, Auto, *" Margin="32,16,32,16">
+                            <Label Text="How Can we help you?" Grid.Row="0" FontFamily="Roboto-Regular" FontSize="28" HorizontalOptions="Center"/>
+                            <inputLayout:SfTextInputLayout Grid.Row="1" Hint="Describe your Issue" ContainerType="Outlined" InputViewPadding="0" Margin="0,32,0,32" MinimumHeightRequest="42">
+                                <Entry Text="{Binding SearchText, Mode=TwoWay}"/>
+                            </inputLayout:SfTextInputLayout>
+                            <CollectionView Grid.Row="2" ItemsSource="{Binding FAQItemList, Mode=TwoWay}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <expander:SfExpander HeaderBackground="Transparent" Padding="0,8,0,8">
+                                            <expander:SfExpander.Header Margin="32,0,32,0">
+                                                <Label Text="{Binding Question}" BackgroundColor="Transparent" FontSize="16" TextColor="{DynamicResource BlackText}" HeightRequest="40" LineBreakMode="WordWrap"/>
+                                            </expander:SfExpander.Header>
+                                            <expander:SfExpander.Content>
+                                                <Border BackgroundColor="{DynamicResource SurfaceBackground}" Stroke="Transparent">
+                                                    <Label Text="{Binding Answer}" FontSize="16" TextColor="{DynamicResource GrayText}" Margin="16,8,16,8" MinimumHeightRequest="44" LineBreakMode="WordWrap"/>
+                                                </Border>
+                                            </expander:SfExpander.Content>
+                                        </expander:SfExpander>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+        
+    </Grid>
+  
+</ContentView>

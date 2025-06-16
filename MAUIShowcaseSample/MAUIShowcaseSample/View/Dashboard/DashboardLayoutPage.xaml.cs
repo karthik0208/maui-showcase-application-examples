@@ -1,6 +1,7 @@
 using MAUIShowcaseSample.Services;
 using MAUIShowcaseSample.View.Dashboard;
 using MAUIShowcaseSample.ViewModel;
+using Microsoft.Maui.Devices;
 using Syncfusion.Maui.Buttons;
 using Syncfusion.Maui.Inputs;
 using Syncfusion.Maui.Popup;
@@ -106,17 +107,31 @@ public partial class DashboardLayoutPage : ContentView
 
     private void OnAvatarTapped(object sender, TappedEventArgs e)
     {
-
+        this.profilePopup.ShowRelativeToView(this.profileavatar, Syncfusion.Maui.Toolkit.Popup.PopupRelativePosition.AlignBottomRight);
     }
 
     private void OnViewProfileClicked(object sender, EventArgs e)
     {
+        this.settingscontainer.Content = new SettingsMobilePage(_userCredentials, _dataStore);
+    }
+
+    private async void OnLogoutClicked(object sender, EventArgs e)
+    {
+        _userCredentials.LoggedInAccount = string.Empty;
+        await Shell.Current.GoToAsync("/signin");
 
     }
 
-    private void OnLogoutClicked(object sender, EventArgs e)
+    private async void OnHelpAndSupportClicked(object sender, TappedEventArgs e)
     {
+        this.settingscontainer.Content = new SettingsMobilePage(_userCredentials, _dataStore);
+        ((SettingsMobilePage)this.settingscontainer.Content).OnHelpAndSupportClicked(sender, e);
+    }
 
+    private async void OnThemeClicked(object sender, TappedEventArgs e)
+    {
+        this.settingscontainer.Content = new SettingsMobilePage(_userCredentials, _dataStore);
+        ((SettingsMobilePage)this.settingscontainer.Content).OnThemeClicked(sender, e);
     }
 
     private async void CalendarIconClicked(object sender, System.EventArgs e)
@@ -153,6 +168,8 @@ public partial class DashboardLayoutPage : ContentView
         var viewModel = BindingContext as DashboardLayoutPageViewModel;
         viewModel.TransactionDetails.Clear();
         this.createtransactionpopup.IsOpen = false;
+        this.createtransactionpopup.IsVisible = false;
+        this.addexpensepopup.IsVisible = false;
     }
 
     private async void OnTransactionAddClicked(object sender, System.EventArgs e)
@@ -162,22 +179,26 @@ public partial class DashboardLayoutPage : ContentView
         {
             this.createtransactionpopup.IsOpen = false;
             this.addexpensepopup.IsOpen = false;
+            this.createtransactionpopup.IsVisible = false;
+            this.addexpensepopup.IsVisible = false;
             await Application.Current.MainPage.DisplayAlert("Success", "Transaction added successfully", "OK");
         }
         else
         {
             this.createtransactionpopup.IsOpen = false;
             this.addexpensepopup.IsOpen = false;
+            this.createtransactionpopup.IsVisible = false;
+            this.addexpensepopup.IsVisible = false;
             await Application.Current.MainPage.DisplayAlert("Failed", "Adding transaction failed", "OK");
         }
         viewModel.TransactionDetails.Clear();
         var currentPage = Shell.Current.CurrentState.Location.ToString();
-        if(currentPage == "//transaction")
+        if(currentPage == "transaction")
         {
             var transactionViewModel = this.Parent.BindingContext as TransactionPageViewModel;
             transactionViewModel.UpdateGridData();
         }
-        else if(currentPage == "//dashboard")
+        else if(currentPage == "dashboard")
         {
             var transactionViewModel = this.Parent.BindingContext as DashboardPageViewModel;
             transactionViewModel.UpdateDashboardPage();            
@@ -189,6 +210,7 @@ public partial class DashboardLayoutPage : ContentView
         var viewModel = BindingContext as DashboardLayoutPageViewModel;
         viewModel.BudgetDetails.Clear();
         this.createbudgetpopup.IsOpen = false;
+        this.createbudgetpopup.IsVisible = false;
     }
 
     private async void OnBudgetAddClicked(object sender, System.EventArgs e)
@@ -197,21 +219,23 @@ public partial class DashboardLayoutPage : ContentView
         if (viewModel.OnAddBudgetClicked())
         {
             this.createbudgetpopup.IsOpen = false;
+            this.createbudgetpopup.IsVisible = false;
             await Application.Current.MainPage.DisplayAlert("Success", "Budget created successfully", "OK");
         }
         else
         {
             this.createbudgetpopup.IsOpen = false;
+            this.createbudgetpopup.IsVisible = false;
             await Application.Current.MainPage.DisplayAlert("Failed", "Budget creation failed", "OK");
         }
         viewModel.BudgetDetails.Clear();
         var currentPage = Shell.Current.CurrentState.Location.ToString();
-        if (currentPage == "//budget")
+        if (currentPage == "budget")
         {
             var budgetPageViewModel = this.Parent.BindingContext as BudgetPageViewModel;
             budgetPageViewModel.UpdateBudgetData();
         }
-        else if (currentPage == "//dashboard")
+        else if (currentPage == "dashboard")
         {
             var transactionViewModel = this.Parent.BindingContext as DashboardPageViewModel;
             transactionViewModel.UpdateDashboardPage();
@@ -223,6 +247,7 @@ public partial class DashboardLayoutPage : ContentView
         var viewModel = BindingContext as DashboardLayoutPageViewModel;
         viewModel.SavingDetails.Clear();
         this.addsavingspopup.IsOpen = false;
+        this.addsavingspopup.IsVisible = false;
     }
 
     private async void OnAddSavingsClicked(object sender, System.EventArgs e)
@@ -231,11 +256,13 @@ public partial class DashboardLayoutPage : ContentView
         if (viewModel.OnAddBSavingsClicked().Result)
         {
             this.addsavingspopup.IsOpen = false;
+            this.addsavingspopup.IsVisible = false;
             await Application.Current.MainPage.DisplayAlert("Success", "Added Savings successfully", "OK");
         }
         else
         {
             this.addsavingspopup.IsOpen = false;
+            this.addsavingspopup.IsVisible = false;
             await Application.Current.MainPage.DisplayAlert("Failed", "Adding Savings failed", "OK");
         }
         viewModel.SavingDetails.Clear();
@@ -258,6 +285,7 @@ public partial class DashboardLayoutPage : ContentView
         var viewModel = BindingContext as DashboardLayoutPageViewModel;
         viewModel.GoalDetails.Clear();
         this.creategoalpopup.IsOpen = false;
+        this.creategoalpopup.IsVisible = false;
     }
 
     private async void OnCreateGoalClicked(object sender, System.EventArgs e)
@@ -266,11 +294,13 @@ public partial class DashboardLayoutPage : ContentView
         if (viewModel.OnCreateGoalClicked())
         {
             this.creategoalpopup.IsOpen = false;
+            this.creategoalpopup.IsVisible = false;
             await Application.Current.MainPage.DisplayAlert("Success", "Goal created successfully", "OK");
         }
         else
         {
             this.creategoalpopup.IsOpen = false;
+            this.creategoalpopup.IsVisible = false;
             await Application.Current.MainPage.DisplayAlert("Failed", "Creating Goal failed", "OK");
         }
         viewModel.GoalDetails.Clear();
@@ -288,49 +318,87 @@ public partial class DashboardLayoutPage : ContentView
         }
     }
 
-    public async void TriggerEditSavePopup(double transactionId)
+    public async void TriggerEditSavePopup(double? transactionId = null)
     {
-        layoutViewModel.TriggerEditSavings(transactionId);
-        this.addsavingspopup.HeaderTitle = "Edit Savings";
-        this.addsavingspopup.AcceptButtonText = "Save";
+#if ANDROID
+        // Ensure the popup fills the entire window by setting both HeightRequest and VerticalOptions
+        this.addsavingspopup.HeightRequest = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+        this.addsavingspopup.VerticalOptions = LayoutOptions.FillAndExpand;
+#endif
+        if(transactionId.HasValue)
+        {
+            layoutViewModel.TriggerEditSavings(transactionId.Value);
+            this.addsavingspopup.HeaderTitle = "Edit Savings";
+            this.addsavingspopup.AcceptButtonText = "Save";
+        }        
         this.addsavingspopup.IsOpen = true;
     }
 
-    public async void TriggerEditTransactionPopup(double transactionId)
+    public async void TriggerEditTransactionPopup(double? transactionId = null)
     {
-        layoutViewModel.TriggerEditTransaction(transactionId);
-        this.createtransactionpopup.HeaderTitle = "Edit Transaction";
-        this.createtransactionpopup.AcceptButtonText = "Save";
+#if ANDROID
+        // Ensure the popup fills the entire window by setting both HeightRequest and VerticalOptions
+        this.createtransactionpopup.HeightRequest = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+        this.createtransactionpopup.VerticalOptions = LayoutOptions.FillAndExpand;
+#endif
+
+        // Ensure the popup is not removed from the visual tree of the parent page
+        // and does not set its Parent to null or change the Content of the parent.
+        // If using a modal or overlay, ensure it is a child of the current page's visual tree.
+        if (transactionId.HasValue)
+        {
+            layoutViewModel.TriggerEditTransaction(transactionId.Value);
+            this.createtransactionpopup.HeaderTitle = "Edit Transaction";
+            this.createtransactionpopup.AcceptButtonText = "Save";
+        }
+
+        // Make sure IsOpen is set after all properties are set
         this.createtransactionpopup.IsOpen = true;
+
+        // If the parent page vanishes, check your XAML for the popup's placement.
+        // The popup should be declared inside the same ContentPage or ContentView as the rest of the UI.
+        // If you are dynamically adding/removing the popup, ensure you do not remove the parent content.
     }
 
-    public async void TriggerEditBudgetPopup(double budgetId)
+    public async void TriggerEditBudgetPopup(double? budgetId = null)
     {
-        layoutViewModel.TriggerEditBudget(budgetId);
-        this.createbudgetpopup.HeaderTitle = "Edit Budget";
-        this.createbudgetpopup.AcceptButtonText = "Save";
+#if ANDROID
+        // Ensure the popup fills the entire window by setting both HeightRequest and VerticalOptions
+        this.createbudgetpopup.HeightRequest = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+        this.createbudgetpopup.VerticalOptions = LayoutOptions.FillAndExpand;
+#endif
+        if(budgetId.HasValue)
+        {
+            layoutViewModel.TriggerEditBudget(budgetId.Value);
+            this.createbudgetpopup.HeaderTitle = "Edit Budget";
+            this.createbudgetpopup.AcceptButtonText = "Save";
+        }        
         this.createbudgetpopup.IsOpen = true;
     }
 
-    public async void TriggerAddExpensePopup()
+    public async void TriggerEditGoalPopup(double? goalId = null)
     {
-        layoutViewModel.TransactionDetails.Clear();
-        this.addexpensepopup.IsOpen = true;
-        layoutViewModel.TransactionDetails.TransactionType = "Expense";
-        this.addexpensepopup.HeaderTitle = "Add Expense";
-        this.addexpensepopup.AcceptButtonText = "Add";
-    }
-
-    public async void TriggerEditGoalPopup(double goalId)
-    {
-        layoutViewModel.TriggerEditGoal(goalId);
-        this.creategoalpopup.HeaderTitle = "Edit Goal";
-        this.creategoalpopup.AcceptButtonText = "Save";
+#if ANDROID
+        // Ensure the popup fills the entire window by setting both HeightRequest and VerticalOptions
+        this.creategoalpopup.HeightRequest = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+        this.creategoalpopup.VerticalOptions = LayoutOptions.FillAndExpand;
+#endif
+        if(goalId.HasValue)
+        {
+            layoutViewModel.TriggerEditGoal(goalId.Value);
+            this.creategoalpopup.HeaderTitle = "Edit Goal";
+            this.creategoalpopup.AcceptButtonText = "Save";
+        }        
         this.creategoalpopup.IsOpen = true;
     }
 
     public async void TriggerAddFundPopup(double goalId, string goalDescription)
     {
+#if ANDROID
+        // Ensure the popup fills the entire window by setting both HeightRequest and VerticalOptions
+        this.creategoalpopup.HeightRequest = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+        this.creategoalpopup.VerticalOptions = LayoutOptions.FillAndExpand;
+#endif
         this.addfundpopup.IsOpen = true;
         layoutViewModel.FundDetails.TransactionDescription = goalDescription;
         layoutViewModel.FundDetails.GoalId = goalId.ToString(); // Convert double to string
@@ -341,11 +409,13 @@ public partial class DashboardLayoutPage : ContentView
         if (layoutViewModel.OnAddFundClicked().Result)
         {
             this.addfundpopup.IsOpen = false;
+            this.addfundpopup.IsVisible = false;
             await Application.Current.MainPage.DisplayAlert("Success", "Added fund successfully", "OK");
         }
         else
         {
             this.addfundpopup.IsOpen = false;
+            this.addfundpopup.IsVisible = false;
             await Application.Current.MainPage.DisplayAlert("Failed", "Adding fund failed", "OK");
         }
         layoutViewModel.FundDetails.Clear();
@@ -356,6 +426,21 @@ public partial class DashboardLayoutPage : ContentView
         var viewModel = BindingContext as DashboardLayoutPageViewModel;
         viewModel.FundDetails.Clear();
         this.addfundpopup.IsOpen = false;
+        this.addfundpopup.IsVisible = false;
+    }
+
+    public async void TriggerAddExpensePopup()
+    {
+#if ANDROID
+        // Ensure the popup fills the entire window by setting both HeightRequest and VerticalOptions
+        this.creategoalpopup.HeightRequest = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+        this.creategoalpopup.VerticalOptions = LayoutOptions.FillAndExpand;
+#endif
+        layoutViewModel.TransactionDetails.Clear();
+        layoutViewModel.TransactionDetails.TransactionType = "Expense";
+        this.addexpensepopup.HeaderTitle = "Add Expense";
+        this.addexpensepopup.AcceptButtonText = "Add";
+        this.addexpensepopup.IsOpen = true;
     }
 
 }

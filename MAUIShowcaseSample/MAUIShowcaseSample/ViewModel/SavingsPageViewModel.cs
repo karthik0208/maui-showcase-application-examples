@@ -23,6 +23,7 @@ namespace MAUIShowcaseSample
         private string totalSavingCartValue;
         private string currentMonthSavingsCartValue;
         private string emergencyFundCartValue;
+        private bool isPageEnabled = false;
 
         public List<SfSegmentItem> SegmentTitle
         {
@@ -153,6 +154,19 @@ namespace MAUIShowcaseSample
             {
                 this.emergencyFundCartValue = value;
                 OnPropertyChanged(nameof(EmergencyFundCartValue));
+            }
+        }
+
+        public bool IsPageEnabled
+        {
+            get => isPageEnabled;
+            set
+            {
+                if (isPageEnabled != value)
+                {
+                    isPageEnabled = value;
+                    OnPropertyChanged(nameof(IsPageEnabled));
+                }
             }
         }
 

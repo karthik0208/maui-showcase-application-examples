@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:popup="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
+             x:Class="MAUIShowcaseSample.View.Dashboard.SettingsAccountPage">
+    <Grid>
+        <ScrollView BackgroundColor="{DynamicResource SurfaceBackground}">
+            <Grid RowDefinitions="Auto,*">
+                <ContentView Grid.Row="0" x:Name="contentcontainer"/>
+                <Border Grid.Row="1" StrokeShape="RoundRectangle 12,12,12,12" Padding="15" Stroke="Transparent" Background="{DynamicResource Surface}" Margin="32,32,32,32">
+                    <Grid RowDefinitions="Auto, *" Margin="16">
+                        <Label Text="Account" Grid.Row="0" FontFamily="Roboto-Medium" FontSize="16"/>
+
+                        <CollectionView ItemsSource="{Binding AccountSettingValue}" Grid.Row="1" SelectionMode="None" Margin="16,32,0,0" >
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid RowDefinitions="Auto,Auto">
+                                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                                <Label Text="{Binding SettingsTitle}" FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource BlackText}"/>
+                                                <Label Text="{Binding SettingsDescription}" FontFamily="Roboto-Regular" FontSize="14" TextColor="{DynamicResource GrayText}"/>
+                                            </VerticalStackLayout>
+                                            <buttons:SfButton Grid.Column="1" HorizontalOptions="End" Background="Transparent" FontSize="24" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnButtonClicked" />
+
+
+                                        </Grid>
+                                        <BoxView Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Color="{DynamicResource LineBackground}" Margin="0,16,0,16"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </Border>
+            </Grid>
+        </ScrollView>
+        <!--Syncfusion Popup-->
+        <popup:SfPopup x:Name="DeleteAccountPopup"
+          WidthRequest="370"
+          HeightRequest="240"
+          ShowCloseButton="True"
+          ShowHeader="True"
+          HeaderTitle="Delete Account"
+          HorizontalOptions="Center"
+          VerticalOptions="Center"
+          IsOpen="False">
+
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Grid RowDefinitions="*,Auto">
+                        <Label Grid.Row="0" Text="Are you sure, you want to delete your account permanently ?" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                        <HorizontalStackLayout Grid.Row="1" HorizontalOptions="End" VerticalOptions="End" Margin="0,0,16,16" Spacing="20">
+                            <Border StrokeShape="RoundRectangle 30,30,30,30" HeightRequest="44" WidthRequest="97" Stroke="{DynamicResource PrimaryBackground}">
+                                <buttons:SfButton Text="Cancel"  Background="Transparent" TextColor="{DynamicResource PrimaryBackground}" Clicked="OnCancelClicked" FontFamily="Roboto-Medium" FontSize="14" />
+                            </Border>
+                            <Border StrokeShape="RoundRectangle 30,30,30,30" HeightRequest="44" WidthRequest="97" Stroke="{DynamicResource Red}">
+                                <buttons:SfButton Text="Delete"  Background="Transparent" TextColor="{DynamicResource Red}" Clicked="OnDeleteClicked" FontFamily="Roboto-Medium" FontSize="14" />
+                            </Border>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+    </Grid>   
+</ContentPage>

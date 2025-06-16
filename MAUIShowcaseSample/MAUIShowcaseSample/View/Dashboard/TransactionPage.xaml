@@ -14,48 +14,49 @@
         <ResourceDictionary>
             <converter:StringToColorConverter x:Key="StringToColorConverter"/>
         </ResourceDictionary>
-        
     </ContentPage.Resources>
 
     <Grid BackgroundColor="{DynamicResource SurfaceBackground}">
         <Grid RowDefinitions="Auto,*">
             <ContentView Grid.Row="0" x:Name="contentcontainer"/>
             <Border Grid.Row="1" StrokeShape="RoundRectangle 10,10,10,10" BackgroundColor="{DynamicResource Surface}" Margin="16,24,16,24">
-                <Grid RowDefinitions="Auto,*">
-                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" HorizontalOptions="FillAndExpand">
+                <Grid RowDefinitions="Auto,Auto,*">
+                    <!-- First row: SegmentedControl as a row -->
+                    <segmentedControl:SfSegmentedControl Grid.Row="0" x:Name="TransactionSegment" VerticalOptions="Center" SegmentWidth="103" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="310" HorizontalOptions="Start" Margin="32,32,0,16" SelectionChanged="GridSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}">
+                        <segmentedControl:SfSegmentedControl.TextStyle>
+                            <segmentedControl:SegmentTextStyle FontFamily="Roboto-Medium" FontSize="16"/>
+                        </segmentedControl:SfSegmentedControl.TextStyle>
+                    </segmentedControl:SfSegmentedControl>
 
-                        <!-- Segment to select transaction type -->
-                        <segmentedControl:SfSegmentedControl Grid.Row="0" Grid.Column="0" x:Name="TransactionSegment" VerticalOptions="Center" SegmentWidth="103" ItemsSource="{Binding SegmentTitle}" MinimumHeightRequest="40" MinimumWidthRequest="310" HorizontalOptions="Start" Margin="32,32,0,32" SelectionChanged="GridSegmentChanged" SelectedIndex="{Binding SelectedSegmentIndex, Mode=TwoWay}">
-                            <segmentedControl:SfSegmentedControl.TextStyle>
-                                <segmentedControl:SegmentTextStyle FontFamily="Roboto-Medium" FontSize="16"/>
-                            </segmentedControl:SfSegmentedControl.TextStyle>
-                        </segmentedControl:SfSegmentedControl>
+                    <!-- Second row: ComboBox and Export button in two columns -->
+                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="32,0,16,16" VerticalOptions="Center">
 
+                        <Border StrokeShape="RoundRectangle 6,6,6,6"  Grid.Column="0" WidthRequest="152" HorizontalOptions="Start" HeightRequest="40" Stroke="{DynamicResource LineBackground}" StrokeThickness="1">
+                            <editors:SfComboBox x:Name="rangecombo" ItemsSource="{Binding DateRange}"  
+                                SelectedItem="{Binding SelectedGridDateRange, Mode=TwoWay}"
+                                DisplayMemberPath="RangeType"
+                                IsClearButtonVisible="False" 
+                                Stroke="Transparent"                                
+                                HeightRequest="40">
+                                <editors:SfComboBox.CustomView>
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0" FontFamily="FontIcons" Text="&#xe723;" VerticalOptions="Center" TextColor="{DynamicResource GrayText}" Padding="10"/>
+                                        <Label Grid.Column="1" 
+                    Text="{Binding Source={x:Reference rangecombo}, Path=SelectedItem.RangeType, Mode=OneWay}" 
+                    HorizontalOptions="Start" 
+                    VerticalOptions="Center" 
+                    FontSize="14" 
+                    FontFamily="Roboto-Regular" 
+                    TextColor="{DynamicResource GrayText}" />
+                                    </Grid>
+                                </editors:SfComboBox.CustomView>
+                            </editors:SfComboBox>
+                        </Border>
                         <!-- Dropdown (SfComboBox) for Date Range selection -->
-                        <editors:SfComboBox x:Name="rangecombo" ItemsSource="{Binding DateRange}"  Grid.Column="1"
-                            SelectedItem="{Binding SelectedGridDateRange, Mode=TwoWay}"
-                            DisplayMemberPath="RangeType"
-                            IsClearButtonVisible="False" Stroke="Transparent"
-                            WidthRequest="175" 
-                            HeightRequest="40"
-                            Margin="0,0,8,0" >
-                            <editors:SfComboBox.CustomView>
-                                <Grid ColumnDefinitions="Auto,*">
-                                    <Label Grid.Column="0" FontFamily="FontIcons" Text="&#xe723;" VerticalOptions="Center" TextColor="{DynamicResource GrayText}" Padding="10"/>
-                                    <!-- ComboBox Text: Bind to SelectedItem, not just ViewModel property -->
-                                    <Label Grid.Column="1" 
-                                           Text="{Binding Source={x:Reference rangecombo}, Path=SelectedItem.RangeType, Mode=OneWay}" 
-                                           HorizontalOptions="Start" 
-                                           VerticalOptions="Center" 
-                                           FontSize="14" 
-                                           FontFamily="Roboto-Regular" 
-                                           TextColor="{DynamicResource GrayText}" />
-                                </Grid>
-                            </editors:SfComboBox.CustomView>
-                        </editors:SfComboBox>
+                       
 
                         <!-- Export Button -->
-                        <buttons:SfButton Text="Export"  Grid.Column="2"
+                        <buttons:SfButton Text="Export"  Grid.Column="1"
                                       CornerRadius="20"
                                       WidthRequest="108"
                                       HeightRequest="40"
@@ -67,7 +68,7 @@
                                       FontSize="14"
                                       Background="Transparent"
                                       ShowIcon="True" 
-                                      Margin="0,0,16,0" 
+                                      Margin="0,0,0,0" 
                                       Command="{Binding ExportAllDataCommand}">
                             <buttons:SfButton.ImageSource>
                                 <FontImageSource FontFamily="FontIcons" Glyph="&#xe733;" Size="16" Color="{DynamicResource GrayText}" />
@@ -75,7 +76,7 @@
                         </buttons:SfButton>
                     </Grid>
 
-                    <Border x:Name="selectioncontrol" Grid.Row="0" StrokeShape="RoundRectangle 68,68,68,68" Margin="16,16,16,16" HorizontalOptions="Fill" HeightRequest="40" IsVisible="False" StrokeThickness="0" Background="{DynamicResource SurfaceBackground}">
+                    <Border x:Name="selectioncontrol" Grid.Row="1" StrokeShape="RoundRectangle 68,68,68,68" Margin="16,16,16,16" HorizontalOptions="Fill" HeightRequest="40" IsVisible="False" StrokeThickness="0" Background="{DynamicResource SurfaceBackground}">
                         <HorizontalStackLayout>
                             <buttons:SfButton FontFamily="FontIcons" Text="&#xe721;" FontSize="16" TextColor="{DynamicResource GrayText}" Background="Transparent" WidthRequest="50" Clicked="OnSelectCloseButtonClicked"/>
                             <Label Text="{Binding SelectedRowCount}" WidthRequest="20" VerticalOptions="Center"/>
@@ -86,65 +87,77 @@
                         </HorizontalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="1" StrokeShape="RoundRectangle 20,20,20,20" Margin="16,0,16,16" VerticalOptions="Fill">
+                    <Border Grid.Row="2" StrokeShape="RoundRectangle 20,20,20,20" Margin="16,0,16,16" VerticalOptions="Fill">
                         <Grid RowDefinitions="*,Auto" >
 
                             <!-- Data grid page selection -->
                             <pager:SfDataPager Grid.Row="1" x:Name ="dataPager" PageSize="10" NumericButtonCount="10" UseOnDemandPaging="True" Source="{Binding GridData}" Margin="0,0,0,16" PageChanging="OnPageChanged" />
 
                             <!-- Data grid -->
-                            <grid:SfDataGrid Grid.Row="0" x:Name="dataGrid" ColumnWidthMode="Fill" AutoGenerateColumnsMode="None"  RowHeight="68" ItemsSource="{Binding Source={x:Reference dataPager}, Path=PagedSource }" >
-                                <grid:SfDataGrid.Columns>
 
-                                    <!-- Checkbox Column with Header Template -->
-                                    <grid:DataGridTemplateColumn Width="60" >
-                                        <grid:DataGridTemplateColumn.HeaderTemplate>
-                                            <DataTemplate>
-                                                <CheckBox HorizontalOptions="End" IsChecked="{Binding IsAllRowsSelected, Mode=TwoWay}" CheckedChanged="OnCheckedChanged"/>
-                                            </DataTemplate>
-                                        </grid:DataGridTemplateColumn.HeaderTemplate>
-                                        <grid:DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <CheckBox HorizontalOptions="End"  IsChecked="{Binding IsSelected, Mode=TwoWay}" CheckedChanged="OnSingleCheckboxChanged" />
-                                            </DataTemplate>
-                                        </grid:DataGridTemplateColumn.CellTemplate>
-                                    </grid:DataGridTemplateColumn>
+                            <ScrollView Grid.Row="0" Orientation="Both" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                <Grid>
+                                    <grid:SfDataGrid x:Name="dataGrid"
+                          ColumnWidthMode="None"
+                          AutoGenerateColumnsMode="None"
+                          RowHeight="68"
+                          ItemsSource="{Binding Source={x:Reference dataPager}, Path=PagedSource }"
+                          HorizontalOptions="Start"
+                          VerticalOptions="FillAndExpand"
+                          WidthRequest="900">
+                                        <grid:SfDataGrid.Columns>
+                                            <!-- Checkbox Column with Header Template -->
+                                            <grid:DataGridTemplateColumn Width="60">
+                                                <grid:DataGridTemplateColumn.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox HorizontalOptions="End" IsChecked="{Binding IsAllRowsSelected, Mode=TwoWay}" CheckedChanged="OnCheckedChanged"/>
+                                                    </DataTemplate>
+                                                </grid:DataGridTemplateColumn.HeaderTemplate>
+                                                <grid:DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox HorizontalOptions="End" IsChecked="{Binding IsSelected, Mode=TwoWay}" CheckedChanged="OnSingleCheckboxChanged" />
+                                                    </DataTemplate>
+                                                </grid:DataGridTemplateColumn.CellTemplate>
+                                            </grid:DataGridTemplateColumn>
 
-                                    <!-- Text Columns -->
-                                    <grid:DataGridDateColumn HeaderText="Transaction Date" MappingName="TransactionDate" Format="dd/MM/yyyy" HeaderTextAlignment="Start" CellTextAlignment="Start"/>
-                                    <grid:DataGridTemplateColumn>
-                                        <grid:DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Grid RowDefinitions="Auto,Auto" VerticalOptions="Center" RowSpacing="5">
-                                                    <Label Grid.Row="0" Text="{Binding TransactionCategory}"/>
-                                                    <Label Grid.Row="1" Text="{Binding TransactionName}" TextColor="{DynamicResource GrayText}"/>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </grid:DataGridTemplateColumn.CellTemplate>
-                                        <grid:DataGridTemplateColumn.HeaderTemplate>
-                                            <DataTemplate>
-                                                <Label Text="Category" HorizontalOptions="Start" VerticalOptions="Center"/>
-                                            </DataTemplate>
-                                        </grid:DataGridTemplateColumn.HeaderTemplate>
-                                    </grid:DataGridTemplateColumn>
-                                    <grid:DataGridTemplateColumn>
-                                        <grid:DataGridTemplateColumn.HeaderTemplate>
-                                            <DataTemplate>
-                                                <Label  Text="Transaction Type" HorizontalOptions="Start" VerticalOptions="Center"/>
-                                            </DataTemplate>
-                                        </grid:DataGridTemplateColumn.HeaderTemplate>
-                                        <grid:DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Border StrokeShape="RoundRectangle 5,5,5,5" Background="{Binding TransactionType, Converter={x:StaticResource StringToColorConverter}, ConverterParameter='DataGridBackground'}" HeightRequest="22" WidthRequest="66" Stroke="Transparent" VerticalOptions="Center" HorizontalOptions="Start">
-                                                    <Label Text="{Binding TransactionType}" TextColor="{Binding TransactionType, Converter={x:StaticResource StringToColorConverter}, ConverterParameter='DataGridValue'}" FontSize="16" FontFamily="Roboto-Regular"/>
-                                                </Border>
-                                            </DataTemplate>
-                                        </grid:DataGridTemplateColumn.CellTemplate>
-                                    </grid:DataGridTemplateColumn>
-                                    <grid:DataGridTextColumn HeaderText="Amount" MappingName="TransactionAmount"/>
-                                    <grid:DataGridTextColumn HeaderText="Remark" MappingName="TransactionDescription"/>
-                                </grid:SfDataGrid.Columns>
-                            </grid:SfDataGrid>
+                                            <!-- Text Columns -->
+                                            <grid:DataGridDateColumn HeaderText="Transaction Date" MappingName="TransactionDate" Format="dd/MM/yyyy" HeaderTextAlignment="Start" CellTextAlignment="Start" Width="150"/>
+                                            <grid:DataGridTemplateColumn Width="180">
+                                                <grid:DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Grid RowDefinitions="Auto,Auto" VerticalOptions="Center" RowSpacing="5">
+                                                            <Label Grid.Row="0" Text="{Binding TransactionCategory}"/>
+                                                            <Label Grid.Row="1" Text="{Binding TransactionName}" TextColor="{DynamicResource GrayText}"/>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </grid:DataGridTemplateColumn.CellTemplate>
+                                                <grid:DataGridTemplateColumn.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <Label Text="Category" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                                    </DataTemplate>
+                                                </grid:DataGridTemplateColumn.HeaderTemplate>
+                                            </grid:DataGridTemplateColumn>
+                                            <grid:DataGridTemplateColumn Width="160">
+                                                <grid:DataGridTemplateColumn.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <Label Text="Transaction Type" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                                    </DataTemplate>
+                                                </grid:DataGridTemplateColumn.HeaderTemplate>
+                                                <grid:DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Border StrokeShape="RoundRectangle 5,5,5,5" Background="{Binding TransactionType, Converter={x:StaticResource StringToColorConverter}, ConverterParameter='DataGridBackground'}" HeightRequest="22" WidthRequest="66" Stroke="Transparent" VerticalOptions="Center" HorizontalOptions="Start">
+                                                            <Label Text="{Binding TransactionType}" TextColor="{Binding TransactionType, Converter={x:StaticResource StringToColorConverter}, ConverterParameter='DataGridValue'}" FontSize="16" FontFamily="Roboto-Regular"/>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </grid:DataGridTemplateColumn.CellTemplate>
+                                            </grid:DataGridTemplateColumn>
+                                            <grid:DataGridTextColumn HeaderText="Amount" MappingName="TransactionAmount" Width="120"/>
+                                            <grid:DataGridTextColumn HeaderText="Remark" MappingName="TransactionDescription" Width="200"/>
+                                        </grid:SfDataGrid.Columns>
+                                    </grid:SfDataGrid>
+                                </Grid>
+                            </ScrollView>
+
                         </Grid>
                     </Border>
                 </Grid>

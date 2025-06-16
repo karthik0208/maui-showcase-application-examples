@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:button="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             x:Class="MAUIShowcaseSample.View.Dashboard.SettingsNotificationPage">
+    <ScrollView BackgroundColor="{DynamicResource SurfaceBackground}">
+        <Grid RowDefinitions="Auto,*">
+            <ContentView Grid.Row="0" x:Name="contentcontainer"/>
+            <Border Grid.Row="1" StrokeShape="RoundRectangle 12,12,12,12" Padding="15" Stroke="Transparent" Background="{DynamicResource Surface}" Margin="32,32,32,32">
+                <Grid RowDefinitions="Auto, *" Margin="16">
+                    <Label Text="Notification" Grid.Row="0" FontFamily="Roboto-Medium" FontSize="16" TextColor="{DynamicResource BlackText}"/>
+                    <Grid Grid.Row="1" RowDefinitions="*,Auto,Auto">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="16,32,16,16">
+                            <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                <Label Text="Notification" FontFamily="Roboto-Regular" FontSize="16" TextColor="{DynamicResource BlackText}"/>
+                                <Label Text="Set up alerts based on your preferences" FontFamily="Roboto-Regular" FontSize="14" TextColor="{DynamicResource GrayText}"/>
+                            </VerticalStackLayout>
+                            <button:SfSwitch Grid.Column="1" x:Name="sfSwitch" IsOn="{Binding ProfileValue.IsNotificationEnabled}" VerticalOptions="Start" />
+                        </Grid>
+                        <BoxView Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Color="{DynamicResource LineBackground}"  Margin="0,0,0,32"/>
+                        <HorizontalStackLayout Grid.Row="2" HorizontalOptions="End" VerticalOptions="End" Spacing="8">
+                            <Border StrokeShape="RoundRectangle 30,30,30,30" HeightRequest="44" WidthRequest="97" Stroke="{DynamicResource PrimaryBackground}">
+                                <buttons:SfButton Text="Discard"  Background="Transparent" TextColor="{DynamicResource PrimaryBackground}" FontFamily="Roboto-Medium" FontSize="14" Clicked="OnDiscardButtonClicked" />
+                            </Border>
+                            <Border StrokeShape="RoundRectangle 30,30,30,30" HeightRequest="44" WidthRequest="97" Stroke="{DynamicResource PrimaryBackground}">
+                                <buttons:SfButton Text="Update"  Background="Transparent" TextColor="{DynamicResource PrimaryBackground}" FontFamily="Roboto-Medium" FontSize="14" Clicked="OnUpdateButtonClicked"/>
+                            </Border>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>

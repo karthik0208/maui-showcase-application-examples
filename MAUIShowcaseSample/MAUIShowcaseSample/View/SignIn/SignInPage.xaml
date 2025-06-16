@@ -103,7 +103,7 @@
                     </Label>
                 </Grid>
 
-                <buttons:SfButton Text="Sign In" x:Name="loginButtonAndroid" HeightRequest="44" HorizontalOptions="Fill" Margin="20,16,20,0" CornerRadius="30" FontFamily="Roboto-Medium" FontSize="16" Background="{StaticResource PrimaryBackground}" Command="{Binding OnSignInClickedCommand}"/>
+                <buttons:SfButton Text="Sign In" x:Name="loginButtonAndroid" HeightRequest="44" HorizontalOptions="Fill" Margin="20,16,20,16" CornerRadius="30" FontFamily="Roboto-Medium" FontSize="16" Background="{StaticResource PrimaryBackground}" Command="{Binding OnSignInClickedCommand}"/>
 
                 <Label HorizontalOptions="Center" HorizontalTextAlignment="Center" HeightRequest="24" VerticalTextAlignment="Center">
                     <Label.FormattedText>

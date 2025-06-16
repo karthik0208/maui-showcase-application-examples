@@ -90,7 +90,7 @@ public partial class SignUpPageViewModel : ObservableObject
     // Command auto-generated: OnSignInTappedCommand
     private async void OnSignInTapped()
     {
-        await Shell.Current.GoToAsync("///signin");
+        await Shell.Current.GoToAsync("signin");
     }
 }
 

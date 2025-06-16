@@ -233,7 +233,7 @@ namespace MAUIShowcaseSample
             {
                 _userDataService.UpdatePassword(this.ForgotPasswordFormModel.Email, this.ResetPasswordFormModel.Password);
                 await Application.Current.MainPage.DisplayAlert("Success", "Your password has been reset!", "OK");
-                await Shell.Current.GoToAsync("///signin");
+                await Shell.Current.GoToAsync("signin");
             }
             catch (Exception ex)
             {
@@ -247,7 +247,7 @@ namespace MAUIShowcaseSample
         /// <returns>A task representing the asynchronous operation.</returns>
         private async Task OnSignInTapped()
         {
-            await Shell.Current.GoToAsync("///signin");
+            await Shell.Current.GoToAsync("signin");
         }
 
         #endregion        

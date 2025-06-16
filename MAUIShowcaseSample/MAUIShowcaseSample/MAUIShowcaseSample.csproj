@@ -102,20 +102,41 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="View\Dashboard\BudgetDetailMobilePage.xaml.cs">
+	    <DependentUpon>BudgetDetailMobilePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\Dashboard\BudgetMobilePage.xaml.cs">
+	    <DependentUpon>BudgetMobilePage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\Dashboard\DashboardLayoutPage.xaml.cs">
 	    <DependentUpon>DashboardLayoutPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\Dashboard\DashboardMobilePage.xaml.cs">
+	    <DependentUpon>DashboardMobilePage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="View\Dashboard\DashboardPage.xaml.cs">
 	    <DependentUpon>DashboardPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="View\Dashboard\GoalDetailMobilePage.xaml.cs">
+	    <DependentUpon>GoalDetailMobilePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\Dashboard\GoalsMobilePage.xaml.cs">
+	    <DependentUpon>GoalsMobilePage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="View\Dashboard\HelpAndSupportPage.xaml.cs">
 	    <DependentUpon>HelpAndSupportPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\Dashboard\SavingsMobilePage.xaml.cs">
+	    <DependentUpon>SavingsMobilePage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="View\Dashboard\SettingsAppearancePage.xaml.cs">
 	    <DependentUpon>SettingsAppearancePage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="View\Dashboard\SettingsProfilePage.xaml.cs">
 	    <DependentUpon>SettingsProfilePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\Dashboard\TransactionMobilePage.xaml.cs">
+	    <DependentUpon>TransactionMobilePage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -135,6 +156,9 @@
 	  <MauiFont Update="Resources\Fonts\Roboto-Regular.ttf">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </MauiFont>
+	  <MauiFont Update="Resources\Fonts\Roboto-SemiBold.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </MauiFont>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -147,25 +171,49 @@
 	  <MauiXaml Update="Resources\Styles\LabelStyles.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\Dashboard\AddTransactionMobilePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Dashboard\BudgetDetailMobilePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\BudgetDetailPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Dashboard\BudgetMobilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\BudgetPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\Dashboard\DashboardBottomLayoutPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\DashboardLayoutPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Dashboard\DashboardMobilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\DashboardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\Dashboard\GoalDetailMobilePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\GoalDetailPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Dashboard\GoalsMobilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\GoalsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\HelpAndSupportPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Dashboard\SavingsMobilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\SettingsAccountPage.xaml">
@@ -178,6 +226,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\SettingsChangePassword.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Dashboard\SettingsMobilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\SettingsNotificationPage.xaml">
@@ -193,6 +244,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\SettingsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Dashboard\TransactionMobilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Dashboard\TransactionPage.xaml">

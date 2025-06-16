@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:popup="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
+             x:Class="MAUIShowcaseSample.View.Dashboard.AddTransactionMobilePage">
+    <AbsoluteLayout>
+        <popup:SfPopup x:Name="FabMenu"
+            IsOpen="False"
+            ShowHeader="False"
+            ShowCloseButton="False"
+            StaysOpen="False"
+            AbsoluteLayout.LayoutBounds="1,0,AutoSize,AutoSize"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            Margin="0,20,20,0"
+            WidthRequest="141"
+            HeightRequest="208"
+            HorizontalOptions="End"
+            VerticalOptions="Start">
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle PopupBackground="Transparent" CornerRadius="0"/>
+            </popup:SfPopup.PopupStyle>
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout Spacing="10">
+                        <buttons:SfButton Text="Goal" Style="{StaticResource RoundedWhiteButton}" Clicked="OnGoalClicked">
+                            <buttons:SfButton.ImageSource>
+                                <FontImageSource Glyph="&#xe73a;" FontFamily="FontIcons" Color="{DynamicResource BlackText}" Size="14" />
+                            </buttons:SfButton.ImageSource>
+                        </buttons:SfButton>
+                        <buttons:SfButton Text="Savings" Style="{StaticResource RoundedWhiteButton}" Clicked="OnSavingsClicked">
+                            <buttons:SfButton.ImageSource>
+                                <FontImageSource Glyph="&#xe737;" FontFamily="FontIcons" Color="{DynamicResource BlackText}" Size="14" />
+                            </buttons:SfButton.ImageSource>
+                        </buttons:SfButton>
+                        <buttons:SfButton Text="Budget" Style="{StaticResource RoundedWhiteButton}" Clicked="OnBudgetClicked">
+                            <buttons:SfButton.ImageSource>
+                                <FontImageSource Glyph="&#xe739;" FontFamily="FontIcons" Color="{DynamicResource BlackText}" Size="14" />
+                            </buttons:SfButton.ImageSource>
+                        </buttons:SfButton>
+                        <buttons:SfButton Text="Transaction"  Style="{StaticResource RoundedWhiteButton}" Clicked="OnTransactionClicked">
+                            <buttons:SfButton.ImageSource>
+                                <FontImageSource Glyph="&#xe738;" FontFamily="FontIcons" Color="{DynamicResource BlackText}" Size="14" />
+                            </buttons:SfButton.ImageSource>
+                        </buttons:SfButton>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+
+        <!--<popup:SfPopup  x:Name="FabMenu"  
+Margin="0,0,20,80"  
+HorizontalOptions="End"  
+VerticalOptions="End">
+            <VerticalStackLayout   Spacing="10"   
+    >
+
+                <buttons:SfButton Text="Goal" Style="{StaticResource RoundedWhiteButton}" Clicked="OnGoalClicked"/>
+                <buttons:SfButton Text="Savings" ImageSource="savings_icon.png" Style="{StaticResource RoundedWhiteButton}" Clicked="OnSavingsClicked"/>
+                <buttons:SfButton Text="Budget" ImageSource="budget_icon.png" Style="{StaticResource RoundedWhiteButton}" Clicked="OnBudgetClicked"/>
+                <buttons:SfButton Text="Transaction" ImageSource="transaction_icon.png" Style="{StaticResource RoundedWhiteButton}" Clicked="OnTransactionClicked"/>
+
+            </VerticalStackLayout>
+        </popup:SfPopup>-->        
+        <buttons:SfButton  
+            x:Name="MainFab"  
+            WidthRequest="56"  
+            HeightRequest="56"  
+            CornerRadius="28"  
+            HorizontalOptions="End"  
+            VerticalOptions="End"  
+            AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"  
+            AbsoluteLayout.LayoutFlags="PositionProportional"  
+            BackgroundColor="Purple"  
+            Text="+"  
+            FontSize="32"  
+            Clicked="OnFabClicked"  
+            TextColor="White"  
+            Margin="0,0,20,20" />  
+    </AbsoluteLayout>  
+</ContentView>        
+

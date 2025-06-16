@@ -24,7 +24,8 @@ namespace MAUIShowcaseSample
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("Roboto-Medium.ttf", "Roboto-Medium");
                     fonts.AddFont("Roboto-Regular.ttf", "Roboto-Regular");
-                    fonts.AddFont("ExpenseAnalysis.ttf", "FontIcons");
+                    fonts.AddFont("Roboto-SemiBold.ttf", "Roboto-SemiBold");
+                    fonts.AddFont("ExpenseAnalysis.ttf", "FontIcons");                    
                 });
 
             //builder.ConfigureMauiHandlers(handlers =>
@@ -61,9 +62,10 @@ namespace MAUIShowcaseSample
            // builder.Services.AddTransient<DashboardLayoutPage>();
             builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddTransient<DashboardPage>();
-            builder.Services.AddTransient<TransactionPage>();
-            builder.Services.AddTransient<BudgetPage>();
-            builder.Services.AddTransient<BudgetDetailPage>();
+            builder.Services.AddTransient<TransactionMobilePage>();
+           // builder.Services.AddTransient<BudgetPage>();
+          //  builder.Services.AddTransient<BudgetDetailPage>();
+            //builder.Services.AddTransient<BudgetDetailMobilePage>();
             builder.Services.AddTransient<GoalsPage>();
             builder.Services.AddTransient<GoalDetailPage>();
             builder.Services.AddTransient<HelpAndSupportPage>();
@@ -76,7 +78,7 @@ namespace MAUIShowcaseSample
             builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddTransient<SettingsPersonalizationPage>();
             builder.Services.AddTransient<SettingsProfilePage>();
-            builder.Services.AddTransient<TransactionPage>();
+            builder.Services.AddTransient<TransactionMobilePage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
