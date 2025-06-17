@@ -6,32 +6,84 @@
              xmlns:local="clr-namespace:MAUIShowcaseSample"
              x:Class="MAUIShowcaseSample.View.SignIn.UpdateAccountInfoPage"
              Title="UpdateAccountInfoPage">
+    
+    <!-- Main container with two-column layout for split-screen design -->
     <Grid x:Name="UpdateAccountInfoView" ColumnDefinitions="*,*">
+        
+        <!-- Left column: Background image section -->
         <Grid Grid.Column="0">
-            <!-- Background Image -->
+            <!-- Background decorative image for visual appeal -->
             <Image Source="LeftLayout.png"
-     Aspect="AspectFill" />
+                   Aspect="AspectFill" />
         </Grid>
+        
+        <!-- Right column: Account setup form section -->
         <Grid Grid.Column="1" Background="Transparent">
-            <!-- Reset Password View -->
+            
+            <!-- Centered container for account setup form -->
             <StackLayout WidthRequest="384" VerticalOptions="Center">
-                <Label Text="Let’s Set Up Your Account" FontFamily="Roboto-Medium" FontSize="22" HeightRequest="28" TextColor="{DynamicResource BlackText}" HorizontalOptions="Center" />
-                <Label Text="Complete your profile for personalized insights." FontFamily="Roboto-Regular" FontSize="16" HeightRequest="22" TextColor="{DynamicResource GrayText}" HorizontalOptions="Center" Margin="{OnPlatform WinUI='0,12,0,0'}"/>
-                <dataForm:SfDataForm x:Name="AccountInfoDataForm" ColumnCount="2" DataObject="{Binding AccountInfoDataFormModel, Mode=TwoWay}" LayoutType="TextInputLayout" AutoGenerateItems="True" CommitMode="PropertyChanged" GenerateDataFormItem="OnAutoGeneratingDataFormItem" MinimumHeightRequest="250">
+                
+                <!-- Main heading for account setup -->
+                <Label Text="Let's Set Up Your Account" 
+                       FontFamily="Roboto-Medium" 
+                       FontSize="22" 
+                       HeightRequest="28" 
+                       TextColor="{DynamicResource BlackText}" 
+                       HorizontalOptions="Center" />
+                
+                <!-- Subheading with description -->
+                <Label Text="Complete your profile for personalized insights." 
+                       FontFamily="Roboto-Regular" 
+                       FontSize="16" 
+                       HeightRequest="22" 
+                       TextColor="{DynamicResource GrayText}" 
+                       HorizontalOptions="Center" 
+                       Margin="{OnPlatform WinUI='0,12,0,0'}"/>
+                
+                <!-- Data form for collecting user account information -->
+                <dataForm:SfDataForm x:Name="AccountInfoDataForm" 
+                                     ColumnCount="2" 
+                                     DataObject="{Binding AccountInfoDataFormModel, Mode=TwoWay}" 
+                                     LayoutType="TextInputLayout" 
+                                     AutoGenerateItems="True" 
+                                     CommitMode="PropertyChanged" 
+                                     GenerateDataFormItem="OnAutoGeneratingDataFormItem" 
+                                     HeightRequest="250">
+                    
+                    <!-- Form fields collection -->
                     <dataForm:SfDataForm.Items>
+                        <!-- Personal information fields -->
                         <dataForm:DataFormTextItem FieldName="FirstName" />
                         <dataForm:DataFormTextItem FieldName="LastName" />
                         <dataForm:DataFormDateItem FieldName="DOB"/>
+                        
+                        <!-- Preference selection fields -->
                         <dataForm:DataFormComboBoxItem FieldName="Gender" />
                         <dataForm:DataFormComboBoxItem FieldName="Language" />
                         <dataForm:DataFormComboBoxItem FieldName="Currency" />
+                        
+                        <!-- Full-width timezone selection -->
                         <dataForm:DataFormComboBoxItem FieldName="TimeZone" ColumnSpan="2"/>
                     </dataForm:SfDataForm.Items>
+                    
+                    <!-- Styling for form labels -->
                     <dataForm:SfDataForm.LabelTextStyle>
-                        <dataForm:DataFormTextStyle FontFamily="Roboto-Regular" TextColor="{DynamicResource GrayText}" FontSize="16" />
+                        <dataForm:DataFormTextStyle FontFamily="Roboto-Regular" 
+                                                    TextColor="{DynamicResource GrayText}" 
+                                                    FontSize="16" />
                     </dataForm:SfDataForm.LabelTextStyle>
                 </dataForm:SfDataForm>
-                <Button Text="Finish Set Up" HeightRequest="44" HorizontalOptions="Fill" Margin="20,0,20,0" CornerRadius="30" FontFamily="Roboto-Medium" FontSize="16" Background="{StaticResource PrimaryBackground}" Command="{Binding OnFinishSetupClickedCommand}" />               
+                
+                <!-- Submit button to complete account setup -->
+                <Button Text="Finish Set Up" 
+                        HeightRequest="44" 
+                        HorizontalOptions="Fill" 
+                        Margin="20,0,20,0" 
+                        CornerRadius="30" 
+                        FontFamily="Roboto-Medium" 
+                        FontSize="16" 
+                        Background="{StaticResource PrimaryBackground}" 
+                        Command="{Binding OnFinishSetupClickedCommand}" />              
             </StackLayout>
         </Grid>
     </Grid>
